@@ -39,6 +39,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ML_Address.cs" />
+    <Compile Include="ML_Admission.cs" />
+    <Compile Include="ML_City.cs" />
+    <Compile Include="ML_Configurations.cs" />
+    <Compile Include="ML_Country.cs" />
+    <Compile Include="ML_Member.cs" />
+    <Compile Include="ML_Organisation.cs" />
+    <Compile Include="ML_OrganisationCategory.cs" />
+    <Compile Include="ML_OrganisationSubCategory.cs" />
+    <Compile Include="ML_Privilege.cs" />
+    <Compile Include="ML_Profession.cs" />
+    <Compile Include="ML_ProfessionalDetails.cs" />
+    <Compile Include="ML_Receipt.cs" />
+    <Compile Include="ML_RemarksHistory.cs" />
+    <Compile Include="ML_Salutation.cs" />
+    <Compile Include="ML_UsageLog.cs" />
+    <Compile Include="ML_User.cs" />
+    <Compile Include="ML_UserAccessPrivilege.cs" />
+    <Compile Include="ML_UserAccessType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
