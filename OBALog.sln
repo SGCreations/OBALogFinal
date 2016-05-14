@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OBALog", "OBALog\OBALog.csproj", "{D67F60C5-2730-40CF-BB63-741CDB7BD0FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OBALog.Windows", "OBALog.Windows\OBALog.Windows.csproj", "{D67F60C5-2730-40CF-BB63-741CDB7BD0FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OBALog.Data", "OBALog.Data\OBALog.Data.csproj", "{F432926D-4D0E-40D5-8EA3-7D1145AB08BB}"
 EndProject
