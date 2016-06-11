@@ -18,7 +18,7 @@ namespace OBALog.Windows
             DevExpress.Skins.SkinManager.EnableFormSkins();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MemberDetails());
+            Application.Run(new Home());
         }
     }
 }

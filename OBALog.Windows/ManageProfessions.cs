@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevExpress.XtraEditors;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,9 +11,9 @@ using System.Windows.Forms;
 
 namespace OBALog.Windows
 {
-    public partial class test : Form
+    public partial class ManageProfessions : XtraForm
     {
-        public test()
+        public ManageProfessions()
         {
             InitializeComponent();
         }
