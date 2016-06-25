@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OBALog.Model
 {
-    class ML_City
+    public class ML_City
     {
         public string City { get; set; }
         public int Key { get; set; }

@@ -14,11 +14,19 @@ namespace OBALog.Windows
         [STAThread]
         static void Main()
         {
-            DevExpress.LookAndFeel.UserLookAndFeel.Default.SkinName = "DevExpress Style";
-            DevExpress.Skins.SkinManager.EnableFormSkins();
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Home());
+            try
+            {
+                DevExpress.LookAndFeel.UserLookAndFeel.Default.SkinName = "DevExpress Style";
+                DevExpress.Skins.SkinManager.EnableFormSkins();
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+
+                Application.Run(new ManageProfessions());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Message : {0}{1}{2}StackTrace : {3}{4}", Environment.NewLine, ex.Message, Environment.NewLine, Environment.NewLine, ex.StackTrace));
+            }
         }
     }
 }

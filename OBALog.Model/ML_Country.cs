@@ -8,7 +8,7 @@ namespace OBALog.Model
 {
     public class ML_Country
     {
-        public int CountryKey { get; set; }
+        public int Key { get; set; }
         public string Country { get; set; }
     }
 }
