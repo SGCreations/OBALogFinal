@@ -39,14 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BL_Address.cs" />
+    <Compile Include="BL_Organisation.cs" />
     <Compile Include="BL_OrganisationCategory.cs" />
     <Compile Include="BL_City.cs" />
     <Compile Include="BL_Country.cs" />
     <Compile Include="BL_Member.cs" />
+    <Compile Include="BL_OrganisationSubCategory.cs" />
     <Compile Include="BL_Profession.cs" />
     <Compile Include="BL_Salutation.cs" />
     <Compile Include="BL_UsageLog.cs" />
     <Compile Include="BL_User.cs" />
+    <Compile Include="BL_UserAccessType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

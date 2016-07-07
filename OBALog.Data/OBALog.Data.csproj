@@ -44,14 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DL_Address.cs" />
+    <Compile Include="DL_Organisation.cs" />
     <Compile Include="DL_OrganisationCategory.cs" />
     <Compile Include="DL_City.cs" />
     <Compile Include="DL_Country.cs" />
     <Compile Include="DL_Member.cs" />
+    <Compile Include="DL_OrganisationSubCategory.cs" />
     <Compile Include="DL_Profession.cs" />
     <Compile Include="DL_Salutation.cs" />
     <Compile Include="DL_UsageLog.cs" />
     <Compile Include="DL_User.cs" />
+    <Compile Include="DL_UserAccessType.cs" />
     <Compile Include="Helper\DataHelper.cs" />
     <Compile Include="Helper\DBConnection.cs" />
     <Compile Include="Helper\MySQLHelper.cs" />

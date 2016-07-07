@@ -13,7 +13,7 @@ namespace OBALog.Model
         public string Name { get; set; }
         public string NIC { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public int Key { get; set; }
+        public int? Key { get; set; }
         public int UserAccessTypeKey { get; set; }
         //public ML_UserAccessType UserAccessType { get; set; }
         public int UserKey { get; set; }

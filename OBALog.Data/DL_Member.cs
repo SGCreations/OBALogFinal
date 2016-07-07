@@ -37,6 +37,18 @@ namespace OBALog.Data
             return true;
         }
 
+
+
+        public DataTable selectMemberTop20()
+        {
+            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT M.KEY ,MembershipNo, Initials, Forenames, Surname FROM member M ORDER BY M.KEY ASC LIMIT 20;"); 
+        }
+
+        public DataTable selectMemberLastUpdatedTop20()
+        {
+            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT M.KEY, MembershipNo, Initials, Forenames, Surname FROM member M ORDER BY UpdatedDate DESC LIMIT 20");   
+        }
+
         public bool delete(ML_Member member)
         {
             try

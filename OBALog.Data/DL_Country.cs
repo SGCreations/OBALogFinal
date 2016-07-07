@@ -37,7 +37,7 @@ namespace OBALog.Data
             MySqlParameter[] para = new MySqlParameter[1];
             para[0] = new MySqlParameter("@Key", country.Key);
 
-            return Convert.ToInt32(MySQLHelper.ExecuteScalar(DBConnection.connectionString, CommandType.Text, "SELECT COUNT(*) FROM country cn JOIN city c ON cn.`Key` = c.CountryKey JOIN address a ON c.`Key` = a.CityKey WHERE cn.Country = @Country", para));
+            return Convert.ToInt32(MySQLHelper.ExecuteScalar(DBConnection.connectionString, CommandType.Text, "SELECT COUNT(*) FROM address a JOIN city c ON a.CityKey = c.`KEY` JOIN country c1 ON c.CountryKey = c1.`KEY` WHERE c1.`KEY` = @Key", para));
         }
 
         public bool delete(OBALog.Model.ML_Country country)

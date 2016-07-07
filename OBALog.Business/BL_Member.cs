@@ -14,5 +14,15 @@ namespace OBALog.Business
         {
             return new DL_Member().insert(member);
         }
+        public System.Data.DataTable selectMemberTop20()
+        {
+            return new DL_Member().selectMemberTop20();
+
+        }
+
+        public System.Data.DataTable selectMemberLastUpdatedTop20()
+        {
+            return new DL_Member().selectMemberLastUpdatedTop20();
+        }
     }
 }

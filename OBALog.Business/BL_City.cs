@@ -27,5 +27,16 @@ namespace OBALog.Business
         {
             return new OBALog.Data.DL_City().delete(city);
         }
+
+        public bool deleteByCountry(Model.ML_City city)
+        {
+            return new OBALog.Data.DL_City().deleteByCountry(city);
+        }
+
+        public System.Data.DataTable select(Model.ML_City city)
+        {
+            return new OBALog.Data.DL_City().select(city);
+
+        }
     }
 }

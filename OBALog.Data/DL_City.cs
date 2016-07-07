@@ -8,7 +8,7 @@ namespace OBALog.Data
     {
         public int insert(OBALog.Model.ML_City city)
         {
-            MySqlParameter[] para = new MySqlParameter[1];
+            MySqlParameter[] para = new MySqlParameter[2];
             para[0] = new MySqlParameter("@City", city.City);
             para[1] = new MySqlParameter("@CountryKey", city.CountryKey);
 
@@ -40,7 +40,7 @@ namespace OBALog.Data
             MySqlParameter[] para = new MySqlParameter[1];
             para[0] = new MySqlParameter("@Key", city.Key);
 
-            return Convert.ToInt32(MySQLHelper.ExecuteScalar(DBConnection.connectionString, CommandType.Text, "SELECT COUNT(*) FROM city cn JOIN city c ON cn.`Key` = c.CityKey JOIN address a ON c.`Key` = a.CityKey WHERE cn.City = @City", para));
+            return Convert.ToInt32(MySQLHelper.ExecuteScalar(DBConnection.connectionString, CommandType.Text, "SELECT COUNT(*) FROM address a JOIN city c ON a.CityKey = c.`KEY` WHERE c.`Key` = @Key", para));
         }
 
         public bool delete(OBALog.Model.ML_City city)
@@ -49,6 +49,22 @@ namespace OBALog.Data
             para[0] = new MySqlParameter("@Key", city.Key);
             MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "DELETE FROM city WHERE `Key` = @Key;", para);
             return true;
+        }
+
+        public bool deleteByCountry(Model.ML_City city)
+        {
+            MySqlParameter[] para = new MySqlParameter[1];
+            para[0] = new MySqlParameter("@CountryKey", city.CountryKey);
+            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "DELETE FROM city WHERE `CountryKey` = @CountryKey;", para);
+            return true;
+        }
+
+        public DataTable select(Model.ML_City city)
+        {
+            MySqlParameter[] para = new MySqlParameter[1];
+            para[0] = new MySqlParameter("@City", city.City);
+
+            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT c.`KEY` AS CountryKey, c.country, ct.`KEY` AS CityKey, ct.city FROM stc_oba.city ct JOIN country c ON ct.CountryKey = c.`KEY` WHERE city = COALESCE(@City, city)", para);
         }
     }
 }

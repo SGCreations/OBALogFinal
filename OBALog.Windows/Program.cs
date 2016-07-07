@@ -16,12 +16,12 @@ namespace OBALog.Windows
         {
             try
             {
-                DevExpress.LookAndFeel.UserLookAndFeel.Default.SkinName = "DevExpress Style";
+                //DevExpress.UserSkins.BonusSkins.Register();
+                DevExpress.LookAndFeel.UserLookAndFeel.Default.SkinName = "Visual Studio 2013 Light";
                 DevExpress.Skins.SkinManager.EnableFormSkins();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-
-                Application.Run(new ManageProfessions());
+                Application.Run(new MemberDetails());
             }
             catch (Exception ex)
             {
