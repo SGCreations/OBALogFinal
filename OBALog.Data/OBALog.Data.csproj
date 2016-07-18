@@ -51,6 +51,7 @@
     <Compile Include="DL_Country.cs" />
     <Compile Include="DL_Member.cs" />
     <Compile Include="DL_OrganisationSubCategory.cs" />
+    <Compile Include="DL_Privilege.cs" />
     <Compile Include="DL_Profession.cs" />
     <Compile Include="DL_Salutation.cs" />
     <Compile Include="DL_UsageLog.cs" />

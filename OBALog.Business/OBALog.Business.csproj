@@ -46,6 +46,7 @@
     <Compile Include="BL_Country.cs" />
     <Compile Include="BL_Member.cs" />
     <Compile Include="BL_OrganisationSubCategory.cs" />
+    <Compile Include="BL_Privilege.cs" />
     <Compile Include="BL_Profession.cs" />
     <Compile Include="BL_Salutation.cs" />
     <Compile Include="BL_UsageLog.cs" />

@@ -58,6 +58,7 @@
     <Compile Include="ML_User.cs" />
     <Compile Include="ML_UserAccessPrivilege.cs" />
     <Compile Include="ML_UserAccessType.cs" />
+    <Compile Include="ML_ViewMember.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
