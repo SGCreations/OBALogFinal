@@ -4,7 +4,7 @@ namespace OBALog.Model
 {
     public class ML_RemarksHistory
     {
-        public string MemberKey { get; set; }
+        public int MemberKey { get; set; }
         public string Remarks { get; set; }
         public DateTime UpdatedDate { get; set; }
         public int Key { get; set; }

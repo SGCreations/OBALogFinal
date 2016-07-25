@@ -20,6 +20,17 @@ namespace OBALog.Data
             return (int)MySQLHelper.ExecuteScalar(DBConnection.connectionString, CommandType.Text, "INSERT INTO stc_oba.member (`Key` , MembershipNo , MembershipDate , OldMembershipNos , SalutationKey , Surname , Initials , Forenames , DOB , IdentificationType , IdentificationNo , YearJoined , YearLeft , AddressKey , Mobile , Email , MailReturned , EmailReturned , OLYear , ALYear , ClassGroup , ReceiptKey , Rejected , RejectedReason , RefundChqNo , RefundCheqDate , ApprovalStage , DateSentToOffice , DateApproved , DateRejected , DateCardSentToPrinter , DateCardReceivedFromPrinter , DateMemberNotified , DateCardGivenToMember , MembershipNotificationType , Picture , Archive , Deceased , DeceasedDate , Remarks , ProfessionKey , Outdated , UserKey , UpdatedDate , Deleted) VALUES (NULL, @MembershipNo, @MembershipDate, @OldMembershipNos, @SalutationKey, @Surname, @Initials, @Forenames, @DOB, @IdentificationType, @IdentificationNo, @YearJoined, @YearLeft, @AddressKey, @Mobile, @Email, @MailReturned, @EmailReturned, @OLYear, @ALYear, @ClassGroup, @ReceiptKey, @Rejected, @RejectedReason, @RefundChqNo, @RefundCheqDate, @ApprovalStage, @DateSentToOffice, @DateApproved, @DateRejected, @DateCardSentToPrinter, @DateCardReceivedFromPrinter, @DateMemberNotified, @DateCardGivenToMember, @MembershipNotificationType, @Picture, @Archive, @Deceased, @DeceasedDate, @Remarks, @ProfessionKey, @Outdated, @UserKey, @UpdatedDate, @Deleted); SELECT LAST_INSERT_ID();", para);
         }
 
+        public bool updateMemberImage(ML_Member member)
+        {
+            MySqlParameter[] para = new MySqlParameter[2];
+            para[0] = new MySqlParameter("@Picture", member.Picture);
+            para[1] = new MySqlParameter("@Key", member.Key);
+
+            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "UPDATE `member` SET `Picture` = @Picture WHERE `Key`= @Key;", para);
+
+            return true;
+        }
+
         public bool update(ML_Member member)
         {
             try
@@ -39,19 +50,19 @@ namespace OBALog.Data
 
         public DataTable selectMemberTop20()
         {
-            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT M.KEY ,MembershipNo, Initials, Forenames, Surname FROM member M ORDER BY M.KEY ASC LIMIT 20;");
+            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT M.KEY ,MembershipNo, Initials, Forenames, Surname FROM member M WHERE `Deleted` = 0 ORDER BY M.KEY ASC LIMIT 20;");
         }
 
         public DataSet select(int? MemberKey)
         {
             MySqlParameter[] para = new MySqlParameter[1];
             para[0] = new MySqlParameter("@MemberKey", MemberKey);
-            return MySQLHelper.ExecuteDataSet(DBConnection.connectionString, CommandType.Text, "SELECT * FROM vw_allmemberdata WHERE `KEY` = @MemberKey; SELECT * FROM admission a WHERE a.MemberKey = @MemberKey AND a.School != 'STC Mt. Lavinia'; SELECT * FROM professionaldetails WHERE MemberKey = @MemberKey; SELECT rh.`KEY`, rh.MemberKey, rh.UserKey, u.`Name` As User, rh.Remarks, rh.UpdatedDate FROM remarkshistory rh LEFT JOIN USER u ON rh.UserKey = u.`KEY` WHERE MemberKey = @MemberKey;", para);
+            return MySQLHelper.ExecuteDataSet(DBConnection.connectionString, CommandType.Text, "SELECT * FROM vw_allmemberdata WHERE `KEY` = @MemberKey; SELECT * FROM admission a WHERE a.MemberKey = @MemberKey AND a.School != 'STC Mt. Lavinia'; SELECT * FROM professionaldetails WHERE MemberKey = @MemberKey; SELECT rh.`KEY`, rh.MemberKey, rh.UserKey, u.`Name` As User, rh.Remarks, rh.UpdatedDate FROM remarkshistory rh LEFT JOIN USER u ON rh.UserKey = u.`KEY` WHERE MemberKey = @MemberKey; SELECT Picture FROM member WHERE `Key` = @MemberKey AND Picture IS NOT NULL;", para);
         }
 
         public DataTable selectMemberLastUpdatedTop20()
         {
-            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT M.KEY, MembershipNo, Initials, Forenames, Surname FROM member M ORDER BY UpdatedDate DESC LIMIT 20");
+            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT M.KEY, MembershipNo, Initials, Forenames, Surname FROM member M WHERE `Deleted` = 0 ORDER BY UpdatedDate DESC LIMIT 20");
         }
 
         #region Advanced
@@ -76,17 +87,10 @@ namespace OBALog.Data
 
         public bool delete(ML_Member member)
         {
-            try
-            {
-                MySqlParameter[] para = new MySqlParameter[2];
-                para[0] = new MySqlParameter("@Deleted", member.Deleted);
-                para[1] = new MySqlParameter("@Key", member.Key);
-                MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "UPDATE `member` SET `Deleted` = @Deleted WHERE `Key`= @Key;", para);
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            MySqlParameter[] para = new MySqlParameter[1];
+            para[0] = new MySqlParameter("@Key", member.Key);
+
+            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "UPDATE `member` SET `Deleted` = 1 WHERE `Key`= @Key;", para);
             return true;
         }
 

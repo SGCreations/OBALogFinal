@@ -21,6 +21,7 @@ namespace OBALog.Windows
                 DevExpress.Skins.SkinManager.EnableFormSkins();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
+                Control.CheckForIllegalCrossThreadCalls = false;
                 Application.Run(new Home());
             }
             catch (Exception ex)

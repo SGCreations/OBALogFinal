@@ -9,6 +9,11 @@ namespace OBALog.Business
         {
             return new DL_Member().insert(member);
         }
+        public bool updateMemberImage(ML_Member member)
+        {
+            return new DL_Member().updateMemberImage(member);
+        }
+
         public System.Data.DataTable selectMemberTop20()
         {
             return new DL_Member().selectMemberTop20();
@@ -18,10 +23,17 @@ namespace OBALog.Business
         {
             return new DL_Member().select(MemberKey);
         }
+
         public System.Data.DataTable selectMemberLastUpdatedTop20()
         {
             return new DL_Member().selectMemberLastUpdatedTop20();
         }
+
+        public bool delete(ML_Member member)
+        {
+            return new DL_Member().delete(member);
+        }
+
         public System.Data.DataTable selectMemberAdvancedPersonal(ML_Member member, int? CountryKey, int? CityKey, string DOBSD, string DOBED, string Telephone, bool? Deleted)
         {
             return new DL_Member().selectMemberAdvancedPersonal(member, CountryKey, CityKey, DOBSD, DOBED, Telephone, Deleted);
