@@ -1,4 +1,9 @@
-﻿using OBALog.Data;
+﻿/*I*n*v*i*n*c*b*l*e----*S*t*u*d*i*o*s*/
+//© 2016 - Sidath Gajanayaka
+//sinhalokaya@gmail.com
+/*All Rights Reserved*/
+
+using OBALog.Data;
 using OBALog.Model;
 
 namespace OBALog.Business

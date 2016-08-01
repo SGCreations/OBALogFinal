@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BL_Address.cs" />
+    <Compile Include="BL_Configurations.cs" />
     <Compile Include="BL_Organisation.cs" />
     <Compile Include="BL_OrganisationCategory.cs" />
     <Compile Include="BL_City.cs" />

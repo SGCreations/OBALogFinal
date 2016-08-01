@@ -2,19 +2,15 @@
 using OBALog.Business;
 using OBALog.Model;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace OBALog.Windows
 {
     public partial class ManageProfessions : XtraForm
     {
+        public bool FormDirty { get; set; }
+        public string LastProfession { get; set; }
+
         public int SelectedID { get; set; }
 
         public bool IsNewRecord { get; set; }
@@ -60,6 +56,7 @@ namespace OBALog.Windows
             btn_delete_profession.Enabled = btnDeleteEnabled;
             IsNewRecord = IsNew;
             if (focusList) lst_professions_SelectedIndexChanged(this, new EventArgs());
+            FormDirty = false;
         }
 
         private void lst_professions_SelectedIndexChanged(object sender, EventArgs e)
@@ -73,6 +70,7 @@ namespace OBALog.Windows
                     {
                         txt_new_profession.Text = currentRow.Row["Profession"].ToString();
                         SelectedID = (int)currentRow.Row["Key"];
+                        FormDirty = false;
                     }
                 }
             }
@@ -104,6 +102,7 @@ namespace OBALog.Windows
 
                             BindProfession();
                             ResetForm(false, true, true, true, true, true);
+                            SetPrevious();
                         }
                         else
                         {
@@ -121,6 +120,15 @@ namespace OBALog.Windows
 
                 AuditFactory.AuditLog(ex);
                 ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
+        }
+
+        private void SetPrevious()
+        {
+            if (LastProfession.IsNotEmpty())
+            {
+                lst_professions.SelectedIndex = lst_professions.FindStringExact(LastProfession);
+                FormDirty = false;
             }
         }
 
@@ -164,14 +172,30 @@ namespace OBALog.Windows
 
         private void btn_close_Click(object sender, EventArgs e)
         {
+            this.Close();
+        }
+
+        private bool CloseFormWithChecks()
+        {
             if (IsNewRecord)
             {
                 ResetForm(false, true, true, true, true, true);
+                return false;
             }
             else
             {
-                this.Close();
+                return true;
             }
+        }
+
+        private void txt_new_profession_EditValueChanged(object sender, EventArgs e)
+        {
+            FormDirty = false;
+        }
+
+        private void ManageProfessions_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        {
+            e.Cancel = !ApplicationUtilities.CheckFormDirtyClose(CloseFormWithChecks, FormDirty);
         }
 
     }

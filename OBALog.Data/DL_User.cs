@@ -10,7 +10,7 @@ namespace OBALog.Data
             para[0] = new MySqlParameter("@LoginId", user.LoginId);
             para[1] = new MySqlParameter("@Name", user.Name);
             para[2] = new MySqlParameter("@NIC", user.NIC);
-            para[3] = new MySqlParameter("@Password", user.Password);
+            para[3] = new MySqlParameter("@Password", DataHelper.CreateSHA1(user.Password));
             para[4] = new MySqlParameter("@UpdatedDate", user.UpdatedDate);
             para[5] = new MySqlParameter("@UserAccessTypeKey", user.UserAccessTypeKey);
             para[6] = new MySqlParameter("@UserKey", user.UserKey);
@@ -24,7 +24,7 @@ namespace OBALog.Data
             para[0] = new MySqlParameter("@LoginId", user.LoginId);
             para[1] = new MySqlParameter("@Name", user.Name);
             para[2] = new MySqlParameter("@NIC", user.NIC);
-            para[3] = new MySqlParameter("@Password", user.Password);
+            para[3] = new MySqlParameter("@Password", DataHelper.CreateSHA1(user.Password));
             para[4] = new MySqlParameter("@UpdatedDate", user.UpdatedDate);
             para[5] = new MySqlParameter("@UserAccessTypeKey", user.UserAccessTypeKey);
             para[6] = new MySqlParameter("@UserKey", user.UserKey);
@@ -36,15 +36,8 @@ namespace OBALog.Data
 
         public bool delete(OBALog.Model.ML_User user)
         {
-            var para = new MySqlParameter[8];
-            para[0] = new MySqlParameter("@LoginId", user.LoginId);
-            para[1] = new MySqlParameter("@Name", user.Name);
-            para[2] = new MySqlParameter("@NIC", user.NIC);
-            para[3] = new MySqlParameter("@Password", user.Password);
-            para[4] = new MySqlParameter("@UpdatedDate", user.UpdatedDate);
-            para[5] = new MySqlParameter("@UserAccessTypeKey", user.UserAccessTypeKey);
-            para[6] = new MySqlParameter("@UserKey", user.UserKey);
-            para[7] = new MySqlParameter("@Key", user.Key);
+            var para = new MySqlParameter[1];
+            para[0] = new MySqlParameter("@Key", user.Key);
 
             MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, System.Data.CommandType.Text, "UPDATE stc_oba.user SET `Deleted` = True WHERE `Key` = @Key", para);
             return true;

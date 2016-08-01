@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DL_Address.cs" />
+    <Compile Include="DL_Configurations.cs" />
     <Compile Include="DL_Organisation.cs" />
     <Compile Include="DL_OrganisationCategory.cs" />
     <Compile Include="DL_City.cs" />
