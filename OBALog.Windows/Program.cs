@@ -22,7 +22,7 @@ namespace OBALog.Windows
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Control.CheckForIllegalCrossThreadCalls = false;
-                Application.Run(new Home());
+                Application.Run(new ManageOrganisations());
             }
             catch (Exception ex)
             {

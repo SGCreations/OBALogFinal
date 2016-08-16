@@ -166,7 +166,7 @@ namespace OBALog.Data
             return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT `KEY`, MembershipNo, Initials, Surname, Forenames, country FROM vw_allmemberdata WHERE (Initials LIKE @Initials OR @Initials IS NULL) AND (Surname LIKE @Surname OR @Surname IS NULL) AND (Forenames LIKE @Forenames OR @Forenames IS NULL) AND (CountryKey LIKE @CountryKey OR @CountryKey IS NULL) AND (CityKey LIKE @CityKey OR @CityKey IS NULL) AND (Telephone LIKE @Telephone OR @Telephone IS NULL) AND (Deceased = @Deceased OR @Deceased IS NULL) AND (EmailReturned = @EmailReturned OR @EmailReturned IS NULL) AND (MailReturned = @MailReturned OR @MailReturned IS NULL) AND (Mobile LIKE @Mobile OR @Mobile IS NULL) AND (IdentificationNo LIKE @IdentificationNo OR @IdentificationNo IS NULL) AND (CONVERT(DOB, date) >= CONVERT(@DOBSD, date) OR @DOBSD IS NULL) AND (CONVERT(DOB, date) <= CONVERT(@DOBED, date) OR @DOBED IS NULL) AND (MembershipNo LIKE @MembershipNo OR @MembershipNo IS NULL) AND (Deleted = @Deleted OR @Deleted IS NULL);", para);
         }
 
-        public DataTable selectMemberAdvancedMembership(ML_Member member, string DateFrom, string DateTo, bool? Deleted)
+        public DataTable selectMemberAdvancedMembership(ML_Member member, string DateFrom, string DateTo, bool? Deleted, bool includeDuplicates)
         {
             MySqlParameter[] para = new MySqlParameter[5];
             para[0] = new MySqlParameter("@MembershipNo", member.MembershipNo);
@@ -175,7 +175,9 @@ namespace OBALog.Data
             para[3] = new MySqlParameter("@MDED", DateTo);
             para[4] = new MySqlParameter("@Deleted", Deleted);
 
-            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT `Key`, MembershipNo, Initials, Surname, Forenames, country FROM vw_allmemberdata WHERE (MembershipNo LIKE @MembershipNo OR @MembershipNo IS NULL) AND (OldMembershipNos LIKE @OldMembershipNos OR @OldMembershipNos IS NULL) AND (CONVERT(MembershipDate, date) >= CONVERT(@MDSD, date) OR @MDSD IS NULL) AND (CONVERT(MembershipDate, date) <= CONVERT(@MDED, date) OR @MDED IS NULL) AND (Deleted = @Deleted OR @Deleted IS NULL)", para);
+            string Query = string.Format("SELECT `Key`, MembershipNo, Initials, Surname, Forenames, country FROM vw_allmemberdata WHERE {0} AND (CONVERT(MembershipDate, date) >= CONVERT(@MDSD, date) OR @MDSD IS NULL) AND (CONVERT(MembershipDate, date) <= CONVERT(@MDED, date) OR @MDED IS NULL) AND (Deleted = @Deleted OR @Deleted IS NULL)", includeDuplicates ? "(MembershipNo LIKE @MembershipNo OR @MembershipNo IS NULL) OR (OldMembershipNos LIKE @MembershipNo OR @MembershipNo IS NULL)" : "(MembershipNo LIKE @MembershipNo OR @MembershipNo IS NULL) AND (OldMembershipNos LIKE @OldMembershipNos OR @OldMembershipNos IS NULL) ");
+
+            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, Query, para);
         }
 
         public DataTable selectMemberAdvancedSchool(string AdmissionNo, int? FROLYear, int? TOOLYear, int? FRALYear, int? TOALYear, int? FRYearJoined, int? TOYearJoined, int? FRYearLeft, int? TOYearLeft, int? FRClassGroup, int? TOClassGroup, bool? Deleted)

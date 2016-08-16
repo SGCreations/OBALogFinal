@@ -44,9 +44,9 @@ namespace OBALog.Business
             return new DL_Member().selectMemberAdvancedPersonal(member, CountryKey, CityKey, DOBSD, DOBED, Telephone, Deleted);
         }
 
-        public System.Data.DataTable selectMemberAdvancedMembership(ML_Member member, string DateFrom, string DateTo, bool? Deleted)
+        public System.Data.DataTable selectMemberAdvancedMembership(ML_Member member, string DateFrom, string DateTo, bool? Deleted, bool includeDuplicates)
         {
-            return new DL_Member().selectMemberAdvancedMembership(member, DateFrom, DateTo, Deleted);
+            return new DL_Member().selectMemberAdvancedMembership(member, DateFrom, DateTo, Deleted, includeDuplicates);
         }
         public System.Data.DataTable selectMemberAdvancedSchool(string AdmissionNo, int? FROLYear, int? TOOLYear, int? FRALYear, int? TOALYear, int? FRYearJoined, int? TOYearJoined, int? FRYearLeft, int? TOYearLeft, int? FRClassGroup, int? TOClassGroup, bool? Deleted)
         {

@@ -8,7 +8,7 @@ namespace OBALog.Data
     {
         public static string CreateSHA1(String inputString)
         {
-            return BitConverter.ToString(new SHA1CryptoServiceProvider().ComputeHash(Encoding.Default.GetBytes(inputString))).Replace("-", "");
+            return string.IsNullOrEmpty(inputString) ? null : BitConverter.ToString(new SHA1CryptoServiceProvider().ComputeHash(Encoding.Default.GetBytes(inputString))).Replace("-", "");
         }
     }
 }

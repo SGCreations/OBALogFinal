@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using System;
 
 namespace OBALog.Data
 {
@@ -15,7 +16,7 @@ namespace OBALog.Data
             para[5] = new MySqlParameter("@UserAccessTypeKey", user.UserAccessTypeKey);
             para[6] = new MySqlParameter("@UserKey", user.UserKey);
 
-            return (int)MySQLHelper.ExecuteScalar(DBConnection.connectionString, System.Data.CommandType.Text, "INSERT INTO stc_oba.user ( LoginId ,Password ,Name ,NIC ,UserAccessTypeKey ,UserKey ) VALUES ( @LoginId ,@Password ,@Name ,@NIC ,@UserAccessTypeKey ,@UserKey); SELECT @@identity", para);
+            return Convert.ToInt32(MySQLHelper.ExecuteScalar(DBConnection.connectionString, System.Data.CommandType.Text, "INSERT INTO stc_oba.user ( LoginId ,Password ,Name ,NIC ,UserAccessTypeKey ,UserKey, UpdatedDate) VALUES ( @LoginId ,@Password ,@Name ,@NIC ,@UserAccessTypeKey ,@UserKey, NOW()); SELECT @@identity", para));
         }
 
         public bool update(OBALog.Model.ML_User user)
@@ -31,6 +32,18 @@ namespace OBALog.Data
             para[7] = new MySqlParameter("@Key", user.Key);
 
             MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, System.Data.CommandType.Text, "UPDATE stc_oba.user SET LoginId = @LoginId ,Password = COALESCE(@Password, Password) ,Name = @Name ,NIC = @NIC ,UserAccessTypeKey = @UserAccessTypeKey ,UserKey = @UserKey ,UpdatedDate = NOW() WHERE `Key` = @Key", para);
+            return true;
+        }
+
+        public bool resetPassword(OBALog.Model.ML_User user)
+        {
+            var para = new MySqlParameter[4];
+            para[0] = new MySqlParameter("@LoginId", user.LoginId);
+            para[1] = new MySqlParameter("@Password", DataHelper.CreateSHA1(user.Password));
+            para[2] = new MySqlParameter("@UpdatedDate", user.UpdatedDate);
+            para[3] = new MySqlParameter("@Key", user.Key);
+
+            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, System.Data.CommandType.Text, "UPDATE stc_oba.user SET Password = COALESCE(@Password, Password), UpdatedDate = NOW() WHERE `Key` = @Key AND `LoginId`= COALESCE(@LoginId, LoginId)", para);
             return true;
         }
 
@@ -56,7 +69,7 @@ namespace OBALog.Data
             var para = new MySqlParameter[2];
             para[0] = new MySqlParameter("@Key", user.Key);
             para[1] = new MySqlParameter("@LoginId", user.LoginId);
-            
+
             return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, System.Data.CommandType.Text, "SELECT `Key`, LoginId, Name, NIC, UserAccessTypeKey, UserKey, UpdatedDate FROM stc_oba.user WHERE `Key` = @Key OR `LoginId` = @LoginId", para);
         }
 

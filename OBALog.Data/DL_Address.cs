@@ -24,13 +24,14 @@ namespace OBALog.Data
 
         public bool update(OBALog.Model.ML_Address address)
         {
-            MySqlParameter[] para = new MySqlParameter[4];
+            MySqlParameter[] para = new MySqlParameter[5];
             para[0] = new MySqlParameter("@Address", address.Address);
             para[1] = new MySqlParameter("@Telephone", address.Telephone);
             para[2] = new MySqlParameter("@CityKey", address.CityKey);
             para[3] = new MySqlParameter("@UserKey", address.UserKey);
+            para[4] = new MySqlParameter("@Key", address.Key);
 
-            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "UPDATE stc_oba.address SET Address = @Address ,CityKey = @CityKey ,Telephone = @Telephone ,UserKey = @UserKey , UpdatedDate = NOW() WHERE `Key` = @`Key`", para);
+            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "UPDATE stc_oba.address SET Address = @Address ,CityKey = @CityKey ,Telephone = @Telephone ,UserKey = @UserKey , UpdatedDate = NOW() WHERE `Key` = @Key", para);
             return true;
         }
 

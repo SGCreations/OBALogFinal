@@ -18,6 +18,7 @@ namespace OBALog.Windows
             {
                 bindInitialData();
                 bindConfigurations();
+                FormDirty = false;
             }
             catch (Exception ex)
             {
@@ -195,18 +196,16 @@ namespace OBALog.Windows
                         int count = 0;
                         foreach (string rec_val in lst_receipt_amount.Items)
                         {
-                            receiptValues = (count == lst_receipt_amount.Items.Count) ? string.Format("{0}{1}", receiptValues) : string.Format("{0}{1};", receiptValues, rec_val);
+                            receiptValues = (count == lst_receipt_amount.Items.Count) ? string.Format("{0}{1}", receiptValues, rec_val) : string.Format("{0}{1};", receiptValues, rec_val);
                             count++;
                         }
                         new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.ReceiptAmountStr, Description = txt_rec_amount_desc.Text, ConfigurationValue = receiptValues, UserKey = UniversalVariables.UserKey });
                         break;
                     case "System Timeout":
-                        string timeoutSystem = string.Format("{0}:{1}:{2}", nud_timeout_hrs.Text, nud_timeout_minutes.Text, nud_timeout_seconds.Text);
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.TimeoutPeriodStr, Description = txt_timeout_desc.Text, ConfigurationValue = timeoutSystem, UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.TimeoutPeriodStr, Description = txt_timeout_desc.Text, ConfigurationValue = string.Format("{0}:{1}:{2}", nud_timeout_hrs.Text, nud_timeout_minutes.Text, nud_timeout_seconds.Text), UserKey = UniversalVariables.UserKey });
                         break;
                     case "Logout Confirmation Timeout":
-                        string timeoutValue = string.Format("{0}:{1}", nud_msg_box_minutes.Text, nud_msg_box_seconds.Text);
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.MembershipNoIndexStr, Description = mem_logout_desc.Text, ConfigurationValue = timeoutValue, UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.MembershipNoIndexStr, Description = mem_logout_desc.Text, ConfigurationValue = string.Format("{0}:{1}", nud_msg_box_minutes.Text, nud_msg_box_seconds.Text), UserKey = UniversalVariables.UserKey });
                         break;
                     case "Default Values":
                         if (cbo_country.EditValue != null && cbo_city.EditValue != null && cbo_salutation.EditValue != null)
@@ -225,7 +224,7 @@ namespace OBALog.Windows
                     default:
                         break;
                 }
-                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Information, "Configuration settings saved.", "Record Updated");
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Information, "Configuration settings saved. The new settings will be applied at next login.", "Record Updated");
                 bindConfigurations();
                 FormDirty = false;
             }
