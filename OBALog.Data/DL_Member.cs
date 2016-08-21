@@ -215,6 +215,7 @@ namespace OBALog.Data
 
             return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT `Key`, MembershipNo, Initials, Surname, Forenames, country FROM vw_allmemberdata WHERE (ReceiptNo LIKE @ReceiptNo OR @ReceiptNo IS NULL) AND (CONVERT(ReceiptDate, date) >= CONVERT(@FRReceiptDate, date) OR @FRReceiptDate IS NULL) AND (CONVERT(ReceiptDate, date) <= CONVERT(@TOReceiptDate, date) OR @TOReceiptDate IS NULL) AND (ApprovalStage LIKE @ApprovalStage OR @ApprovalStage IS NULL) AND (Deleted = @Deleted OR @Deleted IS NULL);", para);
         }
+
         public DataTable selectMemberAdvancedProfessional(int? ProfessionKey, int? CategoryKey, int? SubCategoryKey, int? OrganisationKey, bool? Deleted)
         {
             MySqlParameter[] para = new MySqlParameter[5];
@@ -225,6 +226,14 @@ namespace OBALog.Data
             para[4] = new MySqlParameter("@Deleted", Deleted);
 
             return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT `KEY`, MembershipNo, Initials, Surname, Forenames FROM vw_allmemberdata WHERE (ProfessionKey LIKE @ProfessionKey OR @ProfessionKey IS NULL) AND (CategoryKey LIKE @CategoryKey OR @CategoryKey IS NULL) AND (SubCategoryKey LIKE @SubCategoryKey OR @SubCategoryKey IS NULL) AND (OrganisationKey LIKE @OrganisationKey OR @OrganisationKey IS NULL) AND (Deleted = @Deleted OR @Deleted IS NULL);", para);
+        }
+
+        public ML_ViewMember selectMember(int MemberKey)
+        {
+            MySqlParameter[] para = new MySqlParameter[1];
+            para[0] = new MySqlParameter("@MemberKey", MemberKey);
+
+            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT * FROM vw_allmemberdata WHERE `KEY` = @MemberKey;", para).DataTableToList<ML_ViewMember>()[0];
         }
     }
 }

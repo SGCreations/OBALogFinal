@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\CurrencyToTextConverter.cs" />
     <Compile Include="ML_Address.cs" />
     <Compile Include="ML_Admission.cs" />
     <Compile Include="ML_City.cs" />

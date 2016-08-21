@@ -190,7 +190,7 @@ namespace OBALog.Windows
 
         private void txt_new_profession_EditValueChanged(object sender, EventArgs e)
         {
-            FormDirty = false;
+            FormDirty = true;
         }
 
         private void ManageProfessions_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)

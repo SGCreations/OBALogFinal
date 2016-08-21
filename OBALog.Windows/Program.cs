@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace OBALog.Windows
@@ -22,7 +19,7 @@ namespace OBALog.Windows
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Control.CheckForIllegalCrossThreadCalls = false;
-                Application.Run(new ManageOrganisations());
+                Application.Run(new MemberDetails());
             }
             catch (Exception ex)
             {

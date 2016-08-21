@@ -29,6 +29,11 @@ namespace OBALog.Business
             return new DL_Member().select(MemberKey);
         }
 
+        public ML_ViewMember selectMember(int MemberKey)
+        {
+            return new DL_Member().selectMember(MemberKey);
+        }
+
         public System.Data.DataTable selectMemberLastUpdatedTop20()
         {
             return new DL_Member().selectMemberLastUpdatedTop20();
