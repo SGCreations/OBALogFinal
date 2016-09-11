@@ -3,9 +3,6 @@ using OBALog.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OBALog.Data
 {
@@ -17,9 +14,8 @@ namespace OBALog.Data
             MySqlParameter[] para = new MySqlParameter[paraList.Count];
             para = paraList.ToArray();
 
-            return (int)MySQLHelper.ExecuteScalar(DBConnection.connectionString, CommandType.Text, "INSERT INTO stc_oba.member (`Key` , MembershipNo , MembershipDate , OldMembershipNos , SalutationKey , Surname , Initials , Forenames , DOB , IdentificationType , IdentificationNo , YearJoined , YearLeft , AddressKey , Mobile , Email , MailReturned , EmailReturned , OLYear , ALYear , ClassGroup , ReceiptKey , Rejected , RejectedReason , RefundChqNo , RefundCheqDate , ApprovalStage , DateSentToOffice , DateApproved , DateRejected , DateCardSentToPrinter , DateCardReceivedFromPrinter , DateMemberNotified , DateCardGivenToMember , MembershipNotificationType , Picture , Archive , Deceased , DeceasedDate , Remarks , ProfessionKey , Outdated , UserKey , UpdatedDate , Deleted) VALUES (NULL, @MembershipNo, @MembershipDate, @OldMembershipNos, @SalutationKey, @Surname, @Initials, @Forenames, @DOB, @IdentificationType, @IdentificationNo, @YearJoined, @YearLeft, @AddressKey, @Mobile, @Email, @MailReturned, @EmailReturned, @OLYear, @ALYear, @ClassGroup, @ReceiptKey, @Rejected, @RejectedReason, @RefundChqNo, @RefundCheqDate, @ApprovalStage, @DateSentToOffice, @DateApproved, @DateRejected, @DateCardSentToPrinter, @DateCardReceivedFromPrinter, @DateMemberNotified, @DateCardGivenToMember, @MembershipNotificationType, @Picture, @Archive, @Deceased, @DeceasedDate, @Remarks, @ProfessionKey, @Outdated, @UserKey, @UpdatedDate, @Deleted); SELECT LAST_INSERT_ID();", para);
+            return (int)MySQLHelper.ExecuteScalar(DBConnection.connectionString, CommandType.Text, "INSERT INTO stc_oba.member (MembershipNo , MembershipDate , OldMembershipNos , SalutationKey , Surname , Initials , Forenames , DOB , IdentificationType , IdentificationNo , YearJoined , YearLeft , AddressKey , Mobile , Email , MailReturned , EmailReturned , OLYear , ALYear , ClassGroup , ReceiptKey , Rejected , RejectedReason , RefundChqNo , RefundCheqDate , ApprovalStage , DateSentToOffice , DateApproved , DateRejected , DateCardSentToPrinter , DateCardReceivedFromPrinter , DateMemberNotified , DateCardGivenToMember , MembershipNotificationType , Picture , Archive , Deceased , DeceasedDate , Remarks , ProfessionKey , Outdated , UserKey , UpdatedDate , Deleted) VALUES (@MembershipNo, @MembershipDate, @OldMembershipNos, @SalutationKey, @Surname, @Initials, @Forenames, @DOB, @IdentificationType, @IdentificationNo, @YearJoined, @YearLeft, @AddressKey, @Mobile, @Email, @MailReturned, @EmailReturned, @OLYear, @ALYear, @ClassGroup, @ReceiptKey, @Rejected, @RejectedReason, @RefundChqNo, @RefundCheqDate, @ApprovalStage, @DateSentToOffice, @DateApproved, @DateRejected, @DateCardSentToPrinter, @DateCardReceivedFromPrinter, @DateMemberNotified, @DateCardGivenToMember, @MembershipNotificationType, @Picture, @Archive, @Deceased, @DeceasedDate, @Remarks, @ProfessionKey, @Outdated, @UserKey, @UpdatedDate, @Deleted); SELECT LAST_INSERT_ID();", para);
         }
-
         public bool updateMemberImage(ML_Member member)
         {
             MySqlParameter[] para = new MySqlParameter[2];
@@ -234,6 +230,647 @@ namespace OBALog.Data
             para[0] = new MySqlParameter("@MemberKey", MemberKey);
 
             return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT * FROM vw_allmemberdata WHERE `KEY` = @MemberKey;", para).DataTableToList<ML_ViewMember>()[0];
+        }
+
+
+        public int insertMemberAddress(ML_Address address)
+        {
+            MySqlTransaction tr = null;
+            MySqlConnection con = new MySqlConnection(DBConnection.connectionString);
+            con.Open();
+            try
+            {
+                tr = con.BeginTransaction();
+                MySqlCommand cmd = new MySqlCommand();
+                cmd = new MySqlCommand("INSERT INTO stc_oba.address (address , CityKey , Telephone , UserKey , UpdatedDate) VALUES (@Address, @CityKey, @Telephone, @UserKey, @UpdatedDate); SELECT LAST_INSERT_ID();", con, tr);
+                cmd.Parameters.AddWithValue("@Address", address.Address);
+                cmd.Parameters.AddWithValue("@CityKey", address.CityKey);
+                cmd.Parameters.AddWithValue("@Telephone", address.Telephone);
+                cmd.Parameters.AddWithValue("@UserKey", address.UserKey);
+                cmd.ExecuteNonQuery();
+                tr.Commit();
+            }
+            catch
+            {
+                tr.Rollback();
+                throw;
+            }
+            finally
+            {
+                con.Close();
+            }
+            return 0;
+        }
+        public int insertReceipt(ML_Receipt receipt)
+        {
+            MySqlTransaction tr = null;
+            int returnKey = 0;
+            MySqlConnection con = new MySqlConnection(DBConnection.connectionString);
+            con.Open();
+            try
+            {
+                tr = con.BeginTransaction();
+                MySqlCommand cmd = new MySqlCommand();
+                cmd = new MySqlCommand("INSERT INTO stc_oba.receipt (ReceiptNo, ReceiptDate, ReceiptAmount, PaymentType, CardChequeNo, Bank, PrintCount, UserKey, UpdatedDate) VALUES (@ReceiptNo, @ReceiptDate, @ReceiptAmount, @PaymentType, @CardChequeNo, @Bank, @PrintCount, @UserKey, NOW()); SELECT LAST_INSERT_ID();", con, tr);
+                cmd.Parameters.AddWithValue("@ReceiptNo", receipt.ReceiptNo);
+                cmd.Parameters.AddWithValue("@ReceiptDate", receipt.ReceiptDate);
+                cmd.Parameters.AddWithValue("@ReceiptAmount", receipt.ReceiptAmount);
+                cmd.Parameters.AddWithValue("@PaymentType", receipt.PaymentType);
+                cmd.Parameters.AddWithValue("@CardChequeNo", receipt.CardChequeNo);
+                cmd.Parameters.AddWithValue("@Bank", receipt.Bank);
+                cmd.Parameters.AddWithValue("@PrintCount", receipt.PrintCount);
+                cmd.Parameters.AddWithValue("@UserKey", receipt.UserKey);
+                returnKey = Convert.ToInt32(cmd.ExecuteScalar());
+                tr.Commit();
+            }
+            catch
+            {
+                tr.Rollback();
+                throw;
+            }
+            finally
+            {
+                con.Close();
+            }
+            return returnKey;
+        }
+
+        public int insertAdmission(ML_Admission admission)
+        {
+            MySqlTransaction tr = null;
+            int returnKey = 0;
+            MySqlConnection con = new MySqlConnection(DBConnection.connectionString);
+            con.Open();
+            try
+            {
+                tr = con.BeginTransaction();
+                MySqlCommand cmd = new MySqlCommand();
+                cmd = new MySqlCommand("INSERT INTO stc_oba.admission ( MemberKey ,School ,AdmissionNo ,UserKey ) VALUES ( @MemberKey ,@School ,@AdmissionNo ,@UserKey ); SELECT LAST_INSERT_ID();", con, tr);
+                cmd.Parameters.AddWithValue("@MemberKey", admission.MemberKey);
+                cmd.Parameters.AddWithValue("@School", admission.School);
+                cmd.Parameters.AddWithValue("@AdmissionNo", admission.AdmissionNo);
+                cmd.Parameters.AddWithValue("@UserKey", admission.UserKey);
+                returnKey = Convert.ToInt32(cmd.ExecuteScalar());
+                tr.Commit();
+            }
+            catch
+            {
+                tr.Rollback();
+                throw;
+            }
+            finally
+            {
+                con.Close();
+            }
+            return returnKey;
+        }
+
+
+        public int insertProfessionalDetails(ML_ProfessionalDetails proDetails)
+        {
+            MySqlTransaction tr = null;
+            int returnKey = 0;
+            MySqlConnection con = new MySqlConnection(DBConnection.connectionString);
+            con.Open();
+            try
+            {
+                tr = con.BeginTransaction();
+                MySqlCommand cmd = new MySqlCommand();
+                cmd = new MySqlCommand("INSERT INTO stc_oba.professionaldetails ( OrganisationKey ,MemberKey ,Designation ,Email ,Active ,UserKey ,UpdatedDate ) VALUES ( @OrganisationKey ,@MemberKey ,@Designation ,@Email ,@Active ,@UserKey ,NOW() ); SELECT LAST_INSERT_ID();", con, tr);
+                cmd.Parameters.AddWithValue("@OrganisationKey", proDetails.OrganisationKey);
+                cmd.Parameters.AddWithValue("@MemberKey", proDetails.MemberKey);
+                cmd.Parameters.AddWithValue("@Designation", proDetails.Designation);
+                cmd.Parameters.AddWithValue("@Email", proDetails.Email);
+                cmd.Parameters.AddWithValue("@Active", proDetails.Active);
+                cmd.Parameters.AddWithValue("@UserKey", proDetails.UserKey);
+                returnKey = Convert.ToInt32(cmd.ExecuteScalar());
+                tr.Commit();
+            }
+            catch
+            {
+                tr.Rollback();
+                throw;
+            }
+            finally
+            {
+                con.Close();
+            }
+            return returnKey;
+        }
+
+        public bool insertRemark(ML_RemarksHistory remark)
+        {
+            MySqlTransaction tr = null;
+            MySqlConnection con = new MySqlConnection(DBConnection.connectionString);
+            con.Open();
+            try
+            {
+                tr = con.BeginTransaction();
+                MySqlCommand cmd = new MySqlCommand();
+                cmd = new MySqlCommand("INSERT INTO stc_oba.remarkshistory ( MemberKey ,UserKey ,Remarks ,UpdatedDate ) VALUES ( @MemberKey ,@UserKey ,@Remarks , NOW() );", con, tr);
+                cmd.Parameters.AddWithValue("@MemberKey", remark.MemberKey);
+                cmd.Parameters.AddWithValue("@Remarks", remark.Remarks);
+                cmd.Parameters.AddWithValue("@UserKey", remark.UserKey);
+
+                tr.Commit();
+            }
+            catch
+            {
+                tr.Rollback();
+                throw;
+            }
+            finally
+            {
+                con.Close();
+            }
+            return true;
+        }
+
+
+        public bool insertMember(ML_Address address, ML_Receipt receipt, ML_Member member, List<ML_Admission> admissions, ML_ProfessionalDetails proDetails, List<ML_RemarksHistory> remarks, string ReceiptNoStr, string MembershipDateStr, string MembershipNoIndexStr, string userKey)
+        {
+            MySqlTransaction tr = null;
+            using (MySqlConnection con = new MySqlConnection(DBConnection.connectionString))
+            {
+                con.Open();
+                try
+                {
+                    tr = con.BeginTransaction();
+
+                    #region Address
+
+                    int addressKey = 0;
+
+                    using (MySqlCommand cmdAddress = new MySqlCommand("INSERT INTO stc_oba.address (address , CityKey , Telephone , UserKey , UpdatedDate) VALUES (@Address, @CityKey, @Telephone, @UserKey, NOW()); SELECT LAST_INSERT_ID();", con, tr))
+                    {
+                        cmdAddress.Parameters.AddWithValue("@Address", address.Address);
+                        cmdAddress.Parameters.AddWithValue("@CityKey", address.CityKey);
+                        cmdAddress.Parameters.AddWithValue("@Telephone", address.Telephone);
+                        cmdAddress.Parameters.AddWithValue("@UserKey", userKey);
+
+                        addressKey = Convert.ToInt32(cmdAddress.ExecuteScalar());
+                    }
+
+                    #endregion
+
+                    #region Receipt
+
+                    int receiptKey = 0;
+                    using (MySqlCommand cmdReceipt = new MySqlCommand("INSERT INTO stc_oba.receipt (ReceiptNo, ReceiptDate, ReceiptAmount, PaymentType, CardChequeNo, Bank, PrintCount, UserKey, UpdatedDate) VALUES (@ReceiptNo, @ReceiptDate, @ReceiptAmount, @PaymentType, @CardChequeNo, @Bank, @PrintCount, @UserKey, NOW()); SELECT LAST_INSERT_ID();", con, tr))
+                    {
+
+                        cmdReceipt.Parameters.AddWithValue("@ReceiptNo", receipt.ReceiptNo);
+                        cmdReceipt.Parameters.AddWithValue("@ReceiptDate", receipt.ReceiptDate);
+                        cmdReceipt.Parameters.AddWithValue("@ReceiptAmount", receipt.ReceiptAmount);
+                        cmdReceipt.Parameters.AddWithValue("@PaymentType", receipt.PaymentType);
+                        cmdReceipt.Parameters.AddWithValue("@CardChequeNo", receipt.CardChequeNo);
+                        cmdReceipt.Parameters.AddWithValue("@Bank", receipt.Bank);
+                        cmdReceipt.Parameters.AddWithValue("@PrintCount", receipt.PrintCount);
+                        cmdReceipt.Parameters.AddWithValue("@UserKey", userKey);
+
+                        receiptKey = Convert.ToInt32(cmdReceipt.ExecuteScalar());
+                    }
+
+                    #endregion
+
+                    #region ReceiptNoConfig
+
+                    using (MySqlCommand cmdReceiptNoConfig = new MySqlCommand("UPDATE configurations SET ConfigurationValue = @ConfigurationValue,UserKey = @UserKey ,UpdatedDate = NOW() WHERE ConfigurationName = @ConfigurationName", con, tr))
+                    {
+
+                        cmdReceiptNoConfig.Parameters.AddWithValue("@ConfigurationValue", receipt.ReceiptNo);
+                        cmdReceiptNoConfig.Parameters.AddWithValue("@UserKey", userKey);
+                        cmdReceiptNoConfig.Parameters.AddWithValue("@ConfigurationName", ReceiptNoStr);
+
+                        cmdReceiptNoConfig.ExecuteNonQuery();
+                    }
+
+                    #endregion
+
+                    #region Member
+
+                    int memberKey = 0;
+                    using (MySqlCommand cmdMember = new MySqlCommand("INSERT INTO stc_oba.member (MembershipNo , MembershipDate , OldMembershipNos , SalutationKey , Surname , Initials , Forenames , DOB , IdentificationType , IdentificationNo , YearJoined , YearLeft , AddressKey , Mobile , Email , MailReturned , EmailReturned , OLYear , ALYear , ClassGroup , ReceiptKey , Rejected , RejectedReason , RefundChqNo , RefundCheqDate , ApprovalStage , DateSentToOffice , DateApproved , DateRejected , DateCardSentToPrinter , DateCardReceivedFromPrinter , DateMemberNotified , DateCardGivenToMember , MembershipNotificationType , Deceased , DeceasedDate , ProfessionKey , Outdated , UserKey ,Picture , UpdatedDate) VALUES (@MembershipNo, @MembershipDate, @OldMembershipNos, @SalutationKey, @Surname, @Initials, @Forenames, @DOB, @IdentificationType, @IdentificationNo, @YearJoined, @YearLeft, @AddressKey, @Mobile, @Email, @MailReturned, @EmailReturned, @OLYear, @ALYear, @ClassGroup, @ReceiptKey, @Rejected, @RejectedReason, @RefundChqNo, @RefundCheqDate, @ApprovalStage, @DateSentToOffice, @DateApproved, @DateRejected, @DateCardSentToPrinter, @DateCardReceivedFromPrinter, @DateMemberNotified, @DateCardGivenToMember, @MembershipNotificationType, @Deceased, @DeceasedDate, @ProfessionKey, @Outdated, @UserKey, @Picture, NOW()); SELECT LAST_INSERT_ID();", con, tr))
+                    {
+
+                        cmdMember.Parameters.AddWithValue("@MembershipNo", member.MembershipNo);
+                        cmdMember.Parameters.AddWithValue("@MembershipDate", member.MembershipDate);
+                        cmdMember.Parameters.AddWithValue("@OldMembershipNos", member.OldMembershipNos);
+                        cmdMember.Parameters.AddWithValue("@SalutationKey", member.SalutationKey);
+                        cmdMember.Parameters.AddWithValue("@Surname", member.Surname);
+                        cmdMember.Parameters.AddWithValue("@Initials", member.Initials);
+                        cmdMember.Parameters.AddWithValue("@Forenames", member.Forenames);
+                        cmdMember.Parameters.AddWithValue("@DOB", member.DOB);
+                        cmdMember.Parameters.AddWithValue("@IdentificationType", member.IdentificationType);
+                        cmdMember.Parameters.AddWithValue("@IdentificationNo", member.IdentificationNo);
+                        cmdMember.Parameters.AddWithValue("@YearJoined", member.YearJoined);
+                        cmdMember.Parameters.AddWithValue("@YearLeft", member.YearLeft);
+                        cmdMember.Parameters.AddWithValue("@AddressKey", addressKey);
+                        cmdMember.Parameters.AddWithValue("@Mobile", member.Mobile);
+                        cmdMember.Parameters.AddWithValue("@Email", member.Email);
+                        cmdMember.Parameters.AddWithValue("@MailReturned", member.MailReturned);
+                        cmdMember.Parameters.AddWithValue("@EmailReturned", member.EmailReturned);
+                        cmdMember.Parameters.AddWithValue("@OLYear", member.OLYear);
+                        cmdMember.Parameters.AddWithValue("@ALYear", member.ALYear);
+                        cmdMember.Parameters.AddWithValue("@ClassGroup", member.ClassGroup);
+                        cmdMember.Parameters.AddWithValue("@ReceiptKey", receiptKey);
+                        cmdMember.Parameters.AddWithValue("@Rejected", member.Rejected);
+                        cmdMember.Parameters.AddWithValue("@RejectedReason", member.RejectedReason);
+                        cmdMember.Parameters.AddWithValue("@RefundChqNo", member.RefundChqNo);
+                        cmdMember.Parameters.AddWithValue("@RefundCheqDate", member.RefundCheqDate);
+                        cmdMember.Parameters.AddWithValue("@ApprovalStage", member.ApprovalStage);
+                        cmdMember.Parameters.AddWithValue("@DateSentToOffice", member.DateSentToOffice);
+                        cmdMember.Parameters.AddWithValue("@DateApproved", member.DateApproved);
+                        cmdMember.Parameters.AddWithValue("@DateRejected", member.DateRejected);
+                        cmdMember.Parameters.AddWithValue("@DateCardSentToPrinter", member.DateCardSentToPrinter);
+                        cmdMember.Parameters.AddWithValue("@DateCardReceivedFromPrinter", member.DateCardReceivedFromPrinter);
+                        cmdMember.Parameters.AddWithValue("@DateMemberNotified", member.DateMemberNotified);
+                        cmdMember.Parameters.AddWithValue("@DateCardGivenToMember", member.DateCardGivenToMember);
+                        cmdMember.Parameters.AddWithValue("@MembershipNotificationType", member.MembershipNotificationType);
+                        cmdMember.Parameters.AddWithValue("@Deceased", member.Deceased);
+                        cmdMember.Parameters.AddWithValue("@DeceasedDate", member.DeceasedDate);
+                        cmdMember.Parameters.AddWithValue("@ProfessionKey", member.ProfessionKey);
+                        cmdMember.Parameters.AddWithValue("@Outdated", member.Outdated);
+                        cmdMember.Parameters.AddWithValue("@UserKey", userKey);
+                        cmdMember.Parameters.AddWithValue("@Picture", member.Picture);
+
+                        memberKey = Convert.ToInt32(cmdMember.ExecuteScalar());
+                    }
+
+                    #endregion
+
+                    #region MembershipNoConfig
+
+                    using (MySqlCommand cmdMembershipNoConfig = new MySqlCommand("UPDATE configurations SET ConfigurationValue = @ConfigurationValue,UserKey = @UserKey ,UpdatedDate = NOW() WHERE ConfigurationName = @ConfigurationName", con, tr))
+                    {
+
+                        cmdMembershipNoConfig.Parameters.AddWithValue("@ConfigurationValue", getMaxMemNo());
+                        cmdMembershipNoConfig.Parameters.AddWithValue("@UserKey", userKey);
+                        cmdMembershipNoConfig.Parameters.AddWithValue("@ConfigurationName", MembershipNoIndexStr);
+
+                        cmdMembershipNoConfig.ExecuteNonQuery();
+                    }
+
+                    /*
+                     * if (!string.IsNullOrEmpty(member.MembershipNo))
+                    {
+                        using (MySqlCommand cmdMembershipNoConfig = new MySqlCommand("UPDATE configurations SET ConfigurationValue = @ConfigurationValue,UserKey = @UserKey ,UpdatedDate = NOW() WHERE ConfigurationName = @ConfigurationName", con, tr))
+                        {
+
+                            cmdMembershipNoConfig.Parameters.AddWithValue("@ConfigurationValue", member.MembershipNo);
+                            cmdMembershipNoConfig.Parameters.AddWithValue("@UserKey", userKey);
+                            cmdMembershipNoConfig.Parameters.AddWithValue("@ConfigurationName", MembershipNoIndexStr);
+
+                            cmdMembershipNoConfig.ExecuteNonQuery();
+                        }
+                    }
+                    */
+                    #endregion
+
+                    #region MembershipDate
+
+                    using (MySqlCommand cmdMembershipNoConfig = new MySqlCommand("UPDATE configurations SET ConfigurationValue = @ConfigurationValue,UserKey = @UserKey, UpdatedDate = NOW() WHERE ConfigurationName = @ConfigurationName", con, tr))
+                    {
+                        cmdMembershipNoConfig.Parameters.AddWithValue("@ConfigurationValue", getMaxMemDate());
+                        cmdMembershipNoConfig.Parameters.AddWithValue("@UserKey", userKey);
+                        cmdMembershipNoConfig.Parameters.AddWithValue("@ConfigurationName", MembershipDateStr);
+
+                        cmdMembershipNoConfig.ExecuteNonQuery();
+                    }
+
+                    /*
+                     * if (member.MembershipDate != null)
+                    {
+                        using (MySqlCommand cmdMembershipNoConfig = new MySqlCommand("UPDATE configurations SET ConfigurationValue = @ConfigurationValue,UserKey = @UserKey ,UpdatedDate = NOW() WHERE ConfigurationName = @ConfigurationName", con, tr))
+                        {
+                            cmdMembershipNoConfig.Parameters.AddWithValue("@ConfigurationValue", member.MembershipDate);
+                            cmdMembershipNoConfig.Parameters.AddWithValue("@UserKey", userKey);
+                            cmdMembershipNoConfig.Parameters.AddWithValue("@ConfigurationName", MembershipDateStr);
+
+                            cmdMembershipNoConfig.ExecuteNonQuery();
+                        }
+                    }
+                    */
+                    #endregion
+
+                    #region Admission
+
+                    foreach (ML_Admission admission in admissions)
+                    {
+                        using (MySqlCommand cmdAdmission = new MySqlCommand("INSERT INTO stc_oba.admission ( MemberKey ,School ,AdmissionNo ,UserKey ) VALUES ( @MemberKey ,@School ,@AdmissionNo ,@UserKey );", con, tr))
+                        {
+                            cmdAdmission.Parameters.AddWithValue("@MemberKey", memberKey);
+                            cmdAdmission.Parameters.AddWithValue("@School", admission.School);
+                            cmdAdmission.Parameters.AddWithValue("@AdmissionNo", admission.AdmissionNo);
+                            cmdAdmission.Parameters.AddWithValue("@UserKey", userKey);
+
+                            cmdAdmission.ExecuteNonQuery();
+                        }
+                    }
+
+
+                    #endregion
+
+                    #region ProfessionalDetails
+
+                    if (proDetails.OrganisationKey > 0)
+                    {
+                        using (MySqlCommand cmdProfessionalDetails = new MySqlCommand("INSERT INTO stc_oba.professionaldetails ( OrganisationKey ,MemberKey ,Designation ,Email ,Active ,UserKey ,UpdatedDate ) VALUES ( @OrganisationKey ,@MemberKey ,@Designation ,@Email ,@Active ,@UserKey ,NOW());", con, tr))
+                        {
+
+                            cmdProfessionalDetails.Parameters.AddWithValue("@OrganisationKey", proDetails.OrganisationKey);
+                            cmdProfessionalDetails.Parameters.AddWithValue("@MemberKey", memberKey);
+                            cmdProfessionalDetails.Parameters.AddWithValue("@Designation", proDetails.Designation);
+                            cmdProfessionalDetails.Parameters.AddWithValue("@Email", proDetails.Email);
+                            cmdProfessionalDetails.Parameters.AddWithValue("@Active", proDetails.Active);
+                            cmdProfessionalDetails.Parameters.AddWithValue("@UserKey", userKey);
+
+                            cmdProfessionalDetails.ExecuteNonQuery();
+                        }
+                    }
+
+                    #endregion
+
+                    #region RemarksHistory
+
+                    foreach (ML_RemarksHistory remark in remarks)
+                    {
+                        using (MySqlCommand cmdRemark = new MySqlCommand("INSERT INTO stc_oba.remarkshistory ( MemberKey ,UserKey ,Remarks ,UpdatedDate ) VALUES ( @MemberKey ,@UserKey ,@Remarks , NOW() );", con, tr))
+                        {
+                            cmdRemark.Parameters.AddWithValue("@MemberKey", memberKey);
+                            cmdRemark.Parameters.AddWithValue("@Remarks", remark.Remarks);
+                            cmdRemark.Parameters.AddWithValue("@UserKey", userKey);
+
+                            cmdRemark.ExecuteNonQuery();
+                        }
+                    }
+
+                    #endregion
+
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return true;
+        }
+
+
+        public object updateMember(ML_Address address, ML_Receipt receipt, ML_Member member, List<ML_Admission> admissions, ML_ProfessionalDetails proDetails, List<ML_RemarksHistory> remarks, string ReceiptNoStr, string MembershipDateStr, string MembershipNoIndexStr, string userKey)
+        {
+            MySqlTransaction tr = null;
+            using (MySqlConnection con = new MySqlConnection(DBConnection.connectionString))
+            {
+                con.Open();
+                try
+                {
+                    tr = con.BeginTransaction();
+
+                    #region Address
+
+                    using (MySqlCommand cmdAddress = new MySqlCommand("UPDATE stc_oba.address SET Address = @Address, CityKey = @CityKey, Telephone = @Telephone, UserKey = @UserKey, UpdatedDate = @UpdatedDate WHERE `Key` = @Key", con, tr))
+                    {
+                        cmdAddress.Parameters.AddWithValue("@Address", address.Address);
+                        cmdAddress.Parameters.AddWithValue("@CityKey", address.CityKey);
+                        cmdAddress.Parameters.AddWithValue("@Telephone", address.Telephone);
+                        cmdAddress.Parameters.AddWithValue("@UserKey", userKey);
+                        cmdAddress.Parameters.AddWithValue("@Key", address.Key);
+
+                        cmdAddress.ExecuteNonQuery();
+                    }
+
+                    #endregion
+
+                    #region Receipt
+
+                    using (MySqlCommand cmdReceipt = new MySqlCommand("UPDATE stc_oba.receipt SET ReceiptNo = @ReceiptNo, ReceiptDate = @ReceiptDate, ReceiptAmount = @ReceiptAmount, PaymentType = @PaymentType, CardChequeNo = @CardChequeNo, Bank = @Bank, PrintCount = @PrintCount, UserKey = @UserKey, UpdatedDate = NOW() WHERE `Key` = @Key", con, tr))
+                    {
+
+                        cmdReceipt.Parameters.AddWithValue("@ReceiptNo", receipt.ReceiptNo);
+                        cmdReceipt.Parameters.AddWithValue("@ReceiptDate", receipt.ReceiptDate);
+                        cmdReceipt.Parameters.AddWithValue("@ReceiptAmount", receipt.ReceiptAmount);
+                        cmdReceipt.Parameters.AddWithValue("@PaymentType", receipt.PaymentType);
+                        cmdReceipt.Parameters.AddWithValue("@CardChequeNo", receipt.CardChequeNo);
+                        cmdReceipt.Parameters.AddWithValue("@Bank", receipt.Bank);
+                        cmdReceipt.Parameters.AddWithValue("@PrintCount", receipt.PrintCount);
+                        cmdReceipt.Parameters.AddWithValue("@UserKey", userKey);
+                        cmdReceipt.Parameters.AddWithValue("@Key", receipt.Key);
+
+                        cmdReceipt.ExecuteNonQuery();
+                    }
+
+                    #endregion
+
+                    #region ReceiptNoConfig
+
+                    using (MySqlCommand cmdReceiptNoConfig = new MySqlCommand("UPDATE configurations SET ConfigurationValue = @ConfigurationValue, UserKey = @UserKey, UpdatedDate = NOW() WHERE ConfigurationName = @ConfigurationName", con, tr))
+                    {
+
+                        cmdReceiptNoConfig.Parameters.AddWithValue("@ConfigurationValue", getMaxReceiptNo());
+                        cmdReceiptNoConfig.Parameters.AddWithValue("@UserKey", userKey);
+                        cmdReceiptNoConfig.Parameters.AddWithValue("@ConfigurationName", ReceiptNoStr);
+
+                        cmdReceiptNoConfig.ExecuteNonQuery();
+                    }
+
+                    #endregion
+
+                    #region Member
+
+                    using (MySqlCommand cmdMember = new MySqlCommand("UPDATE stc_oba.member SET MembershipNo = @MembershipNo, MembershipDate = @MembershipDate, OldMembershipNos = @OldMembershipNos, SalutationKey = @SalutationKey, Surname = @Surname, Initials = @Initials, Forenames = @Forenames, DOB = @DOB, IdentificationType = @IdentificationType, IdentificationNo = @IdentificationNo, YearJoined = @YearJoined, YearLeft = @YearLeft, AddressKey = @AddressKey, Mobile = @Mobile, Email = @Email, MailReturned =@MailReturned, EmailReturned = @EmailReturned, OLYear = @OLYear, ALYear = @ALYear, ClassGroup = @ClassGroup, ReceiptKey = @ReceiptKey, Rejected = @Rejected, RejectedReason = @RejectedReason, RefundChqNo = @RefundChqNo, RefundCheqDate = @RefundCheqDate, ApprovalStage = @ApprovalStage, DateSentToOffice = @DateSentToOffice, DateApproved = @DateApproved, DateRejected = @DateRejected, DateCardSentToPrinter = @DateCardSentToPrinter, DateCardReceivedFromPrinter = @DateCardReceivedFromPrinter, DateMemberNotified = @DateMemberNotified, DateCardGivenToMember = @DateCardGivenToMember, MembershipNotificationType = @MembershipNotificationType, Picture = @Picture, Deceased = @Deceased, DeceasedDate = @DeceasedDate, ProfessionKey = @ProfessionKey, Outdated = @Outdated, UserKey = @UserKey, UpdatedDate = NOW() WHERE `Key` = @Key", con, tr))
+                    {
+
+                        cmdMember.Parameters.AddWithValue("@MembershipNo", member.MembershipNo);
+                        cmdMember.Parameters.AddWithValue("@MembershipDate", member.MembershipDate);
+                        cmdMember.Parameters.AddWithValue("@OldMembershipNos", member.OldMembershipNos);
+                        cmdMember.Parameters.AddWithValue("@SalutationKey", member.SalutationKey);
+                        cmdMember.Parameters.AddWithValue("@Surname", member.Surname);
+                        cmdMember.Parameters.AddWithValue("@Initials", member.Initials);
+                        cmdMember.Parameters.AddWithValue("@Forenames", member.Forenames);
+                        cmdMember.Parameters.AddWithValue("@DOB", member.DOB);
+                        cmdMember.Parameters.AddWithValue("@IdentificationType", member.IdentificationType);
+                        cmdMember.Parameters.AddWithValue("@IdentificationNo", member.IdentificationNo);
+                        cmdMember.Parameters.AddWithValue("@YearJoined", member.YearJoined);
+                        cmdMember.Parameters.AddWithValue("@YearLeft", member.YearLeft);
+                        cmdMember.Parameters.AddWithValue("@AddressKey", member.AddressKey);
+                        cmdMember.Parameters.AddWithValue("@Mobile", member.Mobile);
+                        cmdMember.Parameters.AddWithValue("@Email", member.Email);
+                        cmdMember.Parameters.AddWithValue("@MailReturned", member.MailReturned);
+                        cmdMember.Parameters.AddWithValue("@EmailReturned", member.EmailReturned);
+                        cmdMember.Parameters.AddWithValue("@OLYear", member.OLYear);
+                        cmdMember.Parameters.AddWithValue("@ALYear", member.ALYear);
+                        cmdMember.Parameters.AddWithValue("@ClassGroup", member.ClassGroup);
+                        cmdMember.Parameters.AddWithValue("@ReceiptKey", member.ReceiptKey);
+                        cmdMember.Parameters.AddWithValue("@Rejected", member.Rejected);
+                        cmdMember.Parameters.AddWithValue("@RejectedReason", member.RejectedReason);
+                        cmdMember.Parameters.AddWithValue("@RefundChqNo", member.RefundChqNo);
+                        cmdMember.Parameters.AddWithValue("@RefundCheqDate", member.RefundCheqDate);
+                        cmdMember.Parameters.AddWithValue("@ApprovalStage", member.ApprovalStage);
+                        cmdMember.Parameters.AddWithValue("@DateSentToOffice", member.DateSentToOffice);
+                        cmdMember.Parameters.AddWithValue("@DateApproved", member.DateApproved);
+                        cmdMember.Parameters.AddWithValue("@DateRejected", member.DateRejected);
+                        cmdMember.Parameters.AddWithValue("@DateCardSentToPrinter", member.DateCardSentToPrinter);
+                        cmdMember.Parameters.AddWithValue("@DateCardReceivedFromPrinter", member.DateCardReceivedFromPrinter);
+                        cmdMember.Parameters.AddWithValue("@DateMemberNotified", member.DateMemberNotified);
+                        cmdMember.Parameters.AddWithValue("@DateCardGivenToMember", member.DateCardGivenToMember);
+                        cmdMember.Parameters.AddWithValue("@MembershipNotificationType", member.MembershipNotificationType);
+                        cmdMember.Parameters.AddWithValue("@Deceased", member.Deceased);
+                        cmdMember.Parameters.AddWithValue("@DeceasedDate", member.DeceasedDate);
+                        cmdMember.Parameters.AddWithValue("@ProfessionKey", member.ProfessionKey);
+                        cmdMember.Parameters.AddWithValue("@Outdated", member.Outdated);
+                        cmdMember.Parameters.AddWithValue("@UserKey", userKey);
+                        cmdMember.Parameters.AddWithValue("@Picture", member.Picture);
+                        cmdMember.Parameters.AddWithValue("@Key", member.Key);
+
+                        cmdMember.ExecuteNonQuery();
+                    }
+
+                    #endregion
+
+                    #region MembershipNoConfig
+
+                    using (MySqlCommand cmdMembershipNoConfig = new MySqlCommand("UPDATE configurations SET ConfigurationValue = @ConfigurationValue,UserKey = @UserKey ,UpdatedDate = NOW() WHERE ConfigurationName = @ConfigurationName", con, tr))
+                    {
+
+                        cmdMembershipNoConfig.Parameters.AddWithValue("@ConfigurationValue", getMaxMemNo());
+                        cmdMembershipNoConfig.Parameters.AddWithValue("@UserKey", userKey);
+                        cmdMembershipNoConfig.Parameters.AddWithValue("@ConfigurationName", MembershipNoIndexStr);
+
+                        cmdMembershipNoConfig.ExecuteNonQuery();
+                    }
+                    #endregion
+
+                    #region MembershipDate
+
+                    using (MySqlCommand cmdMembershipNoConfig = new MySqlCommand("UPDATE configurations SET ConfigurationValue = @ConfigurationValue,UserKey = @UserKey, UpdatedDate = NOW() WHERE ConfigurationName = @ConfigurationName", con, tr))
+                    {
+                        cmdMembershipNoConfig.Parameters.AddWithValue("@ConfigurationValue", getMaxMemDate());
+                        cmdMembershipNoConfig.Parameters.AddWithValue("@UserKey", userKey);
+                        cmdMembershipNoConfig.Parameters.AddWithValue("@ConfigurationName", MembershipDateStr);
+
+                        cmdMembershipNoConfig.ExecuteNonQuery();
+                    }
+                    #endregion
+
+                    #region Admission
+
+                    foreach (ML_Admission admission in admissions)
+                    {
+                        using (MySqlCommand cmdAdmission = new MySqlCommand("UPDATE stc_oba.admission SET MemberKey = @MemberKey, School = @School, AdmissionNo = @AdmissionNo, UserKey = @UserKey WHERE `Key` = @Key", con, tr))
+                        {
+                            cmdAdmission.Parameters.AddWithValue("@MemberKey", member.Key);
+                            cmdAdmission.Parameters.AddWithValue("@School", admission.School);
+                            cmdAdmission.Parameters.AddWithValue("@AdmissionNo", admission.AdmissionNo);
+                            cmdAdmission.Parameters.AddWithValue("@UserKey", userKey);
+                            cmdAdmission.Parameters.AddWithValue("@Key", admission.Key);
+
+                            cmdAdmission.ExecuteNonQuery();
+                        }
+                    }
+
+
+                    #endregion
+
+                    #region ProfessionalDetails
+
+                    if (proDetails.OrganisationKey > 0)
+                    {
+                        using (MySqlCommand cmdProfessionalDetails = new MySqlCommand("UPDATE stc_oba.professionaldetails SET OrganisationKey = @OrganisationKey, MemberKey = @MemberKey, Designation = @Designation, Email = @Email, Active = @Active, UserKey = @UserKey, UpdatedDate = NOW() WHERE `Key` = @Key", con, tr))
+                        {
+
+                            cmdProfessionalDetails.Parameters.AddWithValue("@OrganisationKey", proDetails.OrganisationKey);
+                            cmdProfessionalDetails.Parameters.AddWithValue("@MemberKey", member.Key);
+                            cmdProfessionalDetails.Parameters.AddWithValue("@Designation", proDetails.Designation);
+                            cmdProfessionalDetails.Parameters.AddWithValue("@Email", proDetails.Email);
+                            cmdProfessionalDetails.Parameters.AddWithValue("@Active", proDetails.Active);
+                            cmdProfessionalDetails.Parameters.AddWithValue("@UserKey", userKey);
+                            cmdProfessionalDetails.Parameters.AddWithValue("@Key", proDetails.Key);
+
+                            cmdProfessionalDetails.ExecuteNonQuery();
+                        }
+                    }
+
+                    #endregion
+
+                    #region RemarksHistory
+                    MySqlParameter[] paraRemark = new MySqlParameter[1];
+                    paraRemark[0] = new MySqlParameter("@MemberKey", member.Key);
+                    bool successDeleteRemarks = Convert.ToBoolean(MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "DELETE FROM remarkshistory WHERE MemberKey= @MemberKey", paraRemark));
+
+                    if (successDeleteRemarks)
+                    {
+                        foreach (ML_RemarksHistory remark in remarks)
+                        {
+                            using (MySqlCommand cmdRemark = new MySqlCommand("INSERT INTO stc_oba.remarkshistory ( MemberKey ,UserKey ,Remarks ,UpdatedDate ) VALUES ( @MemberKey ,@UserKey ,@Remarks , NOW() );", con, tr))
+                            {
+                                cmdRemark.Parameters.AddWithValue("@MemberKey", member.Key);
+                                cmdRemark.Parameters.AddWithValue("@Remarks", remark.Remarks);
+                                cmdRemark.Parameters.AddWithValue("@UserKey", userKey);
+
+                                cmdRemark.ExecuteNonQuery();
+                            }
+                        }
+
+                    }
+                    #endregion
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return true;
+        }
+
+        private string getMaxMemDate()
+        {
+            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT MAX(CAST(m.MembershipDate AS DATETIME)) AS MemDate FROM member m").Rows[0]["MemDate"].ToString();
+        }
+        public string getLastMemNo(string CurrentDateVal)
+        {
+            MySqlParameter[] para = new MySqlParameter[1];
+            para[0] = new MySqlParameter("@CurrentDateVal", CurrentDateVal);
+
+            return string.Format("{0}{1}", CurrentDateVal.Replace('%', ' ').Trim(), MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT COUNT(*) AS Mem_No FROM Member WHERE MembershipNo LIKE @CurrentDateVal;", para).Rows[0]["Mem_No"].ToString().PadLeft(3, '0'));
+        }
+
+        public bool checkMemNo(string membershipNo)
+        {
+            MySqlParameter[] para = new MySqlParameter[1];
+            para[0] = new MySqlParameter("@MembershipNo", membershipNo);
+
+            return Convert.ToInt32(MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT COUNT(*) AS `Count` FROM vw_allmemberdata va WHERE va.MembershipNo = @MembershipNo;", para).Rows[0]["Count"].ToString()) > 0;
+        }
+
+        public string getReceiptNo(string configurationName)
+        {
+            MySqlParameter[] para = new MySqlParameter[1];
+            para[0] = new MySqlParameter("@ConfigurationName", configurationName);
+
+            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT CONCAT('R',LPAD(CONVERT(SUBSTRING(ConfigurationValue, 2), SIGNED integer) + 1,4,'0')) AS ReceiptNo FROM configurations c WHERE c.ConfigurationName = @ConfigurationName", para).Rows[0]["ReceiptNo"].ToString();
+        }
+
+        public string getMaxReceiptNo()
+        {
+            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT CONCAT('R', LPAD(CONVERT(SUBSTRING((SELECT MAX(CAST(SUBSTRING(r.ReceiptNo, 2, 5) AS UNSIGNED)) FROM receipt r WHERE r.ReceiptNo LIKE 'R%'), 1), SIGNED integer), 4, '0')) AS ReceiptNo").Rows[0]["ReceiptNo"].ToString();
+        }
+
+        public string getMaxMemNo()
+        {
+            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT MAX(CAST(m.MembershipNo AS UNSIGNED)) AS MemNo FROM member m").Rows[0]["MemNo"].ToString();
         }
     }
 }

@@ -5,6 +5,7 @@
 
 using OBALog.Data;
 using OBALog.Model;
+using System.Collections.Generic;
 
 namespace OBALog.Business
 {
@@ -66,6 +67,56 @@ namespace OBALog.Business
         public System.Data.DataTable selectMemberAdvancedProfessional(int? ProfessionKey, int? CategoryKey, int? SubCategoryKey, int? OrganisationKey, bool? Deleted)
         {
             return new DL_Member().selectMemberAdvancedProfessional(ProfessionKey, CategoryKey, SubCategoryKey, OrganisationKey, Deleted);
+        }
+
+        public int insertMemberAddress(ML_Address address)
+        {
+            return new DL_Member().insertMemberAddress(address);
+        }
+
+        public int insertReceipt(ML_Receipt receipt)
+        {
+            return new DL_Member().insertReceipt(receipt);
+        }
+
+        public int insertAdmission(ML_Admission admission)
+        {
+            return new DL_Member().insertAdmission(admission);
+        }
+
+        public int insertProfessionalDetails(ML_ProfessionalDetails proDetails)
+        {
+            return new DL_Member().insertProfessionalDetails(proDetails);
+        }
+
+        public bool insertRemark(ML_RemarksHistory remark)
+        {
+            return new DL_Member().insertRemark(remark);
+        }
+
+        public bool insertMember(ML_Address address, ML_Receipt receipt, ML_Member member, List<ML_Admission> admission, ML_ProfessionalDetails proDetails, List<ML_RemarksHistory> remarks, string ReceiptNoStr, string MembershipDateStr, string MembershipNoIndexStr, string userKey)
+        {
+            return new DL_Member().insertMember(address, receipt, member, admission, proDetails, remarks, ReceiptNoStr, MembershipDateStr, MembershipNoIndexStr, userKey);
+        }
+
+        public string getReceiptNo(string configurationName)
+        {
+            return new DL_Member().getReceiptNo(configurationName);
+        }
+
+        public string getLastMemNo(string CurrentDateVal)
+        {
+            return new DL_Member().getLastMemNo(CurrentDateVal);
+        }
+
+        public bool checkMemNo(string membershipNo)
+        {
+            return new DL_Member().checkMemNo(membershipNo);
+        }
+
+        public void updateMember(ML_Address address, ML_Receipt receipt, ML_Member member, List<ML_Admission> admission, ML_ProfessionalDetails professionalDetails, List<ML_RemarksHistory> RemarksHistory, string p1, string p2, string p3, string p4)
+        {
+            return new DL_Member().updateMember(address, receipt, member, admission, proDetails, remarks, ReceiptNoStr, MembershipDateStr, MembershipNoIndexStr, userKey);
         }
     }
 }

@@ -79,7 +79,7 @@ namespace OBALog.Data
             para[0] = new MySqlParameter("@LoginId", user.LoginId);
             para[1] = new MySqlParameter("@Password", DataHelper.CreateSHA1(user.Password));
 
-            return MySQLHelper.ExecuteDataSet(DBConnection.connectionString, System.Data.CommandType.Text, "SELECT usr.`Key`, usr.`LoginId`, usr.`Name`, usr.`NIC`, usr.`UserAccessTypeKey`, u.AccessTypeName FROM `user` usr JOIN useraccesstype u ON usr.UserAccessTypeKey = u.`Key` AND usr.Deleted = FALSE WHERE usr.`LoginId` = @LoginId AND usr.`Password` = @Password AND usr.`Deleted` = FALSE; SELECT p.`Key`, REPLACE(p.Privilege,'.','_') AS Privilege, up.Allowed FROM stc_oba.useraccessprivilege up JOIN `user` u ON up.`UserAccessTypeKey` = u.`UserAccessTypeKey` AND u.LoginId = @LoginId AND u.`LoginId` = LoginId AND u.`Deleted` = FALSE JOIN privilege p ON p.`Key` = up.`PrivilegeKey`", para);
+            return MySQLHelper.ExecuteDataSet(DBConnection.connectionString, System.Data.CommandType.Text, "SELECT usr.`Key`, usr.`LoginId`, usr.`Name`, usr.`NIC`, usr.`UserAccessTypeKey`, u.AccessTypeName FROM `user` usr JOIN useraccesstype u ON usr.UserAccessTypeKey = u.`Key` AND usr.Deleted = FALSE WHERE usr.`LoginId` = @LoginId AND usr.`Password` = @Password AND usr.`Deleted` = FALSE; SELECT p.`Key`, REPLACE(p.Privilege,'.','_') AS Privilege, up.Allowed FROM stc_oba.useraccessprivilege up JOIN `user` u ON up.`UserAccessTypeKey` = u.`UserAccessTypeKey` AND u.LoginId = @LoginId AND u.`LoginId` = LoginId AND u.`Deleted` = FALSE JOIN privilege p ON p.`Key` = up.`PrivilegeKey`; SELECT ConfigurationName, ConfigurationValue FROM configurations;", para);
         }
     }
 }

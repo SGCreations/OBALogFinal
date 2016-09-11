@@ -19,7 +19,7 @@ namespace OBALog.Windows
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Control.CheckForIllegalCrossThreadCalls = false;
-                Application.Run(new MemberDetails());
+                Application.Run(new Home());
             }
             catch (Exception ex)
             {

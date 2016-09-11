@@ -50,7 +50,7 @@ namespace OBALog.Windows
             {
                 using (DataTable dt = new BL_Configurations().select())
                 {
-                    EnumerableRowCollection<DataRow> MembershipNoIndex = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == UniversalVariables.MembershipNoIndexStr select myRow;
+                    EnumerableRowCollection<DataRow> MembershipNoIndex = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.MembershipNoIndexStr select myRow;
                     if (MembershipNoIndex.Any())
                     {
                         rtb_mem_no_desc.Text = MembershipNoIndex.First()["Description"].ToString();
@@ -59,7 +59,7 @@ namespace OBALog.Windows
                         txt_mem_no_conf_date.Text = Convert.ToDateTime(MembershipNoIndex.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
 
-                    EnumerableRowCollection<DataRow> MembershipDate = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == UniversalVariables.MembershipDateStr select myRow;
+                    EnumerableRowCollection<DataRow> MembershipDate = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.MembershipDateStr select myRow;
                     if (MembershipDate.Any())
                     {
                         txt_mem_date_desc.Text = MembershipDate.First()["Description"].ToString();
@@ -68,7 +68,7 @@ namespace OBALog.Windows
                         txt_mem_date_conf_date.Text = Convert.ToDateTime(MembershipDate.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
 
-                    EnumerableRowCollection<DataRow> InternetConnection = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == UniversalVariables.InternetConnectionStr select myRow;
+                    EnumerableRowCollection<DataRow> InternetConnection = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.InternetConnectionStr select myRow;
                     if (InternetConnection.Any())
                     {
                         txt_int_con_desc.Text = InternetConnection.First()["Description"].ToString();
@@ -77,7 +77,7 @@ namespace OBALog.Windows
                         txt_int_con_conf_date.Text = Convert.ToDateTime(InternetConnection.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
 
-                    EnumerableRowCollection<DataRow> ReceiptNo = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == UniversalVariables.ReceiptNoStr select myRow;
+                    EnumerableRowCollection<DataRow> ReceiptNo = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.ReceiptNoStr select myRow;
                     if (ReceiptNo.Any())
                     {
                         txt_rec_no_desc.Text = ReceiptNo.First()["Description"].ToString();
@@ -86,7 +86,7 @@ namespace OBALog.Windows
                         txt_rec_no_conf_date.Text = Convert.ToDateTime(ReceiptNo.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
 
-                    EnumerableRowCollection<DataRow> ReceiptAmount = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == UniversalVariables.ReceiptAmountStr select myRow;
+                    EnumerableRowCollection<DataRow> ReceiptAmount = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.ReceiptAmountStr select myRow;
                     if (ReceiptAmount.Any())
                     {
                         txt_rec_amount_desc.Text = ReceiptAmount.First()["Description"].ToString();
@@ -96,7 +96,7 @@ namespace OBALog.Windows
                         txt_rec_amount_conf_date.Text = Convert.ToDateTime(ReceiptAmount.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
 
-                    EnumerableRowCollection<DataRow> TimeoutPeriod = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == UniversalVariables.TimeoutPeriodStr select myRow;
+                    EnumerableRowCollection<DataRow> TimeoutPeriod = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.TimeoutPeriodStr select myRow;
                     if (TimeoutPeriod.Any())
                     {
                         txt_timeout_desc.Text = TimeoutPeriod.First()["Description"].ToString();
@@ -108,7 +108,7 @@ namespace OBALog.Windows
                         txt_timeout_conf_date.Text = Convert.ToDateTime(TimeoutPeriod.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
 
-                    EnumerableRowCollection<DataRow> LogoffPeriod = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == UniversalVariables.LogoffPeriodStr select myRow;
+                    EnumerableRowCollection<DataRow> LogoffPeriod = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.LogoffPeriodStr select myRow;
                     if (LogoffPeriod.Any())
                     {
                         mem_logout_desc.Text = LogoffPeriod.First()["Description"].ToString();
@@ -119,7 +119,7 @@ namespace OBALog.Windows
                         txt_logout_conf_date.Text = Convert.ToDateTime(LogoffPeriod.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
 
-                    EnumerableRowCollection<DataRow> DefaultSalutation = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == UniversalVariables.DefaultSalutationStr select myRow;
+                    EnumerableRowCollection<DataRow> DefaultSalutation = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.DefaultSalutationStr select myRow;
                     if (DefaultSalutation.Any())
                     {
                         mem_def_val_desc.Text = DefaultSalutation.First()["Description"].ToString();
@@ -128,14 +128,14 @@ namespace OBALog.Windows
                         txt_def_val_conf_date.Text = Convert.ToDateTime(DefaultSalutation.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
 
-                    EnumerableRowCollection<DataRow> DefaultCountry = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == UniversalVariables.DefaultCountryStr select myRow;
+                    EnumerableRowCollection<DataRow> DefaultCountry = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.DefaultCountryStr select myRow;
                     if (DefaultCountry.Any())
                     {
                         cbo_country.EditValue = DefaultCountry.First()["ConfigurationValue"].ToString();
                         cbo_country_EditValueChanged(this, new EventArgs());
                     }
 
-                    EnumerableRowCollection<DataRow> DefaultCity = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == UniversalVariables.DefaultCityStr select myRow;
+                    EnumerableRowCollection<DataRow> DefaultCity = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.DefaultCityStr select myRow;
                     if (DefaultCity.Any())
                     {
                         cbo_city.EditValue = DefaultCity.First()["ConfigurationValue"].ToString();
@@ -177,19 +177,19 @@ namespace OBALog.Windows
         {
             try
             {
-                switch (tab_configurations.SelectedTabPage.Text)
+                switch (tab_configurations.SelectedTabPage.Text.Trim())
                 {
                     case "Membership No":
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.MembershipNoIndexStr, Description = rtb_mem_no_desc.Text, ConfigurationValue = txt_mem_no_value.Text, UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.MembershipNoIndexStr, Description = rtb_mem_no_desc.Text, ConfigurationValue = txt_mem_no_value.Text, UserKey = UniversalVariables.UserKey });
                         break;
                     case "Receipt No":
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.ReceiptNoStr, Description = txt_rec_no_desc.Text, ConfigurationValue = txt_rec_no_value.Text, UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.ReceiptNoStr, Description = txt_rec_no_desc.Text, ConfigurationValue = txt_rec_no_value.Text, UserKey = UniversalVariables.UserKey });
                         break;
                     case "Membership Date":
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.MembershipDateStr, Description = txt_mem_date_desc.Text, ConfigurationValue = txt_mem_date_value.Text, UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.MembershipDateStr, Description = txt_mem_date_desc.Text, ConfigurationValue = txt_mem_date_value.Text, UserKey = UniversalVariables.UserKey });
                         break;
                     case "Internet Connection":
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.InternetConnectionStr, Description = txt_int_con_desc.Text, ConfigurationValue = tsw_int_con.IsOn.ToString(), UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.InternetConnectionStr, Description = txt_int_con_desc.Text, ConfigurationValue = tsw_int_con.IsOn.ToString(), UserKey = UniversalVariables.UserKey });
                         break;
                     case "Receipt Amount":
                         string receiptValues = string.Empty;
@@ -199,22 +199,22 @@ namespace OBALog.Windows
                             receiptValues = (count == lst_receipt_amount.Items.Count) ? string.Format("{0}{1}", receiptValues, rec_val) : string.Format("{0}{1};", receiptValues, rec_val);
                             count++;
                         }
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.ReceiptAmountStr, Description = txt_rec_amount_desc.Text, ConfigurationValue = receiptValues, UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.ReceiptAmountStr, Description = txt_rec_amount_desc.Text, ConfigurationValue = receiptValues, UserKey = UniversalVariables.UserKey });
                         break;
                     case "System Timeout":
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.TimeoutPeriodStr, Description = txt_timeout_desc.Text, ConfigurationValue = string.Format("{0}:{1}:{2}", nud_timeout_hrs.Text, nud_timeout_minutes.Text, nud_timeout_seconds.Text), UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.TimeoutPeriodStr, Description = txt_timeout_desc.Text, ConfigurationValue = string.Format("{0}:{1}:{2}", nud_timeout_hrs.Text.PadLeft(2, '0'), nud_timeout_minutes.Text.PadLeft(2, '0'), nud_timeout_seconds.Text.PadLeft(2, '0')), UserKey = UniversalVariables.UserKey });
                         break;
                     case "Logout Confirmation Timeout":
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.MembershipNoIndexStr, Description = mem_logout_desc.Text, ConfigurationValue = string.Format("{0}:{1}", nud_msg_box_minutes.Text, nud_msg_box_seconds.Text), UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.LogoffPeriodStr, Description = mem_logout_desc.Text, ConfigurationValue = string.Format("{0}:{1}", nud_msg_box_minutes.Text.PadLeft(2, '0'), nud_msg_box_seconds.Text.PadLeft(2, '0')), UserKey = UniversalVariables.UserKey });
                         break;
                     case "Default Values":
                         if (cbo_country.EditValue != null && cbo_city.EditValue != null && cbo_salutation.EditValue != null)
                         {
-                            new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.DefaultCountryStr, Description = mem_def_val_desc.Text, ConfigurationValue = cbo_country.EditValue.ToString(), UserKey = UniversalVariables.UserKey });
+                            new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.DefaultCountryStr, Description = mem_def_val_desc.Text, ConfigurationValue = cbo_country.EditValue.ToString(), UserKey = UniversalVariables.UserKey });
 
-                            new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.DefaultCityStr, Description = mem_def_val_desc.Text, ConfigurationValue = cbo_city.EditValue.ToString(), UserKey = UniversalVariables.UserKey });
+                            new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.DefaultCityStr, Description = mem_def_val_desc.Text, ConfigurationValue = cbo_city.EditValue.ToString(), UserKey = UniversalVariables.UserKey });
 
-                            new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = UniversalVariables.DefaultSalutationStr, Description = mem_def_val_desc.Text, ConfigurationValue = cbo_salutation.EditValue.ToString(), UserKey = UniversalVariables.UserKey });
+                            new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.DefaultSalutationStr, Description = mem_def_val_desc.Text, ConfigurationValue = cbo_salutation.EditValue.ToString(), UserKey = UniversalVariables.UserKey });
                         }
                         else
                         {
