@@ -8,6 +8,10 @@ namespace OBALog.Windows
 {
     public partial class ManageProfessions : XtraForm
     {
+        private bool hasAccessInsert = Privileges.CheckAccess(Privileges.Professions_Insert);
+        private bool hasAccessUpdate = Privileges.CheckAccess(Privileges.Professions_Update);
+        private bool hasAccessDelete = Privileges.CheckAccess(Privileges.Professions_Delete);
+
         public bool FormDirty { get; set; }
         public string LastProfession { get; set; }
 
@@ -25,6 +29,10 @@ namespace OBALog.Windows
                     ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Exclamation, "No professions are available to show. Please add a new profession!", "Message");
                     btn_new_profession.PerformClick();
                 }
+
+                btn_new_profession.Enabled = hasAccessInsert;
+                btn_delete_profession.Enabled = hasAccessDelete;
+                btn_save_profession.Enabled = (hasAccessInsert || hasAccessUpdate);
             }
             catch (Exception ex)
             {
@@ -54,6 +62,7 @@ namespace OBALog.Windows
 
             btn_new_profession.Enabled = btnNewProfessionEnabled;
             btn_delete_profession.Enabled = btnDeleteEnabled;
+
             IsNewRecord = IsNew;
             if (focusList) lst_professions_SelectedIndexChanged(this, new EventArgs());
             FormDirty = false;
@@ -85,6 +94,13 @@ namespace OBALog.Windows
         {
             try
             {
+
+                if (!IsNewRecord && !hasAccessUpdate)
+                {
+                    ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, "You have no save rights.", "Access Denied");
+                    return;
+                }
+
                 if (txt_new_profession.IsNotEmpty())
                 {
                     using (DataTable Table = new BL_Profession().select(new ML_Profession { Profession = txt_new_profession.Text }))
@@ -101,7 +117,7 @@ namespace OBALog.Windows
                             }
 
                             BindProfession();
-                            ResetForm(false, true, true, true, true, true);
+                            ResetForm(false, true, true, hasAccessInsert, hasAccessDelete, true);
                             SetPrevious();
                         }
                         else
@@ -155,7 +171,7 @@ namespace OBALog.Windows
                         new BL_Profession().delete(new ML_Profession { Key = SelectedID });
                         ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Information, string.Format("Profession {0} has been successfully deleted.", lst_professions.Text), "Deletion Successful!");
                         BindProfession();
-                        ResetForm(false, true, true, true, true, true);
+                        ResetForm(false, true, true, hasAccessInsert, hasAccessDelete, true);
                     }
                 }
                 else
@@ -179,7 +195,7 @@ namespace OBALog.Windows
         {
             if (IsNewRecord)
             {
-                ResetForm(false, true, true, true, true, true);
+                ResetForm(false, true, true, hasAccessInsert, hasAccessDelete, true);
                 return false;
             }
             else

@@ -46,7 +46,7 @@ namespace OBALog.Data
 
         public DataTable selectMemberTop20()
         {
-            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT M.KEY ,MembershipNo, Initials, Forenames, Surname FROM member M WHERE `Deleted` = 0 ORDER BY M.KEY ASC LIMIT 20;");
+            return MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT M.KEY ,MembershipNo, Initials, Forenames, Surname FROM member M WHERE `Deleted` = 0 ORDER BY M.KEY DESC LIMIT 20;");
         }
 
         public DataSet select(int? MemberKey)
@@ -573,7 +573,7 @@ namespace OBALog.Data
 
                     #region ProfessionalDetails
 
-                    if (proDetails.OrganisationKey > 0)
+                    if (proDetails.OrganisationKey > 0 && proDetails != null)
                     {
                         using (MySqlCommand cmdProfessionalDetails = new MySqlCommand("INSERT INTO stc_oba.professionaldetails ( OrganisationKey ,MemberKey ,Designation ,Email ,Active ,UserKey ,UpdatedDate ) VALUES ( @OrganisationKey ,@MemberKey ,@Designation ,@Email ,@Active ,@UserKey ,NOW());", con, tr))
                         {
@@ -623,7 +623,7 @@ namespace OBALog.Data
         }
 
 
-        public object updateMember(ML_Address address, ML_Receipt receipt, ML_Member member, List<ML_Admission> admissions, ML_ProfessionalDetails proDetails, List<ML_RemarksHistory> remarks, string ReceiptNoStr, string MembershipDateStr, string MembershipNoIndexStr, string userKey)
+        public bool updateMember(ML_Address address, ML_Receipt receipt, ML_Member member, List<ML_Admission> admissions, ML_ProfessionalDetails proDetails, List<ML_RemarksHistory> remarks, string ReceiptNoStr, string MembershipDateStr, string MembershipNoIndexStr, string school_STCMount, string userKey)
         {
             MySqlTransaction tr = null;
             using (MySqlConnection con = new MySqlConnection(DBConnection.connectionString))
@@ -634,38 +634,70 @@ namespace OBALog.Data
                     tr = con.BeginTransaction();
 
                     #region Address
-
-                    using (MySqlCommand cmdAddress = new MySqlCommand("UPDATE stc_oba.address SET Address = @Address, CityKey = @CityKey, Telephone = @Telephone, UserKey = @UserKey, UpdatedDate = @UpdatedDate WHERE `Key` = @Key", con, tr))
+                    if (member.AddressKey == null)
                     {
-                        cmdAddress.Parameters.AddWithValue("@Address", address.Address);
-                        cmdAddress.Parameters.AddWithValue("@CityKey", address.CityKey);
-                        cmdAddress.Parameters.AddWithValue("@Telephone", address.Telephone);
-                        cmdAddress.Parameters.AddWithValue("@UserKey", userKey);
-                        cmdAddress.Parameters.AddWithValue("@Key", address.Key);
+                        using (MySqlCommand cmdAddress = new MySqlCommand("INSERT INTO stc_oba.address (address , CityKey , Telephone , UserKey , UpdatedDate) VALUES (@Address, @CityKey, @Telephone, @UserKey, NOW()); SELECT LAST_INSERT_ID();", con, tr))
+                        {
+                            cmdAddress.Parameters.AddWithValue("@Address", address.Address);
+                            cmdAddress.Parameters.AddWithValue("@CityKey", address.CityKey);
+                            cmdAddress.Parameters.AddWithValue("@Telephone", address.Telephone);
+                            cmdAddress.Parameters.AddWithValue("@UserKey", userKey);
 
-                        cmdAddress.ExecuteNonQuery();
+                            member.AddressKey = Convert.ToInt32(cmdAddress.ExecuteScalar());
+                        }
                     }
+                    else
+                    {
+                        using (MySqlCommand cmdAddress = new MySqlCommand("UPDATE stc_oba.address SET Address = @Address, CityKey = @CityKey, Telephone = @Telephone, UserKey = @UserKey, UpdatedDate = NOW() WHERE `Key` = @Key", con, tr))
+                        {
+                            cmdAddress.Parameters.AddWithValue("@Address", address.Address);
+                            cmdAddress.Parameters.AddWithValue("@CityKey", address.CityKey);
+                            cmdAddress.Parameters.AddWithValue("@Telephone", address.Telephone);
+                            cmdAddress.Parameters.AddWithValue("@UserKey", userKey);
+                            cmdAddress.Parameters.AddWithValue("@Key", address.Key);
 
+                            cmdAddress.ExecuteNonQuery();
+                        }
+                    }
                     #endregion
 
                     #region Receipt
 
-                    using (MySqlCommand cmdReceipt = new MySqlCommand("UPDATE stc_oba.receipt SET ReceiptNo = @ReceiptNo, ReceiptDate = @ReceiptDate, ReceiptAmount = @ReceiptAmount, PaymentType = @PaymentType, CardChequeNo = @CardChequeNo, Bank = @Bank, PrintCount = @PrintCount, UserKey = @UserKey, UpdatedDate = NOW() WHERE `Key` = @Key", con, tr))
+                    if (receipt.Key == null)
                     {
+                        using (MySqlCommand cmdReceipt = new MySqlCommand("INSERT INTO stc_oba.receipt (ReceiptNo, ReceiptDate, ReceiptAmount, PaymentType, CardChequeNo, Bank, PrintCount, UserKey, UpdatedDate) VALUES (@ReceiptNo, @ReceiptDate, @ReceiptAmount, @PaymentType, @CardChequeNo, @Bank, @PrintCount, @UserKey, NOW()); SELECT LAST_INSERT_ID();", con, tr))
+                        {
 
-                        cmdReceipt.Parameters.AddWithValue("@ReceiptNo", receipt.ReceiptNo);
-                        cmdReceipt.Parameters.AddWithValue("@ReceiptDate", receipt.ReceiptDate);
-                        cmdReceipt.Parameters.AddWithValue("@ReceiptAmount", receipt.ReceiptAmount);
-                        cmdReceipt.Parameters.AddWithValue("@PaymentType", receipt.PaymentType);
-                        cmdReceipt.Parameters.AddWithValue("@CardChequeNo", receipt.CardChequeNo);
-                        cmdReceipt.Parameters.AddWithValue("@Bank", receipt.Bank);
-                        cmdReceipt.Parameters.AddWithValue("@PrintCount", receipt.PrintCount);
-                        cmdReceipt.Parameters.AddWithValue("@UserKey", userKey);
-                        cmdReceipt.Parameters.AddWithValue("@Key", receipt.Key);
+                            cmdReceipt.Parameters.AddWithValue("@ReceiptNo", receipt.ReceiptNo);
+                            cmdReceipt.Parameters.AddWithValue("@ReceiptDate", receipt.ReceiptDate);
+                            cmdReceipt.Parameters.AddWithValue("@ReceiptAmount", receipt.ReceiptAmount);
+                            cmdReceipt.Parameters.AddWithValue("@PaymentType", receipt.PaymentType);
+                            cmdReceipt.Parameters.AddWithValue("@CardChequeNo", receipt.CardChequeNo);
+                            cmdReceipt.Parameters.AddWithValue("@Bank", receipt.Bank);
+                            cmdReceipt.Parameters.AddWithValue("@PrintCount", receipt.PrintCount);
+                            cmdReceipt.Parameters.AddWithValue("@UserKey", userKey);
 
-                        cmdReceipt.ExecuteNonQuery();
+                            receipt.Key = member.ReceiptKey = Convert.ToInt32(cmdReceipt.ExecuteScalar());
+                        }
                     }
+                    else
+                    {
+                        using (MySqlCommand cmdReceipt = new MySqlCommand("UPDATE stc_oba.receipt SET ReceiptNo = @ReceiptNo, ReceiptDate = @ReceiptDate, ReceiptAmount = @ReceiptAmount, PaymentType = @PaymentType, CardChequeNo = @CardChequeNo, Bank = @Bank, PrintCount = @PrintCount, UserKey = @UserKey, UpdatedDate = NOW() WHERE `Key` = @Key", con, tr))
+                        {
 
+                            cmdReceipt.Parameters.AddWithValue("@ReceiptNo", receipt.ReceiptNo);
+                            cmdReceipt.Parameters.AddWithValue("@ReceiptDate", receipt.ReceiptDate);
+                            cmdReceipt.Parameters.AddWithValue("@ReceiptAmount", receipt.ReceiptAmount);
+                            cmdReceipt.Parameters.AddWithValue("@PaymentType", receipt.PaymentType);
+                            cmdReceipt.Parameters.AddWithValue("@CardChequeNo", receipt.CardChequeNo);
+                            cmdReceipt.Parameters.AddWithValue("@Bank", receipt.Bank);
+                            cmdReceipt.Parameters.AddWithValue("@PrintCount", receipt.PrintCount);
+                            cmdReceipt.Parameters.AddWithValue("@UserKey", userKey);
+                            cmdReceipt.Parameters.AddWithValue("@Key", receipt.Key);
+
+                            cmdReceipt.ExecuteNonQuery();
+                        }
+                    }
                     #endregion
 
                     #region ReceiptNoConfig
@@ -707,7 +739,7 @@ namespace OBALog.Data
                         cmdMember.Parameters.AddWithValue("@OLYear", member.OLYear);
                         cmdMember.Parameters.AddWithValue("@ALYear", member.ALYear);
                         cmdMember.Parameters.AddWithValue("@ClassGroup", member.ClassGroup);
-                        cmdMember.Parameters.AddWithValue("@ReceiptKey", member.ReceiptKey);
+                        cmdMember.Parameters.AddWithValue("@ReceiptKey", receipt.Key);
                         cmdMember.Parameters.AddWithValue("@Rejected", member.Rejected);
                         cmdMember.Parameters.AddWithValue("@RejectedReason", member.RejectedReason);
                         cmdMember.Parameters.AddWithValue("@RefundChqNo", member.RefundChqNo);
@@ -761,28 +793,38 @@ namespace OBALog.Data
 
                     #region Admission
 
+                    using (MySqlCommand cmdAdmission = new MySqlCommand("DELETE FROM stc_oba.admission WHERE MemberKey = @MemberKey", con, tr))
+                    {
+                        cmdAdmission.Parameters.AddWithValue("@MemberKey", member.Key);
+                        cmdAdmission.ExecuteNonQuery();
+                    }
+
                     foreach (ML_Admission admission in admissions)
                     {
-                        using (MySqlCommand cmdAdmission = new MySqlCommand("UPDATE stc_oba.admission SET MemberKey = @MemberKey, School = @School, AdmissionNo = @AdmissionNo, UserKey = @UserKey WHERE `Key` = @Key", con, tr))
+                        using (MySqlCommand cmdAdmission = new MySqlCommand("INSERT INTO stc_oba.admission ( MemberKey ,School ,AdmissionNo ,UserKey ) VALUES ( @MemberKey ,@School ,@AdmissionNo ,@UserKey );", con, tr))
                         {
                             cmdAdmission.Parameters.AddWithValue("@MemberKey", member.Key);
                             cmdAdmission.Parameters.AddWithValue("@School", admission.School);
                             cmdAdmission.Parameters.AddWithValue("@AdmissionNo", admission.AdmissionNo);
                             cmdAdmission.Parameters.AddWithValue("@UserKey", userKey);
-                            cmdAdmission.Parameters.AddWithValue("@Key", admission.Key);
 
                             cmdAdmission.ExecuteNonQuery();
                         }
                     }
 
-
                     #endregion
 
                     #region ProfessionalDetails
 
-                    if (proDetails.OrganisationKey > 0)
+                    using (MySqlCommand cmdProfessionalDetails = new MySqlCommand("DELETE FROM stc_oba.professionaldetails WHERE MemberKey = @MemberKey", con, tr))
                     {
-                        using (MySqlCommand cmdProfessionalDetails = new MySqlCommand("UPDATE stc_oba.professionaldetails SET OrganisationKey = @OrganisationKey, MemberKey = @MemberKey, Designation = @Designation, Email = @Email, Active = @Active, UserKey = @UserKey, UpdatedDate = NOW() WHERE `Key` = @Key", con, tr))
+                        cmdProfessionalDetails.Parameters.AddWithValue("@MemberKey", member.Key);
+                        cmdProfessionalDetails.ExecuteNonQuery();
+                    }
+
+                    if (proDetails != null)
+                    {
+                        using (MySqlCommand cmdProfessionalDetails = new MySqlCommand("INSERT INTO stc_oba.professionaldetails ( OrganisationKey ,MemberKey ,Designation ,Email ,Active ,UserKey ,UpdatedDate ) VALUES ( @OrganisationKey ,@MemberKey ,@Designation ,@Email ,@Active ,@UserKey ,NOW());", con, tr))
                         {
 
                             cmdProfessionalDetails.Parameters.AddWithValue("@OrganisationKey", proDetails.OrganisationKey);
@@ -791,28 +833,27 @@ namespace OBALog.Data
                             cmdProfessionalDetails.Parameters.AddWithValue("@Email", proDetails.Email);
                             cmdProfessionalDetails.Parameters.AddWithValue("@Active", proDetails.Active);
                             cmdProfessionalDetails.Parameters.AddWithValue("@UserKey", userKey);
-                            cmdProfessionalDetails.Parameters.AddWithValue("@Key", proDetails.Key);
 
                             cmdProfessionalDetails.ExecuteNonQuery();
                         }
                     }
-
                     #endregion
 
                     #region RemarksHistory
                     MySqlParameter[] paraRemark = new MySqlParameter[1];
                     paraRemark[0] = new MySqlParameter("@MemberKey", member.Key);
-                    bool successDeleteRemarks = Convert.ToBoolean(MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "DELETE FROM remarkshistory WHERE MemberKey= @MemberKey", paraRemark));
+                    bool successDeleteRemarks = Convert.ToBoolean(MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "DELETE FROM remarkshistory WHERE MemberKey = @MemberKey", paraRemark));
 
                     if (successDeleteRemarks)
                     {
                         foreach (ML_RemarksHistory remark in remarks)
                         {
-                            using (MySqlCommand cmdRemark = new MySqlCommand("INSERT INTO stc_oba.remarkshistory ( MemberKey ,UserKey ,Remarks ,UpdatedDate ) VALUES ( @MemberKey ,@UserKey ,@Remarks , NOW() );", con, tr))
+                            using (MySqlCommand cmdRemark = new MySqlCommand("INSERT INTO stc_oba.remarkshistory ( MemberKey ,UserKey ,Remarks ,UpdatedDate ) VALUES ( @MemberKey ,@UserKey ,@Remarks , @UpdatedDate );", con, tr))
                             {
                                 cmdRemark.Parameters.AddWithValue("@MemberKey", member.Key);
                                 cmdRemark.Parameters.AddWithValue("@Remarks", remark.Remarks);
                                 cmdRemark.Parameters.AddWithValue("@UserKey", userKey);
+                                cmdRemark.Parameters.AddWithValue("@UpdatedDate", remark.UpdatedDate);
 
                                 cmdRemark.ExecuteNonQuery();
                             }
@@ -847,12 +888,25 @@ namespace OBALog.Data
             return string.Format("{0}{1}", CurrentDateVal.Replace('%', ' ').Trim(), MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT COUNT(*) AS Mem_No FROM Member WHERE MembershipNo LIKE @CurrentDateVal;", para).Rows[0]["Mem_No"].ToString().PadLeft(3, '0'));
         }
 
-        public bool checkMemNo(string membershipNo)
+        public bool checkMemNo(string membershipNo, bool IsNewRecord, string memberKey = null)
         {
-            MySqlParameter[] para = new MySqlParameter[1];
-            para[0] = new MySqlParameter("@MembershipNo", membershipNo);
+            if (IsNewRecord)
+            {
 
-            return Convert.ToInt32(MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT COUNT(*) AS `Count` FROM vw_allmemberdata va WHERE va.MembershipNo = @MembershipNo;", para).Rows[0]["Count"].ToString()) > 0;
+                MySqlParameter[] para = new MySqlParameter[1];
+                para[0] = new MySqlParameter("@MembershipNo", membershipNo);
+                return Convert.ToInt32(MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT COUNT(*) AS `Count` FROM vw_allmemberdata va WHERE va.MembershipNo = @MembershipNo;", para).Rows[0]["Count"].ToString()) > 0;
+            }
+            else
+            {
+                MySqlParameter[] para = new MySqlParameter[2];
+                para[0] = new MySqlParameter("@MembershipNo", membershipNo);
+                para[1] = new MySqlParameter("@Key", memberKey);
+                return Convert.ToInt32(MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT COUNT(*) AS `Count` FROM vw_allmemberdata va WHERE va.MembershipNo = @MembershipNo OR va.`KEY`= @Key", para).Rows[0]["Count"].ToString()) != 1;
+            }
+
+
+
         }
 
         public string getReceiptNo(string configurationName)

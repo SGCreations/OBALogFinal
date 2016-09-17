@@ -5,7 +5,7 @@ namespace OBALog.Model
     {
         public string School { get; set; }
         public string AdmissionNo { get; set; }
-        public int Key { get; set; }
+        public int? Key { get; set; }
         public int MemberKey { get; set; }
         public int UserKey { get; set; }
     }

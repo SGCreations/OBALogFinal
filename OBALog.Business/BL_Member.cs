@@ -109,14 +109,14 @@ namespace OBALog.Business
             return new DL_Member().getLastMemNo(CurrentDateVal);
         }
 
-        public bool checkMemNo(string membershipNo)
+        public bool checkMemNo(string membershipNo, bool IsNewRecord, string memberKey = null)
         {
-            return new DL_Member().checkMemNo(membershipNo);
+            return new DL_Member().checkMemNo(membershipNo, IsNewRecord, memberKey);
         }
 
-        public void updateMember(ML_Address address, ML_Receipt receipt, ML_Member member, List<ML_Admission> admission, ML_ProfessionalDetails professionalDetails, List<ML_RemarksHistory> RemarksHistory, string p1, string p2, string p3, string p4)
+        public bool updateMember(ML_Address address, ML_Receipt receipt, ML_Member member, List<ML_Admission> admissions, ML_ProfessionalDetails proDetails, List<ML_RemarksHistory> remarks, string ReceiptNoStr, string MembershipDateStr, string MembershipNoIndexStr, string school_STCMount, string userKey)
         {
-            return new DL_Member().updateMember(address, receipt, member, admission, proDetails, remarks, ReceiptNoStr, MembershipDateStr, MembershipNoIndexStr, userKey);
+            return new DL_Member().updateMember(address, receipt, member, admissions, proDetails, remarks, ReceiptNoStr, MembershipDateStr, MembershipNoIndexStr, school_STCMount, userKey);
         }
     }
 }

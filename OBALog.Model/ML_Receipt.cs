@@ -10,7 +10,7 @@ namespace OBALog.Model
         public string Bank { get; set; }
         public string ReceiptDate { get; set; }
         public string UpdatedDate { get; set; }
-        public int Key { get; set; }
+        public int? Key { get; set; }
         public int PrintCount { get; set; }
         public int UserKey { get; set; }
         public double ReceiptAmount { get; set; }
