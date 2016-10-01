@@ -94,7 +94,6 @@ namespace OBALog.Windows
         {
             try
             {
-
                 if (!IsNewRecord && !hasAccessUpdate)
                 {
                     ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, "You have no save rights.", "Access Denied");

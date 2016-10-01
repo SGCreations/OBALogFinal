@@ -50,6 +50,8 @@ namespace OBALog.Windows
             {
                 using (DataTable dt = new BL_Configurations().select())
                 {
+
+                    #region Membership No
                     EnumerableRowCollection<DataRow> MembershipNoIndex = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.MembershipNoIndexStr select myRow;
                     if (MembershipNoIndex.Any())
                     {
@@ -58,6 +60,9 @@ namespace OBALog.Windows
                         txt_mem_no_conf_by.Text = MembershipNoIndex.First()["Name"].ToString();
                         txt_mem_no_conf_date.Text = Convert.ToDateTime(MembershipNoIndex.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
+                    #endregion
+
+                    #region Membership Date
 
                     EnumerableRowCollection<DataRow> MembershipDate = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.MembershipDateStr select myRow;
                     if (MembershipDate.Any())
@@ -67,6 +72,9 @@ namespace OBALog.Windows
                         txt_mem_date_conf_by.Text = MembershipDate.First()["Name"].ToString();
                         txt_mem_date_conf_date.Text = Convert.ToDateTime(MembershipDate.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
+                    #endregion
+
+                    #region Internet Connection
 
                     EnumerableRowCollection<DataRow> InternetConnection = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.InternetConnectionStr select myRow;
                     if (InternetConnection.Any())
@@ -76,6 +84,9 @@ namespace OBALog.Windows
                         txt_int_con_conf_by.Text = InternetConnection.First()["Name"].ToString();
                         txt_int_con_conf_date.Text = Convert.ToDateTime(InternetConnection.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
+                    #endregion
+
+                    #region Receipt No
 
                     EnumerableRowCollection<DataRow> ReceiptNo = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.ReceiptNoStr select myRow;
                     if (ReceiptNo.Any())
@@ -85,7 +96,9 @@ namespace OBALog.Windows
                         txt_rec_no_conf_by.Text = ReceiptNo.First()["Name"].ToString();
                         txt_rec_no_conf_date.Text = Convert.ToDateTime(ReceiptNo.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
+                    #endregion
 
+                    #region Receipt Amount
                     EnumerableRowCollection<DataRow> ReceiptAmount = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.ReceiptAmountStr select myRow;
                     if (ReceiptAmount.Any())
                     {
@@ -95,6 +108,9 @@ namespace OBALog.Windows
                         txt_rec_amount_conf_by.Text = ReceiptAmount.First()["Name"].ToString();
                         txt_rec_amount_conf_date.Text = Convert.ToDateTime(ReceiptAmount.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
+                    #endregion
+
+                    #region System Timeout
 
                     EnumerableRowCollection<DataRow> TimeoutPeriod = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.TimeoutPeriodStr select myRow;
                     if (TimeoutPeriod.Any())
@@ -107,6 +123,9 @@ namespace OBALog.Windows
                         txt_timeout_conf_by.Text = TimeoutPeriod.First()["Name"].ToString();
                         txt_timeout_conf_date.Text = Convert.ToDateTime(TimeoutPeriod.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
+                    #endregion
+
+                    #region Logout Confirmation Timeout
 
                     EnumerableRowCollection<DataRow> LogoffPeriod = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.LogoffPeriodStr select myRow;
                     if (LogoffPeriod.Any())
@@ -118,6 +137,9 @@ namespace OBALog.Windows
                         txt_logout_conf_by.Text = LogoffPeriod.First()["Name"].ToString();
                         txt_logout_conf_date.Text = Convert.ToDateTime(LogoffPeriod.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
+                    #endregion
+
+                    #region Default Values
 
                     EnumerableRowCollection<DataRow> DefaultSalutation = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.DefaultSalutationStr select myRow;
                     if (DefaultSalutation.Any())
@@ -140,6 +162,32 @@ namespace OBALog.Windows
                     {
                         cbo_city.EditValue = DefaultCity.First()["ConfigurationValue"].ToString();
                     }
+
+                    #endregion
+
+                    #region Control Validations
+
+                    EnumerableRowCollection<DataRow> TelephoneValidation = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.TelephoneValidationStr select myRow;
+                    if (TelephoneValidation.Any())
+                    {
+                        mem_validations_desc.Text = TelephoneValidation.First()["Description"].ToString();
+                        chk_validations_tel.EditValue = TelephoneValidation.First()["ConfigurationValue"].ToString().ToBool();
+                        txt_validations_conf_by.Text = TelephoneValidation.First()["Name"].ToString();
+                        txt_validations_conf_date.Text = Convert.ToDateTime(TelephoneValidation.First()["UpdatedDate"].ToString()).ToShortDateString();
+                    }
+
+                    EnumerableRowCollection<DataRow> MobileValidation = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.MobileValidationStr select myRow;
+                    if (MobileValidation.Any())
+                    {
+                        chk_validations_mobile.EditValue = MobileValidation.First()["ConfigurationValue"].ToString().ToBool();
+                    }
+
+                    EnumerableRowCollection<DataRow> EmailValidation = from myRow in dt.AsEnumerable() where myRow.Field<string>("ConfigurationName") == Configurations.EmailValidationStr select myRow;
+                    if (EmailValidation.Any())
+                    {
+                        chk_validations_email.EditValue = EmailValidation.First()["ConfigurationValue"].ToString().ToBool();
+                    }
+                    #endregion
                 }
             }
             catch (Exception ex)
@@ -220,6 +268,11 @@ namespace OBALog.Windows
                         {
                             ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Exclamation, "One or more required values are null. Please re-check!", "Error Saving");
                         }
+                        break;
+                    case "Control Validations":
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.TelephoneValidationStr, Description = mem_validations_desc.Text, ConfigurationValue = chk_validations_tel.Checked ? "True" : "False", UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.EmailValidationStr, Description = mem_validations_desc.Text, ConfigurationValue = chk_validations_email.Checked ? "True" : "False", UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.MobileValidationStr, Description = mem_validations_desc.Text, ConfigurationValue = chk_validations_mobile.Checked ? "True" : "False", UserKey = UniversalVariables.UserKey });
                         break;
                     default:
                         break;

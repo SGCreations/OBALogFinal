@@ -389,7 +389,10 @@ namespace OBALog.Data
 
         public bool insertMember(ML_Address address, ML_Receipt receipt, ML_Member member, List<ML_Admission> admissions, ML_ProfessionalDetails proDetails, List<ML_RemarksHistory> remarks, string ReceiptNoStr, string MembershipDateStr, string MembershipNoIndexStr, string userKey)
         {
+            int memberKey = 0;
+
             MySqlTransaction tr = null;
+
             using (MySqlConnection con = new MySqlConnection(DBConnection.connectionString))
             {
                 con.Open();
@@ -449,7 +452,6 @@ namespace OBALog.Data
 
                     #region Member
 
-                    int memberKey = 0;
                     using (MySqlCommand cmdMember = new MySqlCommand("INSERT INTO stc_oba.member (MembershipNo , MembershipDate , OldMembershipNos , SalutationKey , Surname , Initials , Forenames , DOB , IdentificationType , IdentificationNo , YearJoined , YearLeft , AddressKey , Mobile , Email , MailReturned , EmailReturned , OLYear , ALYear , ClassGroup , ReceiptKey , Rejected , RejectedReason , RefundChqNo , RefundCheqDate , ApprovalStage , DateSentToOffice , DateApproved , DateRejected , DateCardSentToPrinter , DateCardReceivedFromPrinter , DateMemberNotified , DateCardGivenToMember , MembershipNotificationType , Deceased , DeceasedDate , ProfessionKey , Outdated , UserKey ,Picture , UpdatedDate) VALUES (@MembershipNo, @MembershipDate, @OldMembershipNos, @SalutationKey, @Surname, @Initials, @Forenames, @DOB, @IdentificationType, @IdentificationNo, @YearJoined, @YearLeft, @AddressKey, @Mobile, @Email, @MailReturned, @EmailReturned, @OLYear, @ALYear, @ClassGroup, @ReceiptKey, @Rejected, @RejectedReason, @RefundChqNo, @RefundCheqDate, @ApprovalStage, @DateSentToOffice, @DateApproved, @DateRejected, @DateCardSentToPrinter, @DateCardReceivedFromPrinter, @DateMemberNotified, @DateCardGivenToMember, @MembershipNotificationType, @Deceased, @DeceasedDate, @ProfessionKey, @Outdated, @UserKey, @Picture, NOW()); SELECT LAST_INSERT_ID();", con, tr))
                     {
 
@@ -573,7 +575,7 @@ namespace OBALog.Data
 
                     #region ProfessionalDetails
 
-                    if (proDetails.OrganisationKey > 0 && proDetails != null)
+                    if (proDetails != null && proDetails.OrganisationKey > 0)
                     {
                         using (MySqlCommand cmdProfessionalDetails = new MySqlCommand("INSERT INTO stc_oba.professionaldetails ( OrganisationKey ,MemberKey ,Designation ,Email ,Active ,UserKey ,UpdatedDate ) VALUES ( @OrganisationKey ,@MemberKey ,@Designation ,@Email ,@Active ,@UserKey ,NOW());", con, tr))
                         {
@@ -619,6 +621,9 @@ namespace OBALog.Data
                     con.Close();
                 }
             }
+
+            member.Key = memberKey;
+
             return true;
         }
 
