@@ -116,13 +116,17 @@ namespace OBALog.Windows
                     {
                         gv_assigned_privileges.SetRowCellValue(i, "Allowed", Allowed);
                         int privilegeKey = Convert.ToInt32(gv_assigned_privileges.GetRowCellValue(rowHandle, "Key"));
-                        SaveToDatabase(Allowed, privilegeKey, userAccessTypeKey);
+
+                        if (privilegeKey > 0)
+                        {
+                            SaveToDatabase(Allowed, privilegeKey, userAccessTypeKey);
+                        }
                     }
                 }
 
                 DevExpress.XtraSplashScreen.SplashScreenManager.CloseForm(false);
 
-                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Information, "All settings updated!");
+                ApplicationUtilities.ShowMessageSplash(UniversalEnum.MessageTypes.Information, "All settings updated!", this);
             }
         }
         private void btn_deselect_all_privileges_Click(object sender, EventArgs e)

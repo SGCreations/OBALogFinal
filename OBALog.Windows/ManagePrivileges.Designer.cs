@@ -43,10 +43,10 @@
             this.btn_close = new DevExpress.XtraEditors.SimpleButton();
             this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
             this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
+            this.btn_clear_filter = new DevExpress.XtraEditors.SimpleButton();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.cbo_filter = new OBALog.Windows.CustomLookUpEdit();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
-            this.btn_clear_filter = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.lst_uat)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gc_assigned_privileges)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gv_assigned_privileges)).BeginInit();
@@ -161,6 +161,7 @@
             this.btn_select_uat.Size = new System.Drawing.Size(78, 23);
             this.btn_select_uat.TabIndex = 39;
             this.btn_select_uat.Text = "Select All";
+            this.btn_select_uat.Visible = false;
             this.btn_select_uat.Click += new System.EventHandler(this.btn_select_all_privileges_Click);
             // 
             // btn_deselect_uat
@@ -171,6 +172,7 @@
             this.btn_deselect_uat.Size = new System.Drawing.Size(78, 23);
             this.btn_deselect_uat.TabIndex = 38;
             this.btn_deselect_uat.Text = "Deselect All";
+            this.btn_deselect_uat.Visible = false;
             this.btn_deselect_uat.Click += new System.EventHandler(this.btn_deselect_all_privileges_Click);
             // 
             // btn_close
@@ -205,6 +207,16 @@
             this.groupControl2.TabIndex = 40;
             this.groupControl2.Text = "Privileges";
             // 
+            // btn_clear_filter
+            // 
+            this.btn_clear_filter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_clear_filter.Location = new System.Drawing.Point(238, 23);
+            this.btn_clear_filter.Name = "btn_clear_filter";
+            this.btn_clear_filter.Size = new System.Drawing.Size(78, 23);
+            this.btn_clear_filter.TabIndex = 120;
+            this.btn_clear_filter.Text = "Clear Filter";
+            this.btn_clear_filter.Click += new System.EventHandler(this.btn_clear_filter_Click);
+            // 
             // labelControl2
             // 
             this.labelControl2.Location = new System.Drawing.Point(5, 28);
@@ -238,16 +250,6 @@
             this.labelControl1.Size = new System.Drawing.Size(338, 13);
             this.labelControl1.TabIndex = 41;
             this.labelControl1.Text = "PLEASE NOTE: The changes you make are saved in real-time.";
-            // 
-            // btn_clear_filter
-            // 
-            this.btn_clear_filter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_clear_filter.Location = new System.Drawing.Point(238, 23);
-            this.btn_clear_filter.Name = "btn_clear_filter";
-            this.btn_clear_filter.Size = new System.Drawing.Size(78, 23);
-            this.btn_clear_filter.TabIndex = 120;
-            this.btn_clear_filter.Text = "Clear Filter";
-            this.btn_clear_filter.Click += new System.EventHandler(this.btn_clear_filter_Click);
             // 
             // ManagePrivileges
             // 

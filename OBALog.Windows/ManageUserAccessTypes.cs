@@ -115,11 +115,11 @@ namespace OBALog.Windows
                         {
                             if (IsNewRecord)
                             {
-                                new BL_UserAccessType().insert(new ML_UserAccessType { AccessTypeName = txt_new_uat.Text.Trim(), UserKey = UniversalVariables.UserKey });
+                                new BL_UserAccessType().insert(new ML_UserAccessType { AccessTypeName = txt_new_uat.Text.Trim(), UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
                             }
                             else if (SelectedID > 0)
                             {
-                                new BL_UserAccessType().update(new ML_UserAccessType { Key = SelectedID, AccessTypeName = txt_new_uat.Text.Trim(), UserKey = UniversalVariables.UserKey });
+                                new BL_UserAccessType().update(new ML_UserAccessType { Key = SelectedID, AccessTypeName = txt_new_uat.Text.Trim(), UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
                             }
                             LastUAT = txt_new_uat.Text;
                             BindUserAccessTypes();

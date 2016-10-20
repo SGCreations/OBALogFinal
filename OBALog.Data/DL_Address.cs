@@ -12,26 +12,28 @@ namespace OBALog.Data
     {
         public int insert(OBALog.Model.ML_Address address)
         {
-            MySqlParameter[] para = new MySqlParameter[4];
-            para[0] = new MySqlParameter("@Address", address.Address);
-            para[1] = new MySqlParameter("@Telephone", address.Telephone);
-            para[2] = new MySqlParameter("@CityKey", address.CityKey);
-            para[3] = new MySqlParameter("@UserKey", address.UserKey);
-
-            object insertedId = MySQLHelper.ExecuteScalar(DBConnection.connectionString, CommandType.Text, "INSERT INTO stc_oba.address (Address ,CityKey ,Telephone ,UserKey ,UpdatedDate ) VALUES ( @Address ,@CityKey ,@Telephone ,@UserKey ,NOW() ); SELECT LAST_INSERT_ID();", para);
-            return Convert.ToInt32(insertedId);
-        }
-
-        public bool update(OBALog.Model.ML_Address address)
-        {
             MySqlParameter[] para = new MySqlParameter[5];
             para[0] = new MySqlParameter("@Address", address.Address);
             para[1] = new MySqlParameter("@Telephone", address.Telephone);
             para[2] = new MySqlParameter("@CityKey", address.CityKey);
             para[3] = new MySqlParameter("@UserKey", address.UserKey);
-            para[4] = new MySqlParameter("@Key", address.Key);
+            para[4] = new MySqlParameter("@UpdatedDate", address.UpdatedDate);
 
-            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "UPDATE stc_oba.address SET Address = @Address ,CityKey = @CityKey ,Telephone = @Telephone ,UserKey = @UserKey , UpdatedDate = NOW() WHERE `Key` = @Key", para);
+            object insertedId = MySQLHelper.ExecuteScalar(DBConnection.connectionString, CommandType.Text, "INSERT INTO stc_oba.address (Address ,CityKey ,Telephone ,UserKey ,UpdatedDate ) VALUES ( @Address ,@CityKey ,@Telephone ,@UserKey , @UpdatedDate ); SELECT LAST_INSERT_ID();", para);
+            return Convert.ToInt32(insertedId);
+        }
+
+        public bool update(OBALog.Model.ML_Address address)
+        {
+            MySqlParameter[] para = new MySqlParameter[6];
+            para[0] = new MySqlParameter("@Address", address.Address);
+            para[1] = new MySqlParameter("@Telephone", address.Telephone);
+            para[2] = new MySqlParameter("@CityKey", address.CityKey);
+            para[3] = new MySqlParameter("@UserKey", address.UserKey);
+            para[4] = new MySqlParameter("@Key", address.Key);
+            para[5] = new MySqlParameter("@UpdatedDate", address.UpdatedDate);
+
+            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "UPDATE stc_oba.address SET Address = @Address ,CityKey = @CityKey ,Telephone = @Telephone ,UserKey = @UserKey , UpdatedDate = @UpdatedDate WHERE `Key` = @Key", para);
             return true;
         }
 

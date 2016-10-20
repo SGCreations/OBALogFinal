@@ -54,7 +54,7 @@ namespace OBALog.Windows
                 {
                     if (vp_password.Validate() && txt_retype_pwd.Text == txt_password.Text)
                     {
-                        new BL_User().resetPassword(new ML_User() { Key = UniversalVariables.UserKey, Password = txt_password.Text, LoginId = UniversalVariables.Username });
+                        new BL_User().resetPassword(new ML_User() { Key = UniversalVariables.UserKey, Password = txt_password.Text, LoginId = UniversalVariables.Username, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
                         FormDirty = false;
                         ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Information, "Password changed successfully! The new password will be available from next login.", "Success");
                         this.Close();

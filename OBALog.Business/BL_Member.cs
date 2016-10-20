@@ -118,5 +118,10 @@ namespace OBALog.Business
         {
             return new DL_Member().updateMember(address, receipt, member, admissions, proDetails, remarks, ReceiptNoStr, MembershipDateStr, MembershipNoIndexStr, school_STCMount, userKey);
         }
+
+        public bool checkIDVal(string identificationNo, bool IsNewRecord, string memberKey = null)
+        {
+            return new DL_Member().checkIDVal(identificationNo, IsNewRecord, memberKey);
+        }
     }
 }

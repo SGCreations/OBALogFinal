@@ -16,9 +16,9 @@ namespace OBALog.Windows
     public partial class MemberDetails : XtraForm
     {
         #region Variables
-        private bool hasAccessInsert = Privileges.CheckAccess(Privileges.MemberDetails_Insert);
-        private bool hasAccessUpdate = Privileges.CheckAccess(Privileges.MemberDetails_Update);
-        private bool hasAccessDelete = Privileges.CheckAccess(Privileges.MemberDetails_Delete);
+        private bool hasAccessInsert = Privileges.CheckAccess(Privileges.MembershipDetails_Insert);
+        private bool hasAccessUpdate = Privileges.CheckAccess(Privileges.MembershipDetails_Update);
+        private bool hasAccessDelete = Privileges.CheckAccess(Privileges.MembershipDetails_Delete);
         public bool FormDirty { get; set; }
         public string LastMember { get; set; }
 
@@ -38,29 +38,37 @@ namespace OBALog.Windows
 
         private void MemberDetails_Load(object sender, EventArgs e)
         {
-            vp_phone.SetValidationRule(txt_tel, new PhoneValidation());
-            vp_phone.SetValidationRule(txt_mobile, new PhoneValidation());
+            try
+            {
+                vp_phone.SetValidationRule(txt_tel, new PhoneValidation());
+                vp_phone.SetValidationRule(txt_mobile, new PhoneValidation());
 
-            vp_email.SetValidationRule(txt_email, new EmailValidation());
-            vp_email_professional.SetValidationRule(txt_email_professional, new EmailValidation());
+                vp_email.SetValidationRule(txt_email, new EmailValidation());
+                vp_email_professional.SetValidationRule(txt_email_professional, new EmailValidation());
 
-            vp_TelephoneValidation.SetValidationRule(txt_tel, new TelephoneValidation());
-            vp_MobileValidation.SetValidationRule(txt_mobile, new MobileValidation());
-            vp_EmailValidation.SetValidationRule(txt_email, new EmailControlValidation());
+                vp_TelephoneValidation.SetValidationRule(txt_tel, new TelephoneValidation());
+                vp_MobileValidation.SetValidationRule(txt_mobile, new MobileValidation());
+                vp_EmailValidation.SetValidationRule(txt_email, new EmailControlValidation());
 
-            split_search.PanelVisibility = SplitPanelVisibility.Panel2;
-            split_search.Collapsed = true;
-            chk_include_deleted.Visible = false;
-            tab_member.SelectedTabPageIndex = 0;
-            IsNewRecord = false;
-            chk_col_office_CheckedChanged(this, new EventArgs());
-            bindSearchData();
+                split_search.PanelVisibility = SplitPanelVisibility.Panel2;
+                split_search.Collapsed = true;
+                chk_include_deleted.Visible = false;
+                tab_member.SelectedTabPageIndex = 0;
+                IsNewRecord = false;
+                chk_col_office_CheckedChanged(this, new EventArgs());
+                bindSearchData();
 
-            this.Invoke((MethodInvoker)delegate { bindInitialData(); });
+                this.Invoke((MethodInvoker)delegate { bindInitialData(); });
 
-            btn_new.Enabled = hasAccessInsert;
-            btn_delete.Enabled = hasAccessDelete;
-            btn_save.Enabled = (hasAccessInsert || hasAccessUpdate);
+                btn_new.Enabled = hasAccessInsert;
+                btn_delete.Enabled = hasAccessDelete;
+                btn_save.Enabled = btn_print.Enabled = (hasAccessInsert || hasAccessUpdate);
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         private void bindInitialData()
@@ -166,20 +174,28 @@ namespace OBALog.Windows
 
         private void rad_search_options_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (rad_search_options.SelectedIndex == 2)
+            try
             {
-                split_search.PanelVisibility = SplitPanelVisibility.Both;
-                TabAdvancedSearch.SelectedTabPageIndex = 0;
-                split_search.Collapsed = false;
-            }
-            else
-            {
-                split_search.PanelVisibility = SplitPanelVisibility.Panel2;
-                split_search.Collapsed = true;
-            }
+                if (rad_search_options.SelectedIndex == 2)
+                {
+                    split_search.PanelVisibility = SplitPanelVisibility.Both;
+                    TabAdvancedSearch.SelectedTabPageIndex = 0;
+                    split_search.Collapsed = false;
+                }
+                else
+                {
+                    split_search.PanelVisibility = SplitPanelVisibility.Panel2;
+                    split_search.Collapsed = true;
+                }
 
-            chk_include_deleted.Checked = rad_search_options.SelectedIndex == 2;
-            bindSearchData();
+                chk_include_deleted.Checked = rad_search_options.SelectedIndex == 2;
+                bindSearchData();
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         private void bindSearchData()
@@ -277,17 +293,42 @@ namespace OBALog.Windows
 
         private void btn_search_Click(object sender, EventArgs e)
         {
-            bindSearchData();
+            try
+            {
+                bindSearchData();
+
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         private void cbo_country_EditValueChanged(object sender, EventArgs e)
         {
-            bindCity(Convert.ToInt32(cbo_country.EditValue), 2);
+            try
+            {
+                bindCity(Convert.ToInt32(cbo_country.EditValue), 2);
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         private void search_cbo_country_EditValueChanged(object sender, EventArgs e)
         {
-            bindCity(Convert.ToInt32(search_cbo_country.EditValue), 1);
+            try
+            {
+                bindCity(Convert.ToInt32(search_cbo_country.EditValue), 1);
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         private void bindCity(int CountryID, int part)
@@ -316,22 +357,38 @@ namespace OBALog.Windows
 
         private void search_cbo_category_EditValueChanged(object sender, EventArgs e)
         {
-            using (DataTable dt = new BL_OrganisationSubCategory().selectByCategory(new ML_OrganisationSubCategory { CategoryKey = Convert.ToInt32(search_cbo_category.EditValue) }))
+            try
             {
-                search_cbo_sub_category.Clear();
-                search_cbo_sub_category.Properties.DataSource = dt;
-                search_cbo_sub_category.Properties.DisplayMember = "SubCategory";
-                search_cbo_sub_category.Properties.ValueMember = "SubCategoryKey";
-                //search_cbo_sub_category.ItemIndex = dt.Rows.Count > 0 ? 0 : -1;
-                search_cbo_sub_category.SelectFirstIndex();
+                using (DataTable dt = new BL_OrganisationSubCategory().selectByCategory(new ML_OrganisationSubCategory { CategoryKey = Convert.ToInt32(search_cbo_category.EditValue) }))
+                {
+                    search_cbo_sub_category.Clear();
+                    search_cbo_sub_category.Properties.DataSource = dt;
+                    search_cbo_sub_category.Properties.DisplayMember = "SubCategory";
+                    search_cbo_sub_category.Properties.ValueMember = "SubCategoryKey";
+                    //search_cbo_sub_category.ItemIndex = dt.Rows.Count > 0 ? 0 : -1;
+                    search_cbo_sub_category.SelectFirstIndex();
+                }
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
             }
         }
 
         private void btn_close_Click(object sender, EventArgs e)
         {
-            mainSplit.Panel1.Enabled = true;
+            try
+            {
+                mainSplit.Panel1.Enabled = true;
 
-            this.Close();
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         private void btn_save_Click(object sender, EventArgs e)
@@ -369,6 +426,17 @@ namespace OBALog.Windows
                     else if (new BL_Member().checkMemNo(txt_mem_no.Text.Trim().IsNotEmpty() ? txt_mem_no.Text.Trim() : "0", IsNewRecord, Member.KEY.ToString()) && !IsNewRecord)
                     {
                         ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Exclamation, "Error updating record. The specified membership no. already exists in the system. Please re-check!");
+                        return;
+                    }
+
+                    if (new BL_Member().checkIDVal(txt_id_val.Text.Trim().IsNotEmpty() ? txt_id_val.Text.Trim() : "0", IsNewRecord) && IsNewRecord)
+                    {
+                        ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Exclamation, "Error updating record. The specified identification no. already exists in the system. Please re-check!");
+                        return;
+                    }
+                    else if (new BL_Member().checkIDVal(txt_id_val.Text.Trim().IsNotEmpty() ? txt_id_val.Text.Trim() : "0", IsNewRecord, Member.KEY.ToString()) && !IsNewRecord)
+                    {
+                        ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Exclamation, "Error updating record. The specified identification no. already exists in the system. Please re-check!");
                         return;
                     }
 
@@ -425,11 +493,10 @@ namespace OBALog.Windows
                     {
                         CityKey = cbo_city.ToIntNullable(),
                         Address = txt_address.Text.Trim(),
-                        Telephone = txt_tel.Text.Trim()
+                        Telephone = txt_tel.Text.Trim(),
+                        UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                     };
 
-
-                    //check this
                     var receipt = new ML_Receipt
                       {
                           ReceiptNo = (genRecBtnClicked && txt_rec_no.IsNotEmpty()) ? txt_rec_no.Text.Trim() : new BL_Member().getReceiptNo(Configurations.ReceiptNoStr),
@@ -439,6 +506,7 @@ namespace OBALog.Windows
                           ReceiptAmount = Convert.ToDouble(txt_amount.ToIntNullable()),
                           PaymentType = cbo_payment_type.Text,
                           PrintCount = 0,
+                          UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                       };
 
                     var member = new ML_Member
@@ -479,7 +547,8 @@ namespace OBALog.Windows
                         UserKey = UniversalVariables.UserKey,
                         YearJoined = txt_year_joined.Text,
                         YearLeft = txt_year_left.Text,
-                        Picture = pic_member.Image != null ? ApplicationUtilities.imageToByteArray(pic_member.Image) : null
+                        Picture = pic_member.Image != null ? ApplicationUtilities.imageToByteArray(pic_member.Image) : null,
+                        UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                     };
 
 
@@ -508,7 +577,7 @@ namespace OBALog.Windows
                              Designation = txt_designation.Text.Trim(),
                              Email = txt_email_professional.Text.Trim(),
                              OrganisationKey = Convert.ToInt32(cbo_org.EditValue),
-
+                             UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                          };
                     }
 
@@ -580,6 +649,7 @@ namespace OBALog.Windows
                         Address = txt_address.Text.Trim(),
                         Telephone = txt_tel.Text.Trim(),
                         Key = Member.AddressKey.ToInt(),
+                        UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                     };
 
 
@@ -587,7 +657,6 @@ namespace OBALog.Windows
                       {
                           //check this - should a receipt no be always generated when saving?
                           ReceiptNo = (genRecBtnClicked && txt_rec_no.IsNotEmpty()) ? txt_rec_no.Text.Trim() : new BL_Member().getReceiptNo(Configurations.ReceiptNoStr),
-
                           ReceiptDate = dtp_rec_date.GetFormattedDateString(UniversalVariables.MySQLDateFormat),
                           CardChequeNo = txt_cheque_no.Text.Trim(),
                           Bank = txt_bank.Text.Trim(),
@@ -595,6 +664,7 @@ namespace OBALog.Windows
                           PaymentType = cbo_payment_type.Text,
                           PrintCount = Member.PrintCount == string.Empty ? 0 : (genRecBtnClicked ? Member.PrintCount.ToInt() + 1 : Member.PrintCount.ToInt()),
                           Key = (Member.ReceiptKey == null || Member.ReceiptKey == string.Empty) ? (int?)null : Member.ReceiptKey.ToInt(),
+                          UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                       };
 
 
@@ -638,7 +708,8 @@ namespace OBALog.Windows
                         YearJoined = txt_year_joined.Text,
                         YearLeft = txt_year_left.Text,
                         Picture = pic_member.Image != null ? ApplicationUtilities.imageToByteArray(pic_member.Image) : null,
-                        Key = SelectedMemberKey
+                        Key = SelectedMemberKey,
+                        UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                     };
 
 
@@ -668,7 +739,8 @@ namespace OBALog.Windows
                              Active = true,
                              Designation = txt_designation.Text.Trim(),
                              Email = txt_email_professional.Text.Trim(),
-                             OrganisationKey = Convert.ToInt32(cbo_org.EditValue)
+                             OrganisationKey = Convert.ToInt32(cbo_org.EditValue),
+                             UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                          };
                     }
 
@@ -794,7 +866,7 @@ namespace OBALog.Windows
         {
             btn_delete.Enabled = hasAccessDelete;
             btn_new.Enabled = hasAccessInsert;
-            btn_save.Enabled = (hasAccessInsert || hasAccessUpdate);
+            btn_save.Enabled = btn_print.Enabled = (hasAccessInsert || hasAccessUpdate);
         }
 
         private string generateMemNo(ref string newMemNo)
@@ -877,14 +949,6 @@ namespace OBALog.Windows
             }
         }
 
-        private void saveMemberImage(int inputKey)
-        {
-            if (pic_member.Image != null)
-            {
-                new BL_Member().updateMemberImage(new ML_Member { Picture = ApplicationUtilities.imageToByteArray(pic_member.Image), Key = inputKey });
-            }
-        }
-
         private void btn_new_Click(object sender, EventArgs e)
         {
             try
@@ -916,7 +980,6 @@ namespace OBALog.Windows
 
             ClearAllForm(tab_member);
             SetDefaults();
-
         }
 
         private void SetDefaults()
@@ -965,8 +1028,16 @@ namespace OBALog.Windows
 
         private void btn_profession_Click(object sender, EventArgs e)
         {
-            new ManageProfessions().ShowDialog();
-            bindProfession();
+            try
+            {
+                new ManageProfessions().ShowDialog();
+                bindProfession();
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         private void btn_delete_Click(object sender, EventArgs e)
@@ -1099,63 +1170,70 @@ namespace OBALog.Windows
         {
 
             #region Level 3
-            txt_mem_no.Enabled = Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_MembershipNo);
-            txt_initials.Enabled = Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_PersonalDetails_Initials);
-            txt_surname.Enabled = Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_PersonalDetails_Surname);
-            dtp_mem_date.Enabled = Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_MembershipDate);
-            txt_id_val.Enabled = Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_PersonalDetails_IDVal);
-            txt_rec_no.Enabled = Privileges.CheckAccess(Privileges.MembershipDetails_ProcessingDetails_ReceiptDetails_ReceiptNo);
-            dtp_rec_date.Enabled = Privileges.CheckAccess(Privileges.MembershipDetails_ProcessingDetails_ReceiptDetails_ReceiptDate);
-            txt_forenames.Enabled = Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_PersonalDetails_Forenames);
+            txt_mem_no.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_MembershipNo);
+            txt_initials.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_PersonalDetails_Initials);
+            txt_surname.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_PersonalDetails_Surname);
+            dtp_mem_date.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_MembershipDate);
+            txt_id_val.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_PersonalDetails_IDVal);
+            txt_rec_no.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_ProcessingDetails_ReceiptDetails_ReceiptNo);
+            dtp_rec_date.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_ProcessingDetails_ReceiptDetails_ReceiptDate);
+            txt_forenames.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_PersonalDetails_Forenames);
             #endregion
 
-            //Level 2
+            #region Level 2
             if (Member.ReceiptNo.IsNotEmpty())
             {
-                cbo_mem_not_type.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableMemNotTypeAfterRecGen);
-                grp_receipt.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableRecDetAfterRecGen);
-                grp_reg_progress.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableRegProgAfterRecGen);
-                tp_school.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableSchoolDetAfterRecGen);
+                cbo_mem_not_type.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableMemNotTypeAfterRecGen);
+                grp_receipt.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableRecDetAfterRecGen);
+                grp_reg_progress.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableRegProgAfterRecGen);
+                tp_school.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableSchoolDetAfterRecGen);
             }
 
             if (Member.DateCardGivenToMember.IsNotEmpty())
             {
-                grp_crd_processing.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableCardProIfCardGivenToMem);
-                dtp_mem_date.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableMemDateIfCardGivenToMem);
-                txt_mem_no.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableMemNoIfCardGivenToMem);
-                grp_reg_progress.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableRegProgIfCardGivenToMem);
+                grp_crd_processing.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableCardProIfCardGivenToMem);
+                dtp_mem_date.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableMemDateIfCardGivenToMem);
+                txt_mem_no.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableMemNoIfCardGivenToMem);
+                grp_reg_progress.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableRegProgIfCardGivenToMem);
             }
 
             if (Member.Deceased)
             {
-                btn_delete.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableDeleteIfDeceased);
-                chk_deceased.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableDeceasedIfDeceased);
-                dtp_deceased.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableDeceasedDateIfDeceased);
-                btn_save.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableSaveIfDeceased);
+                btn_delete.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableDeleteIfDeceased);
+                chk_deceased.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableDeceasedIfDeceased);
+                dtp_deceased.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableDeceasedDateIfDeceased);
+                btn_save.Enabled = btn_print.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableSaveIfDeceased);
             }
 
             if (Member.Deleted)
             {
-                btn_save.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableSaveIfDel);
+                btn_save.Enabled = btn_print.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableSaveIfDel);
             }
 
             if (Member.Rejected)
             {
-                btn_delete.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableDeleteIfRej);
-                btn_save.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableSaveIfRej);
+                btn_delete.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableDeleteIfRej);
+                btn_save.Enabled = btn_print.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableSaveIfRej);
             }
 
             if (Member.ReceiptNo.IsEmpty())
             {
-                cbo_mem_not_type.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableMemNotTypeTillRecGen);
+                cbo_mem_not_type.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableMemNotTypeTillRecGen);
             }
 
             if (Member.ApprovalStage == UniversalVariables.AppStage_Approved || Member.ApprovalStage == UniversalVariables.AppStage_Rejected)
             {
-                btn_delete.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableDelMemAfterAppRej);
-                grp_reg_progress.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableRegProgAfterAppRej);
-                txt_amount.Enabled = !Privileges.CheckAccess(Privileges.MemberDetails_DisableRecAmtAfterAppRej);
+                btn_delete.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableDelMemAfterAppRej);
+                txt_amount.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableRecAmtAfterAppRej);
             }
+
+            if (Member.ApprovalStage == UniversalVariables.AppStage_Approved)
+            {
+                grp_reg_progress.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableRegProgAfterApp);
+                tp_school.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableSchoolDetAfterApp);
+
+            }
+            #endregion
         }
 
         private void FormatButtons(bool IsEnabled)
@@ -1229,12 +1307,28 @@ namespace OBALog.Windows
 
         private void txt_admission_2_KeyUp(object sender, KeyEventArgs e)
         {
-            txt_admission_2.Text = cbo_school_2.IsEmpty() ? null : txt_admission_2.Text;
+            try
+            {
+                txt_admission_2.Text = cbo_school_2.IsEmpty() ? null : txt_admission_2.Text;
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         private void chk_col_office_CheckedChanged(object sender, EventArgs e)
         {
-            grp_processing_complete.Enabled = chk_col_office.Checked;
+            try
+            {
+                grp_processing_complete.Enabled = chk_col_office.Checked;
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         private void gvSearch_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
@@ -1356,9 +1450,17 @@ namespace OBALog.Windows
 
         private void txt_new_remark_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && txt_new_remark.IsNotEmpty())
+            try
             {
-                btn_add_remark_Click(this, new EventArgs());
+                if (e.KeyCode == Keys.Enter && txt_new_remark.IsNotEmpty())
+                {
+                    btn_add_remark_Click(this, new EventArgs());
+                }
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
             }
         }
 
@@ -1372,7 +1474,15 @@ namespace OBALog.Windows
 
         private void search_chk_include_duplicates_CheckedChanged(object sender, EventArgs e)
         {
-            search_txt_old_mem_no.ReadOnly = search_chk_include_duplicates.Checked;
+            try
+            {
+                search_txt_old_mem_no.ReadOnly = search_chk_include_duplicates.Checked;
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         private void btn_print_Click(object sender, EventArgs e)
@@ -1393,7 +1503,7 @@ namespace OBALog.Windows
 
                     DevExpress.XtraSplashScreen.SplashScreenManager.CloseForm(false);
 
-                    tool.ShowPreview();
+                    tool.ShowPreview(this, this.LookAndFeel);
                 }
             }
             catch (Exception ex)
@@ -1405,46 +1515,78 @@ namespace OBALog.Windows
 
         private void dtp_sent_to_printer_EditValueChanged(object sender, EventArgs e)
         {
-            if (dtp_sent_to_printer.EditValue != null)
+            try
             {
-                dtp_received_from_printer.Enabled = true;
+                if (dtp_sent_to_printer.EditValue != null)
+                {
+                    dtp_received_from_printer.Enabled = true;
+                }
+                else
+                {
+                    dtp_received_from_printer.EditValue = null;
+                    dtp_received_from_printer.Enabled = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                dtp_received_from_printer.EditValue = null;
-                dtp_received_from_printer.Enabled = false;
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
             }
         }
 
         private void dtp_received_from_printer_EditValueChanged(object sender, EventArgs e)
         {
-            if (dtp_received_from_printer.EditValue != null)
+            try
             {
-                dtp_member_notified.Enabled = true;
+                if (dtp_received_from_printer.EditValue != null)
+                {
+                    dtp_member_notified.Enabled = true;
+                }
+                else
+                {
+                    dtp_member_notified.EditValue = null;
+                    dtp_member_notified.Enabled = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                dtp_member_notified.EditValue = null;
-                dtp_member_notified.Enabled = false;
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
             }
         }
 
         private void dtp_member_notified_EditValueChanged(object sender, EventArgs e)
         {
-            if (dtp_member_notified.EditValue != null)
+            try
             {
-                dtp_given_to_member.Enabled = true;
+                if (dtp_member_notified.EditValue != null)
+                {
+                    dtp_given_to_member.Enabled = true;
+                }
+                else
+                {
+                    dtp_given_to_member.EditValue = null;
+                    dtp_given_to_member.Enabled = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                dtp_given_to_member.EditValue = null;
-                dtp_given_to_member.Enabled = false;
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
             }
         }
 
         private void MemberDetails_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel = !ApplicationUtilities.CheckFormDirtyClose(CloseFormWithChecks, FormDirty);
+            try
+            {
+                e.Cancel = !ApplicationUtilities.CheckFormDirtyClose(CloseFormWithChecks, FormDirty);
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         private bool CloseFormWithChecks()
@@ -1454,14 +1596,30 @@ namespace OBALog.Windows
 
         private void grp_processing_complete_CustomButtonChecked(object sender, DevExpress.XtraBars.Docking2010.BaseButtonEventArgs e)
         {
-            ts_approved_rejected.Enabled = true;
-            dtp_approved_rejected.Enabled = true;
+            try
+            {
+                ts_approved_rejected.Enabled = true;
+                dtp_approved_rejected.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         private void grp_processing_complete_CustomButtonUnchecked(object sender, DevExpress.XtraBars.Docking2010.BaseButtonEventArgs e)
         {
-            ts_approved_rejected.Enabled = false;
-            dtp_approved_rejected.Enabled = false;
+            try
+            {
+                ts_approved_rejected.Enabled = false;
+                dtp_approved_rejected.Enabled = false;
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         public DateTime getPresentDateWebRequest()
@@ -1487,8 +1645,29 @@ namespace OBALog.Windows
 
         private void btn_add_org_Click(object sender, EventArgs e)
         {
-            new ManageOrganisations().ShowDialog();
-            bindOrganisation();
+            try
+            {
+                new ManageOrganisations().ShowDialog();
+                bindOrganisation();
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
+        }
+
+        private void ts_approved_rejected_Toggled(object sender, EventArgs e)
+        {
+            try
+            {
+                grp_rejected.Enabled = !ts_approved_rejected.IsOn;
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
     }
 }

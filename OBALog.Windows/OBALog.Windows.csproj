@@ -294,6 +294,10 @@
     <Compile Include="StaticRepo\Configurations.cs" />
     <Compile Include="Utilities\CurrencyToTextConverter.cs" />
     <Compile Include="Utilities\CustomValidationRules.cs" />
+    <Compile Include="Utilities\IdleTimeTool.cs" />
+    <Compile Include="Utilities\MessageBoxHelper.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ViewSessions.cs">
       <SubType>Form</SubType>
     </Compile>

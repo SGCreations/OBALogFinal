@@ -132,8 +132,8 @@ namespace OBALog.Windows
                     {
                         mem_logout_desc.Text = LogoffPeriod.First()["Description"].ToString();
                         string[] time = LogoffPeriod.First()["ConfigurationValue"].ToString().Split(new char[] { ':' });
-                        nud_msg_box_minutes.Text = time[0];
-                        nud_msg_box_seconds.Text = time[1];
+                        nud_msg_box_minutes.Text = time[1];
+                        nud_msg_box_seconds.Text = time[2];
                         txt_logout_conf_by.Text = LogoffPeriod.First()["Name"].ToString();
                         txt_logout_conf_date.Text = Convert.ToDateTime(LogoffPeriod.First()["UpdatedDate"].ToString()).ToShortDateString();
                     }
@@ -228,16 +228,16 @@ namespace OBALog.Windows
                 switch (tab_configurations.SelectedTabPage.Text.Trim())
                 {
                     case "Membership No":
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.MembershipNoIndexStr, Description = rtb_mem_no_desc.Text, ConfigurationValue = txt_mem_no_value.Text, UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.MembershipNoIndexStr, Description = rtb_mem_no_desc.Text, ConfigurationValue = txt_mem_no_value.Text, UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
                         break;
                     case "Receipt No":
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.ReceiptNoStr, Description = txt_rec_no_desc.Text, ConfigurationValue = txt_rec_no_value.Text, UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.ReceiptNoStr, Description = txt_rec_no_desc.Text, ConfigurationValue = txt_rec_no_value.Text, UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
                         break;
                     case "Membership Date":
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.MembershipDateStr, Description = txt_mem_date_desc.Text, ConfigurationValue = txt_mem_date_value.Text, UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.MembershipDateStr, Description = txt_mem_date_desc.Text, ConfigurationValue = txt_mem_date_value.Text, UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
                         break;
                     case "Internet Connection":
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.InternetConnectionStr, Description = txt_int_con_desc.Text, ConfigurationValue = tsw_int_con.IsOn.ToString(), UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.InternetConnectionStr, Description = txt_int_con_desc.Text, ConfigurationValue = tsw_int_con.IsOn.ToString(), UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
                         break;
                     case "Receipt Amount":
                         string receiptValues = string.Empty;
@@ -247,22 +247,22 @@ namespace OBALog.Windows
                             receiptValues = (count == lst_receipt_amount.Items.Count) ? string.Format("{0}{1}", receiptValues, rec_val) : string.Format("{0}{1};", receiptValues, rec_val);
                             count++;
                         }
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.ReceiptAmountStr, Description = txt_rec_amount_desc.Text, ConfigurationValue = receiptValues, UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.ReceiptAmountStr, Description = txt_rec_amount_desc.Text, ConfigurationValue = receiptValues, UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
                         break;
                     case "System Timeout":
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.TimeoutPeriodStr, Description = txt_timeout_desc.Text, ConfigurationValue = string.Format("{0}:{1}:{2}", nud_timeout_hrs.Text.PadLeft(2, '0'), nud_timeout_minutes.Text.PadLeft(2, '0'), nud_timeout_seconds.Text.PadLeft(2, '0')), UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.TimeoutPeriodStr, Description = txt_timeout_desc.Text, ConfigurationValue = string.Format("{0}:{1}:{2}", nud_timeout_hrs.Text.PadLeft(2, '0'), nud_timeout_minutes.Text.PadLeft(2, '0'), nud_timeout_seconds.Text.PadLeft(2, '0')), UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
                         break;
                     case "Logout Confirmation Timeout":
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.LogoffPeriodStr, Description = mem_logout_desc.Text, ConfigurationValue = string.Format("{0}:{1}", nud_msg_box_minutes.Text.PadLeft(2, '0'), nud_msg_box_seconds.Text.PadLeft(2, '0')), UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.LogoffPeriodStr, Description = mem_logout_desc.Text, ConfigurationValue = string.Format("{0}:{1}:{2}", "00", nud_msg_box_minutes.Text.PadLeft(2, '0'), nud_msg_box_seconds.Text.PadLeft(2, '0')), UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
                         break;
                     case "Default Values":
                         if (cbo_country.EditValue != null && cbo_city.EditValue != null && cbo_salutation.EditValue != null)
                         {
-                            new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.DefaultCountryStr, Description = mem_def_val_desc.Text, ConfigurationValue = cbo_country.EditValue.ToString(), UserKey = UniversalVariables.UserKey });
+                            new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.DefaultCountryStr, Description = mem_def_val_desc.Text, ConfigurationValue = cbo_country.EditValue.ToString(), UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
 
-                            new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.DefaultCityStr, Description = mem_def_val_desc.Text, ConfigurationValue = cbo_city.EditValue.ToString(), UserKey = UniversalVariables.UserKey });
+                            new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.DefaultCityStr, Description = mem_def_val_desc.Text, ConfigurationValue = cbo_city.EditValue.ToString(), UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
 
-                            new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.DefaultSalutationStr, Description = mem_def_val_desc.Text, ConfigurationValue = cbo_salutation.EditValue.ToString(), UserKey = UniversalVariables.UserKey });
+                            new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.DefaultSalutationStr, Description = mem_def_val_desc.Text, ConfigurationValue = cbo_salutation.EditValue.ToString(), UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
                         }
                         else
                         {
@@ -270,9 +270,9 @@ namespace OBALog.Windows
                         }
                         break;
                     case "Control Validations":
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.TelephoneValidationStr, Description = mem_validations_desc.Text, ConfigurationValue = chk_validations_tel.Checked ? "True" : "False", UserKey = UniversalVariables.UserKey });
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.EmailValidationStr, Description = mem_validations_desc.Text, ConfigurationValue = chk_validations_email.Checked ? "True" : "False", UserKey = UniversalVariables.UserKey });
-                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.MobileValidationStr, Description = mem_validations_desc.Text, ConfigurationValue = chk_validations_mobile.Checked ? "True" : "False", UserKey = UniversalVariables.UserKey });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.TelephoneValidationStr, Description = mem_validations_desc.Text, ConfigurationValue = chk_validations_tel.Checked ? "True" : "False", UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.EmailValidationStr, Description = mem_validations_desc.Text, ConfigurationValue = chk_validations_email.Checked ? "True" : "False", UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
+                        new BL_Configurations().update(new Model.ML_Configurations { ConfigurationName = Configurations.MobileValidationStr, Description = mem_validations_desc.Text, ConfigurationValue = chk_validations_mobile.Checked ? "True" : "False", UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
                         break;
                     default:
                         break;

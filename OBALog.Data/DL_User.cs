@@ -16,7 +16,7 @@ namespace OBALog.Data
             para[5] = new MySqlParameter("@UserAccessTypeKey", user.UserAccessTypeKey);
             para[6] = new MySqlParameter("@UserKey", user.UserKey);
 
-            return Convert.ToInt32(MySQLHelper.ExecuteScalar(DBConnection.connectionString, System.Data.CommandType.Text, "INSERT INTO stc_oba.user ( LoginId ,Password ,Name ,NIC ,UserAccessTypeKey ,UserKey, UpdatedDate) VALUES ( @LoginId ,@Password ,@Name ,@NIC ,@UserAccessTypeKey ,@UserKey, NOW()); SELECT @@identity", para));
+            return Convert.ToInt32(MySQLHelper.ExecuteScalar(DBConnection.connectionString, System.Data.CommandType.Text, "INSERT INTO stc_oba.user ( LoginId ,Password ,Name ,NIC ,UserAccessTypeKey ,UserKey, UpdatedDate) VALUES ( @LoginId ,@Password ,@Name ,@NIC ,@UserAccessTypeKey ,@UserKey, @UpdatedDate); SELECT @@identity", para));
         }
 
         public bool update(OBALog.Model.ML_User user)
@@ -31,7 +31,7 @@ namespace OBALog.Data
             para[6] = new MySqlParameter("@UserKey", user.UserKey);
             para[7] = new MySqlParameter("@Key", user.Key);
 
-            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, System.Data.CommandType.Text, "UPDATE stc_oba.user SET LoginId = @LoginId ,Password = COALESCE(@Password, Password) ,Name = @Name ,NIC = @NIC ,UserAccessTypeKey = @UserAccessTypeKey ,UserKey = @UserKey ,UpdatedDate = NOW() WHERE `Key` = @Key", para);
+            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, System.Data.CommandType.Text, "UPDATE stc_oba.user SET LoginId = @LoginId ,Password = COALESCE(@Password, Password) ,Name = @Name ,NIC = @NIC ,UserAccessTypeKey = @UserAccessTypeKey ,UserKey = @UserKey ,UpdatedDate = @UpdatedDate WHERE `Key` = @Key", para);
             return true;
         }
 
@@ -43,7 +43,7 @@ namespace OBALog.Data
             para[2] = new MySqlParameter("@UpdatedDate", user.UpdatedDate);
             para[3] = new MySqlParameter("@Key", user.Key);
 
-            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, System.Data.CommandType.Text, "UPDATE stc_oba.user SET Password = COALESCE(@Password, Password), UpdatedDate = NOW() WHERE `Key` = @Key AND `LoginId`= COALESCE(@LoginId, LoginId)", para);
+            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, System.Data.CommandType.Text, "UPDATE stc_oba.user SET Password = COALESCE(@Password, Password), UpdatedDate = @UpdatedDate WHERE `Key` = @Key AND `LoginId`= COALESCE(@LoginId, LoginId)", para);
             return true;
         }
 

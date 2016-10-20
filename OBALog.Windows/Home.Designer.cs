@@ -72,6 +72,7 @@
             // tmr_close_form
             // 
             this.tmr_close_form.Interval = 1000;
+            this.tmr_close_form.Tick += new System.EventHandler(this.tmr_close_form_Tick);
             // 
             // lbl_time
             // 
@@ -150,6 +151,7 @@
             // InactivityTimer
             // 
             this.InactivityTimer.Enabled = true;
+            this.InactivityTimer.Tick += new System.EventHandler(this.InactivityTimer_Tick);
             // 
             // ManageProfessionsToolStripMenuItem
             // 

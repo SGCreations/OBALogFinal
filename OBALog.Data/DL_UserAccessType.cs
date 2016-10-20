@@ -9,21 +9,24 @@ namespace OBALog.Data
 
         public int insert(OBALog.Model.ML_UserAccessType uat)
         {
-            MySqlParameter[] para = new MySqlParameter[2];
+            MySqlParameter[] para = new MySqlParameter[3];
             para[0] = new MySqlParameter("@AccessTypeName", uat.AccessTypeName);
             para[1] = new MySqlParameter("@UserKey", uat.UserKey);
-            object insertedId = MySQLHelper.ExecuteScalar(DBConnection.connectionString, CommandType.Text, "INSERT INTO useraccesstype (AccessTypeName, UserKey, UpdatedDate, Deleted) VALUES (@AccessTypeName, @UserKey, NOW(), 0); SELECT LAST_INSERT_ID();", para);
+            para[2] = new MySqlParameter("@UpdatedDate", uat.UpdatedDate);
+
+            object insertedId = MySQLHelper.ExecuteScalar(DBConnection.connectionString, CommandType.Text, "INSERT INTO useraccesstype (AccessTypeName, UserKey, UpdatedDate, Deleted) VALUES (@AccessTypeName, @UserKey, @UpdatedDate, 0); SELECT LAST_INSERT_ID();", para);
             return Convert.ToInt32(insertedId);
         }
 
         public bool update(OBALog.Model.ML_UserAccessType uat)
         {
-            MySqlParameter[] para = new MySqlParameter[3];
+            MySqlParameter[] para = new MySqlParameter[4];
             para[0] = new MySqlParameter("@AccessTypeName", uat.AccessTypeName);
             para[1] = new MySqlParameter("@UserKey", uat.UserKey);
             para[2] = new MySqlParameter("@Key", uat.Key);
+            para[3] = new MySqlParameter("@UpdatedDate", uat.UpdatedDate);
 
-            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "UPDATE useraccesstype SET `AccessTypeName` = @AccessTypeName, `UserKey` = @UserKey WHERE `Key` = @Key AND `Deleted`= False", para);
+            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "UPDATE useraccesstype SET `AccessTypeName` = @AccessTypeName, `UserKey` = @UserKey, UpdatedDate = @UpdatedDate WHERE `Key` = @Key AND `Deleted`= False", para);
             return true;
         }
 

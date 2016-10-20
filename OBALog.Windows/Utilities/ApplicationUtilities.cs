@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace OBALog.Windows
 {
-    //[System.Diagnostics.DebuggerStepThrough()]
+    [System.Diagnostics.DebuggerStepThrough()]
     public static class ApplicationUtilities
     {
         public static bool IsNotEmpty(this TextBox control)
@@ -167,8 +167,35 @@ namespace OBALog.Windows
             return control.Checked ? (bool?)null : false;
         }
 
+        public static DialogResult ShowMessageSplash(UniversalEnum.MessageTypes type, string message, IWin32Window owner, string title = null)
+        {
+            // DevExpress.XtraSplashScreen.SplashScreenManager.CloseForm(false);
+
+            switch (type)
+            {
+                case UniversalEnum.MessageTypes.Success:
+                    return XtraMessageBox.Show(owner, message, title.IsEmpty() ? "Success" : title, MessageBoxButtons.OK, MessageBoxIcon.None);
+                case UniversalEnum.MessageTypes.Information:
+                    return XtraMessageBox.Show(owner, message, title.IsEmpty() ? "Information" : title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                case UniversalEnum.MessageTypes.Error:
+                    return XtraMessageBox.Show(owner, message, title.IsEmpty() ? "Error" : title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                case UniversalEnum.MessageTypes.Warning:
+                    return XtraMessageBox.Show(owner, message, title.IsEmpty() ? "Warning" : title, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                case UniversalEnum.MessageTypes.YesNo:
+                    return XtraMessageBox.Show(owner, message, title.IsEmpty() ? "Message" : title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                case UniversalEnum.MessageTypes.YesNoCancel:
+                    return XtraMessageBox.Show(owner, message, title.IsEmpty() ? "Message" : title, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
+                case UniversalEnum.MessageTypes.Exclamation:
+                    return XtraMessageBox.Show(owner, message, title.IsEmpty() ? "Message" : title, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                default:
+                    return XtraMessageBox.Show(owner, message, title.IsEmpty() ? "Information" : title, MessageBoxButtons.OK, MessageBoxIcon.None);
+            }
+        }
+
         public static DialogResult ShowMessage(UniversalEnum.MessageTypes type, string message, string title = null)
         {
+            // DevExpress.XtraSplashScreen.SplashScreenManager.CloseForm(false);
+
             switch (type)
             {
                 case UniversalEnum.MessageTypes.Success:

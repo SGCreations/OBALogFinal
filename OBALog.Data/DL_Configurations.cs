@@ -7,13 +7,14 @@ namespace OBALog.Data
     {
         public bool update(OBALog.Model.ML_Configurations config)
         {
-            MySqlParameter[] para = new MySqlParameter[4];
+            MySqlParameter[] para = new MySqlParameter[5];
             para[0] = new MySqlParameter("@ConfigurationName", config.ConfigurationName);
             para[1] = new MySqlParameter("@ConfigurationValue", config.ConfigurationValue);
             para[2] = new MySqlParameter("@Description", config.Description);
             para[3] = new MySqlParameter("@UserKey", config.UserKey);
+            para[4] = new MySqlParameter("@UpdatedDate", config.UpdatedDate);
 
-            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "UPDATE configurations SET ConfigurationValue = @ConfigurationValue ,Description = @Description ,UserKey = @UserKey ,UpdatedDate = NOW() WHERE ConfigurationName = @ConfigurationName", para);
+            MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "UPDATE configurations SET ConfigurationValue = @ConfigurationValue ,Description = @Description ,UserKey = @UserKey ,UpdatedDate = @UpdatedDate WHERE ConfigurationName = @ConfigurationName", para);
             return true;
         }
 

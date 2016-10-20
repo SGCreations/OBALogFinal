@@ -2,6 +2,8 @@
 using OBALog.Model;
 using System;
 using System.Data;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace OBALog.Windows
@@ -9,10 +11,11 @@ namespace OBALog.Windows
     public partial class Home : DevExpress.XtraEditors.XtraForm
     {
         private Login LoginForm;
-
+        private Utilities.IdleTimeTool idleTimeTool;
         public Home()
         {
             InitializeComponent();
+            idleTimeTool = new Utilities.IdleTimeTool();
         }
 
         private void Home_Load(object sender, EventArgs e)
@@ -26,9 +29,12 @@ namespace OBALog.Windows
             {
                 this.lbl_name.Text = string.Empty;
                 LoginForm = new Login();
+
                 if (IsLogOut)
                 {
                     new BL_UsageLog().update(new ML_UsageLog { UserKey = UniversalVariables.UserKey, To = DateTime.Now });
+
+                    UniversalVariables.IsLoggedIn = false;
 
                     LoginForm.btExit.Click -= btExit_Click;
                     LoginForm.btn_Login.Click -= btn_Login_Click;
@@ -73,6 +79,8 @@ namespace OBALog.Windows
                         UniversalVariables.UserAccessTypeKey = user.Tables[0].Rows[0]["UserAccessTypeKey"].ToString().ToInt();
                         UniversalVariables.AccessTypeName = user.Tables[0].Rows[0]["AccessTypeName"].ToString();
                         UniversalVariables.Username = user.Tables[0].Rows[0]["LoginId"].ToString();
+
+                        UniversalVariables.IsLoggedIn = true;
 
                         Privileges.UserPrivileges = user.Tables[1];
                         Configurations.ConfigurationTable = user.Tables[2];
@@ -129,7 +137,7 @@ namespace OBALog.Windows
             {
                 switch (privilege)
                 {
-                    case Privileges.MemberDetails_Open:
+                    case Privileges.MembershipDetails_Open:
                         MembershipToolStripMenuItem.Visible = true;
                         MemberToolStripMenuItem.Visible = true;
                         break;
@@ -305,5 +313,45 @@ namespace OBALog.Windows
         {
             ApplicationUtilities.DisplayForm(new ResetPassword(), this);
         }
+        bool flag = true;
+        private void InactivityTimer_Tick(object sender, EventArgs e)
+        {
+            if (UniversalVariables.IsLoggedIn)
+            {
+                //Calculates for how long we have been idle
+                var inactiveTime = idleTimeTool.GetInactiveTime();
+                Console.WriteLine(inactiveTime.ToString());
+                if (inactiveTime == null)
+                {
+                    //Unknown state
+                    tmr_close_form.Enabled = false;
+                }
+                else if (inactiveTime.Value.TotalSeconds > Configurations.TimeoutPeriod.TotalSeconds & flag)
+                {
+                    //Idle
+                    flag = false;
+                    Utilities.MyXtraMessageArgs myArgs = new Utilities.MyXtraMessageArgs()
+                    {
+                        Owner = this,
+                        Timeout = Configurations.LogoffPeriod.TotalSeconds.ToString().ToInt(),
+                        ShowCountdown = true,
+                        AutoClose = true,
+                        
+                        Icon = MessageBoxIcon.Warning.ToString(),
+                        Buttons = MessageBoxButtons.OKCancel,
+                        Text = string.Format("OBALog has been inactive for {0} hour/s, {1} minute/s and {2} second/s. It will log off after above time has elapsed due to inactivity. Click on 'Cancel' to cancel logging off. Clicking on 'OK' will make the system logoff now.", Configurations.TimeoutPeriod.Hours, Configurations.TimeoutPeriod.Minutes, Configurations.TimeoutPeriod.Seconds)
+                    };
+                    //new Utilities.MyXtraMessageBoxForm().ShowForm(myArgs);
+                    InactivityTimer.Enabled = false;
+
+                }
+            }
+        }
+
+        private void tmr_close_form_Tick(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

@@ -8,29 +8,22 @@ namespace OBALog.Data
     {
         public bool setPrivilege(OBALog.Model.ML_Privilege privilege)
         {
-            try
+            MySqlParameter[] para = new MySqlParameter[3];
+            para[0] = new MySqlParameter("@UserAccesstypeKey", privilege.UserAccessTypeKey);
+            para[1] = new MySqlParameter("@PrivilegeKey", privilege.PrivilegeKey);
+            para[2] = new MySqlParameter("@Allowed", privilege.Allowed);
+
+            int count = Convert.ToInt32(MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT COUNT(`Key`) AS Count FROM stc_oba.useraccessprivilege WHERE UserAccesstypeKey = @UserAccesstypeKey AND PrivilegeKey = @PrivilegeKey;", para).Rows[0]["Count"].ToString());
+
+            if (count == 0)
             {
-                MySqlParameter[] para = new MySqlParameter[3];
-                para[0] = new MySqlParameter("@UserAccesstypeKey", privilege.UserAccessTypeKey);
-                para[1] = new MySqlParameter("@PrivilegeKey", privilege.PrivilegeKey);
-                para[2] = new MySqlParameter("@Allowed", privilege.Allowed);
-
-                int count = Convert.ToInt32(MySQLHelper.ExecuteDataTable(DBConnection.connectionString, CommandType.Text, "SELECT COUNT(`Key`) AS Count FROM stc_oba.useraccessprivilege WHERE UserAccesstypeKey = @UserAccesstypeKey AND PrivilegeKey = @PrivilegeKey;", para).Rows[0]["Count"].ToString());
-
-                if (count == 0)
-                {
-                    MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "INSERT INTO useraccessprivilege ( UserAccessTypeKey ,PrivilegeKey ,Allowed ) VALUES ( @UserAccessTypeKey ,@PrivilegeKey ,@Allowed )", para);
-                }
-                else
-                {
-                    MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "UPDATE useraccessprivilege SET Allowed = @Allowed WHERE UserAccessTypeKey = @UserAccessTypeKey AND PrivilegeKey = @PrivilegeKey;", para);
-                }
-
+                MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "INSERT INTO useraccessprivilege ( UserAccessTypeKey ,PrivilegeKey ,Allowed ) VALUES ( @UserAccessTypeKey ,@PrivilegeKey ,@Allowed )", para);
             }
-            catch (Exception ex)
+            else
             {
-                
+                MySQLHelper.ExecuteNonQuery(DBConnection.connectionString, CommandType.Text, "UPDATE useraccessprivilege SET Allowed = @Allowed WHERE UserAccessTypeKey = @UserAccessTypeKey AND PrivilegeKey = @PrivilegeKey;", para);
             }
+
             return true;
         }
 

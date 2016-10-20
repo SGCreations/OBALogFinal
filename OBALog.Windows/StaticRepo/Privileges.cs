@@ -10,10 +10,10 @@ namespace OBALog.Windows
 
         #region Level 1
 
-        public const string MemberDetails_Open = "MemberDetails_Open";
-        public const string MemberDetails_Insert = "MemberDetails_Insert";
-        public const string MemberDetails_Delete = "MemberDetails_Delete";
-        public const string MemberDetails_Update = "MemberDetails_Update";
+        public const string MembershipDetails_Open = "MembershipDetails_Open";
+        public const string MembershipDetails_Insert = "MembershipDetails_Insert";
+        public const string MembershipDetails_Delete = "MembershipDetails_Delete";
+        public const string MembershipDetails_Update = "MembershipDetails_Update";
 
         public const string CountryCity_Open = "CountryCity_Open";
         public const string CountryCity_Insert = "CountryCity_Insert";
@@ -63,31 +63,34 @@ namespace OBALog.Windows
 
         #region Level 2
 
-        public const string MemberDetails_DisableMemNotTypeAfterRecGen = "MemberDetails_DisableMemNotTypeAfterRecGen";
-        public const string MemberDetails_DisableRecDetAfterRecGen = "MemberDetails_DisableRecDetAfterRecGen";
-        public const string MemberDetails_DisableRegProgAfterRecGen = "MemberDetails_DisableRegProgAfterRecGen";
-        public const string MemberDetails_DisableSchoolDetAfterRecGen = "MemberDetails_DisableSchoolDetAfterRecGen";
+        public const string MembershipDetails_DisableMemNotTypeAfterRecGen = "MembershipDetails_DisableMemNotTypeAfterRecGen";
+        public const string MembershipDetails_DisableRecDetAfterRecGen = "MembershipDetails_DisableRecDetAfterRecGen";
+        public const string MembershipDetails_DisableRegProgAfterRecGen = "MembershipDetails_DisableRegProgAfterRecGen";
+        public const string MembershipDetails_DisableSchoolDetAfterRecGen = "MembershipDetails_DisableSchoolDetAfterRecGen";
 
-        public const string MemberDetails_DisableCardProIfCardGivenToMem = "MemberDetails_DisableCardProIfCardGivenToMem";
-        public const string MemberDetails_DisableMemDateIfCardGivenToMem = "MemberDetails_DisableMemDateIfCardGivenToMem";
-        public const string MemberDetails_DisableMemNoIfCardGivenToMem = "MemberDetails_DisableMemNoIfCardGivenToMem";
-        public const string MemberDetails_DisableRegProgIfCardGivenToMem = "MemberDetails_DisableRegProgIfCardGivenToMem";
+        public const string MembershipDetails_DisableCardProIfCardGivenToMem = "MembershipDetails_DisableCardProIfCardGivenToMem";
+        public const string MembershipDetails_DisableMemDateIfCardGivenToMem = "MembershipDetails_DisableMemDateIfCardGivenToMem";
+        public const string MembershipDetails_DisableMemNoIfCardGivenToMem = "MembershipDetails_DisableMemNoIfCardGivenToMem";
+        public const string MembershipDetails_DisableRegProgIfCardGivenToMem = "MembershipDetails_DisableRegProgIfCardGivenToMem";
 
-        public const string MemberDetails_DisableDeleteIfDeceased = "MemberDetails_DisableDeleteIfDeceased";
-        public const string MemberDetails_DisableDeceasedIfDeceased = "MemberDetails_DisableDeceasedIfDeceased";
-        public const string MemberDetails_DisableDeceasedDateIfDeceased = "MemberDetails_DisableDeceasedDateIfDeceased";
-        public const string MemberDetails_DisableSaveIfDeceased = "MemberDetails_DisableSaveIfDeceased";
+        public const string MembershipDetails_DisableDeleteIfDeceased = "MembershipDetails_DisableDeleteIfDeceased";
+        public const string MembershipDetails_DisableDeceasedIfDeceased = "MembershipDetails_DisableDeceasedIfDeceased";
+        public const string MembershipDetails_DisableDeceasedDateIfDeceased = "MembershipDetails_DisableDeceasedDateIfDeceased";
+        public const string MembershipDetails_DisableSaveIfDeceased = "MembershipDetails_DisableSaveIfDeceased";
 
-        public const string MemberDetails_DisableSaveIfDel = "MemberDetails_DisableSaveIfDel";
+        public const string MembershipDetails_DisableSaveIfDel = "MembershipDetails_DisableSaveIfDel";
 
-        public const string MemberDetails_DisableDeleteIfRej = "MemberDetails_DisableDeleteIfRej";
-        public const string MemberDetails_DisableSaveIfRej = "MemberDetails_DisableSaveIfRej";
+        public const string MembershipDetails_DisableDeleteIfRej = "MembershipDetails_DisableDeleteIfRej";
+        public const string MembershipDetails_DisableSaveIfRej = "MembershipDetails_DisableSaveIfRej";
 
-        public const string MemberDetails_DisableMemNotTypeTillRecGen = "MemberDetails_DisableMemNotTypeTillRecGen";
+        public const string MembershipDetails_DisableMemNotTypeTillRecGen = "MembershipDetails_DisableMemNotTypeTillRecGen";
 
-        public const string MemberDetails_DisableDelMemAfterAppRej = "MemberDetails_DisableDelMemAfterAppRej";
-        public const string MemberDetails_DisableRegProgAfterAppRej = "MemberDetails_DisableRegProgAfterAppRej";
-        public const string MemberDetails_DisableRecAmtAfterAppRej = "MemberDetails_DisableRecAmtAfterAppRej";
+        public const string MembershipDetails_DisableDelMemAfterAppRej = "MembershipDetails_DisableDelMemAfterAppRej";
+        public const string MembershipDetails_DisableRecAmtAfterAppRej = "MembershipDetails_DisableRecAmtAfterAppRej";
+
+        public const string MembershipDetails_DisableRegProgAfterApp = "MembershipDetails_DisableRegProgAfterApp";
+        public const string MembershipDetails_DisableSchoolDetAfterApp = "MembershipDetails_DisableSchoolDetAfterApp";
+
 
         #endregion
 

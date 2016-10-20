@@ -6,7 +6,7 @@ namespace OBALog.Model
     {
         public string Address { get; set; }
         public string Telephone { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        public string UpdatedDate { get; set; }
         public int Key { get; set; }
         public int? CityKey { get; set; }
         //public ML_City City { get; set; }

@@ -89,7 +89,7 @@ namespace OBALog.Windows
                         {
                             if (Table.Rows.Count < 1)
                             {
-                                new BL_User().insert(new ML_User() { LoginId = txt_login_name.Text.Trim(), Name = txt_name.Text.Trim(), NIC = txt_nic.Text.Trim(), Password = (txt_password.IsEmpty() ? null : txt_password.Text), UserAccessTypeKey = (int)cbo_user_access_type.EditValue, UserKey = UniversalVariables.UserKey });
+                                new BL_User().insert(new ML_User() { LoginId = txt_login_name.Text.Trim(), Name = txt_name.Text.Trim(), NIC = txt_nic.Text.Trim(), Password = (txt_password.IsEmpty() ? null : txt_password.Text), UserAccessTypeKey = (int)cbo_user_access_type.EditValue, UserKey = UniversalVariables.UserKey, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
 
                                 LastUser = txt_name.Text;
 
@@ -127,7 +127,7 @@ namespace OBALog.Windows
                                     IsPasswordReset = false;
                                 }
 
-                                new BL_User().update(new ML_User { LoginId = txt_login_name.Text.Trim(), Name = txt_name.Text.Trim(), NIC = txt_nic.Text.Trim(), UserAccessTypeKey = Convert.ToInt32(cbo_user_access_type.EditValue), UserKey = UniversalVariables.UserKey, Key = SelectedID, Password = IsPasswordReset ? (txt_password.IsEmpty() ? null : txt_password.Text) : null });
+                                new BL_User().update(new ML_User { LoginId = txt_login_name.Text.Trim(), Name = txt_name.Text.Trim(), NIC = txt_nic.Text.Trim(), UserAccessTypeKey = Convert.ToInt32(cbo_user_access_type.EditValue), UserKey = UniversalVariables.UserKey, Key = SelectedID, Password = IsPasswordReset ? (txt_password.IsEmpty() ? null : txt_password.Text) : null, UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) });
 
                                 LastUser = txt_name.Text.Trim();
                                 BindUser();

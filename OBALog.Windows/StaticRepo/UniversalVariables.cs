@@ -49,7 +49,6 @@ namespace OBALog.Windows
 
         public static string MySQLDateFormat = "yyyy-MM-dd";
 
-
         public static int UserKey { get; set; }
 
         public static string Name { get; set; }
@@ -58,6 +57,8 @@ namespace OBALog.Windows
 
         public static int UserAccessTypeKey { get; set; }
         public static string Username { get; set; }
+
+        public static bool IsLoggedIn { get; set; }
 
         public static List<string> IdentificationTypes = new List<string> { IDType_NIC, IDType_Passport, IDType_DL };
         public static List<string> PaymentTypes = new List<string> { PaymentType_Cash, PaymentType_Card, PaymentType_Cheque };
