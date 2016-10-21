@@ -183,6 +183,12 @@
     <Compile Include="CustomControls\CustomSpinEdit.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="LockScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LockScreen.Designer.cs">
+      <DependentUpon>LockScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="ManageOrganisations.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -314,6 +320,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CustomControls\AppProgress.resx">
       <DependentUpon>AppProgress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LockScreen.resx">
+      <DependentUpon>LockScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ManageOrganisations.resx">
       <DependentUpon>ManageOrganisations.cs</DependentUpon>

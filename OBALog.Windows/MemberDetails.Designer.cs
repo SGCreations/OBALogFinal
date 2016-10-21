@@ -29,9 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule compareAgainstControlValidationRule4 = new DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule();
             DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule compareAgainstControlValidationRule1 = new DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule();
-            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule13 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule compareAgainstControlValidationRule2 = new DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule();
             DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule1 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
             DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule2 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
             DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule3 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
@@ -42,9 +41,10 @@
             DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule8 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
             DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule9 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
             DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule10 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
-            DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule compareAgainstControlValidationRule2 = new DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MemberDetails));
             DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule11 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule compareAgainstControlValidationRule3 = new DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MemberDetails));
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule12 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
             this.dtp_sent_to_printer = new DevExpress.XtraEditors.DateEdit();
             this.dtp_received_from_printer = new DevExpress.XtraEditors.DateEdit();
             this.dtp_member_notified = new DevExpress.XtraEditors.DateEdit();
@@ -492,10 +492,10 @@
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.dtp_received_from_printer.Size = new System.Drawing.Size(101, 20);
             this.dtp_received_from_printer.TabIndex = 71;
-            compareAgainstControlValidationRule4.CompareControlOperator = DevExpress.XtraEditors.DXErrorProvider.CompareControlOperator.GreaterOrEqual;
-            compareAgainstControlValidationRule4.Control = this.dtp_sent_to_printer;
-            compareAgainstControlValidationRule4.ErrorText = "The dates are not in chronological order";
-            this.vp_date_validator.SetValidationRule(this.dtp_received_from_printer, compareAgainstControlValidationRule4);
+            compareAgainstControlValidationRule1.CompareControlOperator = DevExpress.XtraEditors.DXErrorProvider.CompareControlOperator.GreaterOrEqual;
+            compareAgainstControlValidationRule1.Control = this.dtp_sent_to_printer;
+            compareAgainstControlValidationRule1.ErrorText = "The dates are not in chronological order";
+            this.vp_date_validator.SetValidationRule(this.dtp_received_from_printer, compareAgainstControlValidationRule1);
             this.dtp_received_from_printer.EditValueChanged += new System.EventHandler(this.dtp_received_from_printer_EditValueChanged);
             // 
             // dtp_member_notified
@@ -509,10 +509,10 @@
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.dtp_member_notified.Size = new System.Drawing.Size(101, 20);
             this.dtp_member_notified.TabIndex = 72;
-            compareAgainstControlValidationRule1.CompareControlOperator = DevExpress.XtraEditors.DXErrorProvider.CompareControlOperator.GreaterOrEqual;
-            compareAgainstControlValidationRule1.Control = this.dtp_received_from_printer;
-            compareAgainstControlValidationRule1.ErrorText = "The dates are not in chronological order";
-            this.vp_date_validator.SetValidationRule(this.dtp_member_notified, compareAgainstControlValidationRule1);
+            compareAgainstControlValidationRule2.CompareControlOperator = DevExpress.XtraEditors.DXErrorProvider.CompareControlOperator.GreaterOrEqual;
+            compareAgainstControlValidationRule2.Control = this.dtp_received_from_printer;
+            compareAgainstControlValidationRule2.ErrorText = "The dates are not in chronological order";
+            this.vp_date_validator.SetValidationRule(this.dtp_member_notified, compareAgainstControlValidationRule2);
             this.dtp_member_notified.EditValueChanged += new System.EventHandler(this.dtp_member_notified_EditValueChanged);
             // 
             // Label34
@@ -959,10 +959,10 @@
             this.txt_email.Name = "txt_email";
             this.txt_email.Size = new System.Drawing.Size(200, 20);
             this.txt_email.TabIndex = 13;
-            conditionValidationRule13.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule13.ErrorText = "This value is not valid";
-            conditionValidationRule13.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Warning;
-            this.vp_config_validate.SetValidationRule(this.txt_email, conditionValidationRule13);
+            conditionValidationRule1.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule1.ErrorText = "This value is not valid";
+            conditionValidationRule1.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Warning;
+            this.vp_config_validate.SetValidationRule(this.txt_email, conditionValidationRule1);
             // 
             // Label13
             // 
@@ -979,10 +979,10 @@
             this.txt_mobile.Properties.MaxLength = 14;
             this.txt_mobile.Size = new System.Drawing.Size(157, 20);
             this.txt_mobile.TabIndex = 12;
-            conditionValidationRule1.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule1.ErrorText = "This value is not valid";
-            conditionValidationRule1.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Warning;
-            this.vp_config_validate.SetValidationRule(this.txt_mobile, conditionValidationRule1);
+            conditionValidationRule2.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule2.ErrorText = "This value is not valid";
+            conditionValidationRule2.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Warning;
+            this.vp_config_validate.SetValidationRule(this.txt_mobile, conditionValidationRule2);
             // 
             // Label12
             // 
@@ -1081,10 +1081,10 @@
             this.txt_tel.Name = "txt_tel";
             this.txt_tel.Size = new System.Drawing.Size(201, 20);
             this.txt_tel.TabIndex = 18;
-            conditionValidationRule2.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule2.ErrorText = "This value is not valid";
-            conditionValidationRule2.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Warning;
-            this.vp_config_validate.SetValidationRule(this.txt_tel, conditionValidationRule2);
+            conditionValidationRule3.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule3.ErrorText = "This value is not valid";
+            conditionValidationRule3.ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Warning;
+            this.vp_config_validate.SetValidationRule(this.txt_tel, conditionValidationRule3);
             // 
             // Label21
             // 
@@ -1100,9 +1100,9 @@
             this.txt_address.Name = "txt_address";
             this.txt_address.Size = new System.Drawing.Size(456, 20);
             this.txt_address.TabIndex = 17;
-            conditionValidationRule3.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule3.ErrorText = "This value cannot be blank";
-            this.vp_main.SetValidationRule(this.txt_address, conditionValidationRule3);
+            conditionValidationRule4.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule4.ErrorText = "This value cannot be blank";
+            this.vp_main.SetValidationRule(this.txt_address, conditionValidationRule4);
             // 
             // Label22
             // 
@@ -1143,9 +1143,9 @@
             this.cbo_country.Properties.ShowHeader = false;
             this.cbo_country.Size = new System.Drawing.Size(201, 20);
             this.cbo_country.TabIndex = 62;
-            conditionValidationRule4.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule4.ErrorText = "This value cannot be blank";
-            this.vp_main.SetValidationRule(this.cbo_country, conditionValidationRule4);
+            conditionValidationRule5.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule5.ErrorText = "This value cannot be blank";
+            this.vp_main.SetValidationRule(this.cbo_country, conditionValidationRule5);
             this.cbo_country.EditValueChanged += new System.EventHandler(this.cbo_country_EditValueChanged);
             // 
             // cbo_city
@@ -1163,9 +1163,9 @@
             this.cbo_city.Properties.ShowHeader = false;
             this.cbo_city.Size = new System.Drawing.Size(201, 20);
             this.cbo_city.TabIndex = 62;
-            conditionValidationRule5.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule5.ErrorText = "This value cannot be blank";
-            this.vp_main.SetValidationRule(this.cbo_city, conditionValidationRule5);
+            conditionValidationRule6.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule6.ErrorText = "This value cannot be blank";
+            this.vp_main.SetValidationRule(this.cbo_city, conditionValidationRule6);
             // 
             // btn_find
             // 
@@ -1329,9 +1329,9 @@
             this.txt_id_val.Name = "txt_id_val";
             this.txt_id_val.Size = new System.Drawing.Size(251, 20);
             this.txt_id_val.TabIndex = 8;
-            conditionValidationRule6.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule6.ErrorText = "This value cannot be blank";
-            this.vp_main.SetValidationRule(this.txt_id_val, conditionValidationRule6);
+            conditionValidationRule7.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule7.ErrorText = "This value cannot be blank";
+            this.vp_main.SetValidationRule(this.txt_id_val, conditionValidationRule7);
             // 
             // Label7
             // 
@@ -1347,9 +1347,9 @@
             this.txt_forenames.Name = "txt_forenames";
             this.txt_forenames.Size = new System.Drawing.Size(531, 20);
             this.txt_forenames.TabIndex = 6;
-            conditionValidationRule7.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule7.ErrorText = "This value cannot be blank";
-            this.vp_main.SetValidationRule(this.txt_forenames, conditionValidationRule7);
+            conditionValidationRule8.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule8.ErrorText = "This value cannot be blank";
+            this.vp_main.SetValidationRule(this.txt_forenames, conditionValidationRule8);
             // 
             // Label6
             // 
@@ -1365,9 +1365,9 @@
             this.txt_initials.Name = "txt_initials";
             this.txt_initials.Size = new System.Drawing.Size(121, 20);
             this.txt_initials.TabIndex = 5;
-            conditionValidationRule8.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule8.ErrorText = "This value cannot be blank";
-            this.vp_main.SetValidationRule(this.txt_initials, conditionValidationRule8);
+            conditionValidationRule9.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule9.ErrorText = "This value cannot be blank";
+            this.vp_main.SetValidationRule(this.txt_initials, conditionValidationRule9);
             // 
             // Label5
             // 
@@ -1383,9 +1383,9 @@
             this.txt_surname.Name = "txt_surname";
             this.txt_surname.Size = new System.Drawing.Size(169, 20);
             this.txt_surname.TabIndex = 4;
-            conditionValidationRule9.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule9.ErrorText = "This value cannot be blank";
-            this.vp_main.SetValidationRule(this.txt_surname, conditionValidationRule9);
+            conditionValidationRule10.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule10.ErrorText = "This value cannot be blank";
+            this.vp_main.SetValidationRule(this.txt_surname, conditionValidationRule10);
             // 
             // Label4
             // 
@@ -1418,9 +1418,9 @@
             this.cbo_salutation.Properties.ShowHeader = false;
             this.cbo_salutation.Size = new System.Drawing.Size(96, 20);
             this.cbo_salutation.TabIndex = 63;
-            conditionValidationRule10.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule10.ErrorText = "This value cannot be blank";
-            this.vp_main.SetValidationRule(this.cbo_salutation, conditionValidationRule10);
+            conditionValidationRule11.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule11.ErrorText = "This value cannot be blank";
+            this.vp_main.SetValidationRule(this.cbo_salutation, conditionValidationRule11);
             // 
             // Label1
             // 
@@ -1657,10 +1657,10 @@
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.dtp_given_to_member.Size = new System.Drawing.Size(101, 20);
             this.dtp_given_to_member.TabIndex = 72;
-            compareAgainstControlValidationRule2.CompareControlOperator = DevExpress.XtraEditors.DXErrorProvider.CompareControlOperator.GreaterOrEqual;
-            compareAgainstControlValidationRule2.Control = this.dtp_member_notified;
-            compareAgainstControlValidationRule2.ErrorText = "The dates are not in chronological order";
-            this.vp_date_validator.SetValidationRule(this.dtp_given_to_member, compareAgainstControlValidationRule2);
+            compareAgainstControlValidationRule3.CompareControlOperator = DevExpress.XtraEditors.DXErrorProvider.CompareControlOperator.GreaterOrEqual;
+            compareAgainstControlValidationRule3.Control = this.dtp_member_notified;
+            compareAgainstControlValidationRule3.ErrorText = "The dates are not in chronological order";
+            this.vp_date_validator.SetValidationRule(this.dtp_given_to_member, compareAgainstControlValidationRule3);
             // 
             // lbl_card_date_error
             // 
@@ -2130,9 +2130,9 @@
             this.txt_admission_1.Name = "txt_admission_1";
             this.txt_admission_1.Size = new System.Drawing.Size(100, 20);
             this.txt_admission_1.TabIndex = 9;
-            conditionValidationRule11.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule11.ErrorText = "This value cannot be blank";
-            this.vp_school_details.SetValidationRule(this.txt_admission_1, conditionValidationRule11);
+            conditionValidationRule12.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule12.ErrorText = "This value cannot be blank";
+            this.vp_school_details.SetValidationRule(this.txt_admission_1, conditionValidationRule12);
             // 
             // Label27
             // 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace OBALog.Windows.Utilities
+namespace OBALog.Windows
 {
     public class IdleTimeTool
     {
@@ -18,7 +18,9 @@ namespace OBALog.Windows.Utilities
         public TimeSpan? GetInactiveTime()
         {
             LASTINPUTINFO info = new LASTINPUTINFO();
+
             info.cbSize = (uint)Marshal.SizeOf(info);
+
             if (GetLastInputInfo(ref info))
                 return TimeSpan.FromMilliseconds(Environment.TickCount - info.dwTime);
             else

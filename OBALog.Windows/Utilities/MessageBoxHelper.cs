@@ -4,9 +4,9 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace OBALog.Windows.Utilities
+namespace OBALog.Windows
 {
-    public class MessageBoxHelper : DevExpress.XtraEditors.XtraMessageBoxForm
+    public class MessageBoxHelper : XtraMessageBoxForm
     {
 
         private Timer CountdownTimer;
@@ -40,7 +40,6 @@ namespace OBALog.Windows.Utilities
             if (countDownCaption)
             {
                 this.Text = string.Format("OBALog will logoff in {0} seconds...", timeout);
-
 
             }
             if (selectNext)
@@ -84,7 +83,6 @@ namespace OBALog.Windows.Utilities
             if ((countDownCaption) && (timeout > 0))
             {
                 this.Text = string.Format("OBALog will logoff in {0} seconds...", timeout);
-
             }
             else if (countDownCaption)
             {
@@ -206,7 +204,9 @@ namespace OBALog.Windows.Utilities
         {
             MyXtraMessageBoxForm messageForm = new MyXtraMessageBoxForm();
             DialogResult result = messageForm.ShowForm(options);
+
             options.ShowMessageNextTime = messageForm.ShowMessageNextTime;
+
             return result;
         }
 
@@ -225,20 +225,22 @@ namespace OBALog.Windows.Utilities
         }
     }
 
-    public class MyXtraMessageBoxForm : DevExpress.XtraEditors.XtraMessageBoxForm
+    public class MyXtraMessageBoxForm : XtraMessageBoxForm
     {
         private Timer CountdownTimer;
-        private bool countDownCaption;
-        private bool autoClose;
-        private int timeout;
+        private bool countDownCaption { get; set; }
+        private bool autoClose { get; set; }
+        private int timeout { get; set; }
+
         private DialogResult timeoutResult;
-        private string baseCaption;
-        private bool captionWasCoped;
-        private bool selectNext;
-        private bool disablebttns;
-        private bool disableCancel;
-        private bool center;
-        public bool ShowMessageNextTime;
+        private string baseCaption { get; set; }
+        private bool captionWasCoped { get; set; }
+        private bool selectNext { get; set; }
+        private bool disablebttns { get; set; }
+        private bool disableCancel { get; set; }
+        private bool center { get; set; }
+        public bool ShowMessageNextTime { get; set; }
+        public string text { get; set; }
 
         private CheckEdit cbShowNextTime;
         public MyXtraMessageBoxForm()
@@ -256,11 +258,15 @@ namespace OBALog.Windows.Utilities
         {
             if (countDownCaption)
                 this.Text = string.Format("OBALog will logoff in {0} seconds...", timeout);
+            base.Message.Text = text.Replace("XXXXX", timeout.ToString());
+
             if (selectNext)
             {
                 ShowNextTime();
             }
+
             IButtonControl btnCancel = null;
+
             if ((this.CancelButton != null) && (this.CancelButton.DialogResult == DialogResult.Cancel))
                 btnCancel = this.CancelButton;
             if (disablebttns)
@@ -269,11 +275,13 @@ namespace OBALog.Windows.Utilities
                 (btnCancel as SimpleButton).Enabled = false;
             if (center)
                 CenterOnParent();
+
             if (this.timeout > 0)
             {
                 this.CountdownTimer.Enabled = true;
                 this.CountdownTimer.Start();
             }
+
             base.OnShown(e);
         }
 
@@ -296,7 +304,8 @@ namespace OBALog.Windows.Utilities
             if ((countDownCaption) && (timeout > 0))
             {
                 this.Text = string.Format("OBALog will logoff in {0} seconds...", timeout);
-
+                base.Message.Text = text.Replace("XXXXX", timeout.ToString());
+                this.Refresh();
             }
             else if (countDownCaption)
             {
@@ -325,13 +334,24 @@ namespace OBALog.Windows.Utilities
             timeout = messageArgs.Timeout;
             center = messageArgs.Center;
             timeoutResult = messageArgs.AutoCloseResult;
+
+            text = messageArgs.Text;
+
             return base.ShowMessageBoxDialog(messageArgs);
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
+
             if (cbShowNextTime != null)
                 this.ShowMessageNextTime = cbShowNextTime.Checked;
+
+
+            if (timeout == 0)
+            {
+                DialogResult = System.Windows.Forms.DialogResult.OK;
+            }
+
             this.CountdownTimer.Stop();
             this.CountdownTimer.Dispose();
             base.OnClosing(e);

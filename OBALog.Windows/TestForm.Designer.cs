@@ -258,6 +258,7 @@
             this.MinimizeBox = false;
             this.Name = "TestForm";
             this.Text = "Privileges";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TestForm_FormClosed);
             this.Load += new System.EventHandler(this.ManagePrivileges_Load);
             ((System.ComponentModel.ISupportInitialize)(this.grp_privileges)).EndInit();
             this.grp_privileges.ResumeLayout(false);

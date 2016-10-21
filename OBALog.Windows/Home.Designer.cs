@@ -30,8 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
-            this.Timer1 = new System.Windows.Forms.Timer(this.components);
-            this.tmr_close_form = new System.Windows.Forms.Timer(this.components);
             this.lbl_time = new System.Windows.Forms.Label();
             this.LabelLeft = new System.Windows.Forms.Label();
             this.LabelRight = new System.Windows.Forms.Label();
@@ -64,15 +62,6 @@
             this.lbUserName = new DevExpress.XtraEditors.LabelControl();
             this.MenuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // Timer1
-            // 
-            this.Timer1.Interval = 1000;
-            // 
-            // tmr_close_form
-            // 
-            this.tmr_close_form.Interval = 1000;
-            this.tmr_close_form.Tick += new System.EventHandler(this.tmr_close_form_Tick);
             // 
             // lbl_time
             // 
@@ -358,8 +347,6 @@
 
         #endregion
 
-        internal System.Windows.Forms.Timer Timer1;
-        internal System.Windows.Forms.Timer tmr_close_form;
         internal System.Windows.Forms.Label lbl_time;
         internal System.Windows.Forms.Label LabelLeft;
         internal System.Windows.Forms.Label LabelRight;

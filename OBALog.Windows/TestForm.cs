@@ -124,5 +124,9 @@ namespace OBALog.Windows
                 var dateTime = new DateTime(1970, 1, 1).AddMilliseconds(milliseconds).ToLocalTime();
             }
         }
+
+        private void TestForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+        }
     }
 }
