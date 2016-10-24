@@ -30,7 +30,7 @@ namespace OBALog.Windows
         {
             CaseSensitive = false;
             ErrorText = "Invalid email address.";
-            ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+            ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Warning;
         }
 
         public override bool Validate(Control control, object value)
@@ -70,6 +70,7 @@ namespace OBALog.Windows
             }
         }
     }
+
     internal class DateValidation : ValidationRule
     {
         public DateValidation()
@@ -117,6 +118,7 @@ namespace OBALog.Windows
             CaseSensitive = false;
             ErrorText = "This field is required. Enter a valid phone number.";
             ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+
         }
 
         public override bool Validate(Control control, object value)

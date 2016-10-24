@@ -38,7 +38,7 @@
             this.FAQsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ManageSalutationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.InactivityTimer = new System.Windows.Forms.Timer(this.components);
+            InactivityTimer = new System.Windows.Forms.Timer(this.components);
             this.ManageProfessionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ManageOrganisationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ManageCountriesCitiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -139,8 +139,9 @@
             // 
             // InactivityTimer
             // 
-            this.InactivityTimer.Enabled = true;
-            this.InactivityTimer.Tick += new System.EventHandler(this.InactivityTimer_Tick);
+            InactivityTimer.Enabled = true;
+            InactivityTimer.Interval = 1000;
+            InactivityTimer.Tick += new System.EventHandler(this.InactivityTimer_Tick);
             // 
             // ManageProfessionsToolStripMenuItem
             // 
@@ -355,7 +356,6 @@
         internal System.Windows.Forms.ToolStripMenuItem FAQsToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem HelpToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem ManageSalutationsToolStripMenuItem;
-        internal System.Windows.Forms.Timer InactivityTimer;
         internal System.Windows.Forms.ToolStripMenuItem ManageProfessionsToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem ManageOrganisationsToolStripMenuItem;
         internal System.Windows.Forms.ToolStripMenuItem ManageCountriesCitiesToolStripMenuItem;
@@ -377,5 +377,6 @@
         internal System.Windows.Forms.ToolStripMenuItem PrivilegesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem usageLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem changePasswordToolStripMenuItem;
+        public static System.Windows.Forms.Timer InactivityTimer;
     }
 }

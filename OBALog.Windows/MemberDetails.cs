@@ -10,6 +10,8 @@ using System.Net;
 using System.Net.Cache;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OBALog.Windows
 {
@@ -289,6 +291,7 @@ namespace OBALog.Windows
                                             chk_include_deleted.NullIfTrue());
                     break;
             }
+
         }
 
         private void btn_search_Click(object sender, EventArgs e)
@@ -426,12 +429,12 @@ namespace OBALog.Windows
 
                     if (new BL_Member().checkIDVal(txt_id_val.Text.Trim().IsNotEmpty() ? txt_id_val.Text.Trim() : "0", IsNewRecord) && IsNewRecord)
                     {
-                        ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Exclamation, "Error updating record. The specified identification no. already exists in the system. Please re-check!");
+                        ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, "The specified identification no. already exists in the system. Please re-check!");
                         return;
                     }
                     else if (new BL_Member().checkIDVal(txt_id_val.Text.Trim().IsNotEmpty() ? txt_id_val.Text.Trim() : "0", IsNewRecord, Member.KEY.ToString()) && !IsNewRecord)
                     {
-                        ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Exclamation, "Error updating record. The specified identification no. already exists in the system. Please re-check!");
+                        ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, "The specified identification no. already exists in the system. Please re-check!");
                         return;
                     }
 
@@ -446,8 +449,12 @@ namespace OBALog.Windows
                         return;
                     }
 
-                    saveMember(showConfirmActionDialog, genRecBtnClicked);
-                    ResetFormAfterSave(IsNewRecord);
+                    DialogResult curResult = saveMember(showConfirmActionDialog, genRecBtnClicked);
+
+                    if (curResult == DialogResult.OK)
+                    {
+                        ResetFormAfterSave(IsNewRecord);
+                    }
                 }
                 else
                 {
@@ -471,17 +478,19 @@ namespace OBALog.Windows
             }
         }
 
-        private void saveMember(bool showConfirmActionDialog, bool genRecBtnClicked)
+        private DialogResult saveMember(bool showConfirmActionDialog, bool genRecBtnClicked)
         {
+            DialogResult curResult = DialogResult.Cancel;
+            
             if (IsNewRecord)
             {
-
                 #region Insert New Record
 
                 string newMemNoStr = string.Empty;
 
                 if (ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Warning, "Are you sure you want to save the new member?", "Confirm Action") == System.Windows.Forms.DialogResult.OK)
                 {
+                    curResult = DialogResult.OK;
                     DevExpress.XtraSplashScreen.SplashScreenManager.ShowForm(this, typeof(AppProgress), true, true, false);
 
                     var address = new ML_Address
@@ -509,6 +518,7 @@ namespace OBALog.Windows
                         ALYear = txt_al_year.Text.Trim(),
                         ApprovalStage = getApprovalStage(),
                         ClassGroup = txt_class_group.Text.Trim(),
+                        DateSentToOffice = dtp_col_office.GetFormattedDateString(UniversalVariables.MySQLDateFormat),
                         DateApproved = dtp_approved_rejected.GetFormattedDateString(UniversalVariables.MySQLDateFormat),
                         DateCardGivenToMember = dtp_given_to_member.GetFormattedDateString(UniversalVariables.MySQLDateFormat),
                         DateCardReceivedFromPrinter = dtp_received_from_printer.GetFormattedDateString(UniversalVariables.MySQLDateFormat),
@@ -619,14 +629,18 @@ namespace OBALog.Windows
 
                     //ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Information, (newMemNoStr.IsNotEmpty() ? string.Format("New member saved with membership no.: {0}!", newMemNoStr) : "New member saved!"), "Operation Successful");
 
-                    XtraMessageBox.Show(this, (newMemNoStr.IsNotEmpty() ? string.Format("New member saved with membership no.: {0}!", newMemNoStr) : "New member saved!"), "Operation Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (newMemNoStr.IsNotEmpty())
+                    {
+                        XtraMessageBox.Show(this, string.Format("New member saved with membership no.: {0}!", newMemNoStr), "Operation Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
+                    //XtraMessageBox.Show(this, (newMemNoStr.IsNotEmpty() ? string.Format("New member saved with membership no.: {0}!", newMemNoStr) : "New member saved!"), "Operation Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 
                     SelectedMemberKey = member.Key;
                 }
                 #endregion
             }
-
 
             else if (SelectedMemberKey > 0)
             {
@@ -636,6 +650,8 @@ namespace OBALog.Windows
 
                 if (showConfirmActionDialog ? ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Warning, "Are you sure you want to save the record?", "Confirm Action") == System.Windows.Forms.DialogResult.OK : true)
                 {
+                    curResult = DialogResult.OK;
+
                     DevExpress.XtraSplashScreen.SplashScreenManager.ShowForm(this, typeof(AppProgress), true, true, false);
 
                     var address = new ML_Address
@@ -669,6 +685,7 @@ namespace OBALog.Windows
                         AddressKey = Member.AddressKey.ToInt(),
                         ApprovalStage = getApprovalStage(),
                         ClassGroup = txt_class_group.Text.Trim(),
+                        DateSentToOffice = dtp_col_office.GetFormattedDateString(UniversalVariables.MySQLDateFormat),
                         DateApproved = dtp_approved_rejected.GetFormattedDateString(UniversalVariables.MySQLDateFormat),
                         DateCardGivenToMember = dtp_given_to_member.GetFormattedDateString(UniversalVariables.MySQLDateFormat),
                         DateCardReceivedFromPrinter = dtp_received_from_printer.GetFormattedDateString(UniversalVariables.MySQLDateFormat),
@@ -707,7 +724,7 @@ namespace OBALog.Windows
                         UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                     };
 
-
+                  
                     List<ML_Admission> admission = new List<ML_Admission>();
 
                     admission.Add(new ML_Admission
@@ -796,10 +813,18 @@ namespace OBALog.Windows
 
                     DevExpress.XtraSplashScreen.SplashScreenManager.CloseForm(false);
 
-                    XtraMessageBox.Show(this, (memNoStr.IsNotEmpty() ? string.Format("Member saved with membership no.: {0}!", memNoStr) : "Member saved successfully!"), "Operation Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (memNoStr.IsNotEmpty())
+                    {
+                        XtraMessageBox.Show(this, string.Format("Member saved with membership no.: {0}!", memNoStr), "Operation Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
+                    //XtraMessageBox.Show(this, (memNoStr.IsNotEmpty() ? string.Format("Member saved with membership no.: {0}!", memNoStr) : "Member saved successfully!"), "Operation Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-            }
+
                 #endregion
+            }
+
+            return curResult;
         }
 
         private string getApprovalStage()
@@ -909,7 +934,7 @@ namespace OBALog.Windows
                 tp_member.Image = null;
             }
 
-            if (!vp_school_details.Validate())
+            if (!vp_school_details.Validate() | !ValidateSchoolYears())
             {
                 Tab_School = false;
                 tp_school.Image = OBALog.Windows.Properties.Resources.High_Importance;
@@ -944,14 +969,113 @@ namespace OBALog.Windows
             }
         }
 
+
+        private bool ValidateSchoolYears()
+        {
+            // Year joined <= Class group <= Year left
+            // OL year < AL year (The two sections are independant)
+
+            ClearYearErrors();
+
+            List<KeyValuePair<int, Control>> dYears = new List<KeyValuePair<int, Control>>();
+            List<KeyValuePair<int, Control>> dYearsGeneral = new List<KeyValuePair<int, Control>>();
+
+            if (txt_year_joined.Text.ToIntWithNull() > 0)
+            {
+                dYears.Add(new KeyValuePair<int, Control>(txt_year_joined.Text.ToIntWithNull(), txt_year_joined));
+            }
+
+            if (txt_class_group.Text.ToIntWithNull() > 0)
+            {
+                dYears.Add(new KeyValuePair<int, Control>(txt_class_group.Text.ToIntWithNull(), txt_class_group));
+            }
+
+            if (txt_year_left.Text.ToIntWithNull() > 0)
+            {
+                dYears.Add(new KeyValuePair<int, Control>(txt_year_left.Text.ToIntWithNull(), txt_year_left));
+            }
+
+            if (txt_ol_year.Text.ToIntWithNull() > 0)
+            {
+                dYearsGeneral.Add(new KeyValuePair<int, Control>(txt_ol_year.Text.ToIntWithNull(), txt_ol_year));
+            }
+
+            if (txt_al_year.Text.ToIntWithNull() > 0)
+            {
+                dYearsGeneral.Add(new KeyValuePair<int, Control>(txt_al_year.Text.ToIntWithNull(), txt_al_year));
+            }
+
+            List<int> unsortedList = new System.Collections.Generic.List<int> { };
+            dYears.ForEach(y => unsortedList.Add(y.Key));
+            List<int> sortedList = unsortedList.ToList();
+            sortedList.Sort();
+
+            List<int> unsortedListGeneral = new System.Collections.Generic.List<int> { };
+            dYearsGeneral.ForEach(y => unsortedListGeneral.Add(y.Key));
+            List<int> sortedListGeneral = unsortedListGeneral.ToList();
+
+            for (int i = 0; i < unsortedList.Count; i++)
+            {
+                if (unsortedList[i].ToString().ToInt() > DateTime.Now.Year)
+                {
+                    AddYearErrors(dYears, "One or more of the years you have entered in the 'STC Mount Lavinia' and / or 'General' section/s are greater than the current year. Please re-check!");
+                    return false;
+                }
+
+                if (unsortedList[i] == sortedList[i])
+                {
+                    continue;
+                }
+                else
+                {
+                    AddYearErrors(dYears, "One or more of the years you have entered in the 'STC Mount Lavinia' and / or 'General' section/s are not consistent with the chronological order of events. Please re-check!");
+                    return false;
+                }
+            }
+
+            for (int i = 0; i < unsortedListGeneral.Count; i++)
+            {
+                if (unsortedListGeneral[i].ToString().ToInt() > DateTime.Now.Year)
+                {
+                    AddYearErrors(dYearsGeneral, "One or more of the years you have entered in the 'General' section are greater than the current year. Please re-check!");
+                    return false;
+                }
+                if (unsortedListGeneral[i] == sortedListGeneral[i])
+                {
+                    continue;
+                }
+                else
+                {
+                    AddYearErrors(dYearsGeneral, "One or more of the years you have entered in the 'General' section are not consistent with the chronological order of events. Please re-check!");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void AddYearErrors(List<KeyValuePair<int, Control>> dYears, string errorMessage)
+        {
+            foreach (KeyValuePair<int, Control> item in dYears)
+            {
+                errorProvider.SetError(item.Value, errorMessage, DevExpress.XtraEditors.DXErrorProvider.ErrorType.Warning);
+                lbl_year_error.Text = errorMessage;
+            }
+        }
+
+        private void ClearYearErrors()
+        {
+            errorProvider.ClearErrors();
+            lbl_year_error.Clear();
+        }
+
         private void btn_new_Click(object sender, EventArgs e)
         {
             try
             {
-                ResetForm();
-                FormatButtons(true);
-                mainSplit.Panel1.Enabled = false;
                 IsNewRecord = true;
+                ResetForm();
+                mainSplit.Panel1.Enabled = false;
                 //FormDirty = false;
             }
             catch (Exception ex)
@@ -975,20 +1099,29 @@ namespace OBALog.Windows
 
             ClearAllForm(tab_member);
             SetDefaults();
+            ClearYearErrors();
         }
 
         private void SetDefaults()
         {
-            Member = new ML_ViewMember();
-            cbo_salutation.EditValue = Configurations.DefaultSalutation;
-            cbo_country.EditValue = Configurations.DefaultCountry;
-            cbo_city.EditValue = Configurations.DefaultCity;
-            FormatDeceased();
-            FormatButtons(true);
-            RemarksHistory.Clear();
-            BindRemarksHistory();
-            pic_approval_stage.Visible = false;
-            grp_processing_complete.Enabled = false;
+            if (IsNewRecord)
+            {
+                Member = new ML_ViewMember();
+                AllocatePrivileges();
+                cbo_salutation.EditValue = Configurations.DefaultSalutation;
+                cbo_country.EditValue = Configurations.DefaultCountry;
+                cbo_city.EditValue = Configurations.DefaultCity;
+                btn_new.Enabled = btn_delete.Enabled = false;
+                FormatDeceased();
+                RemarksHistory.Clear();
+                BindRemarksHistory();
+                pic_approval_stage.Visible = false;
+                grp_processing_complete.Enabled = false;
+            }
+            else
+            {
+                FormatButtons(true);
+            }
             //gvSearch.ClearSelection();
             //if (gvSearch.SelectedRowsCount > 0)
             //    gvSearch.UnselectRow(gvSearch.FocusedRowHandle);
@@ -1019,6 +1152,7 @@ namespace OBALog.Windows
 
                 ClearAllForm(ctrl);
             }
+
         }
 
         private void btn_profession_Click(object sender, EventArgs e)
@@ -1105,14 +1239,18 @@ namespace OBALog.Windows
 
 
                     #region TAB 2 - School Details
+                    ClearYearErrors();
+
                     txt_admission_1.Text = Member.AdmissionNo;
                     txt_admission_2.Text = Admission == null ? string.Empty : Admission.AdmissionNo;
                     cbo_school_2.EditValue = Admission == null ? string.Empty : Admission.School;
-                    txt_year_joined.Text = Member.YearJoined;
-                    txt_year_left.Text = Member.YearLeft;
-                    txt_class_group.Text = Member.ClassGroup;
-                    txt_ol_year.Text = Member.OLYear;
-                    txt_al_year.Text = Member.ALYear;
+                    txt_year_joined.EditValue = Member.YearJoined;
+                    txt_year_joined.Update();
+                    txt_year_left.EditValue = Member.YearLeft;
+                    txt_class_group.EditValue = Member.ClassGroup;
+                    txt_ol_year.EditValue = Member.OLYear;
+                    txt_al_year.EditValue = Member.ALYear;
+
                     #endregion
 
                     #region TAB 3 - Processing Details
@@ -1151,6 +1289,7 @@ namespace OBALog.Windows
                     FormatDeceased();
 
                     AllocatePrivileges();
+
                     #endregion
                 }
             }
@@ -1168,66 +1307,106 @@ namespace OBALog.Windows
             txt_mem_no.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_MembershipNo);
             txt_initials.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_PersonalDetails_Initials);
             txt_surname.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_PersonalDetails_Surname);
-            dtp_mem_date.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_MembershipDate);
+            txt_forenames.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_PersonalDetails_Forenames);
             txt_id_val.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_PersonalDetails_IDVal);
             txt_rec_no.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_ProcessingDetails_ReceiptDetails_ReceiptNo);
             dtp_rec_date.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_ProcessingDetails_ReceiptDetails_ReceiptDate);
-            txt_forenames.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_PersonalDetails_Forenames);
+            dtp_mem_date.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_MembershipDate);
+
             #endregion
 
             #region Level 2
-            if (Member.ReceiptNo.IsNotEmpty())
+            if (!IsNewRecord && Member.ReceiptNo.IsNotEmpty())
             {
                 cbo_mem_not_type.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableMemNotTypeAfterRecGen);
                 grp_receipt.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableRecDetAfterRecGen);
                 grp_reg_progress.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableRegProgAfterRecGen);
                 tp_school.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableSchoolDetAfterRecGen);
             }
+            else
+            {
+                cbo_mem_not_type.Enabled = grp_reg_progress.Enabled = grp_receipt.Enabled = tp_school.Enabled = true;
+            }
 
-            if (Member.DateCardGivenToMember.IsNotEmpty())
+            if (!IsNewRecord && Member.DateCardGivenToMember.IsNotEmpty())
             {
                 grp_crd_processing.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableCardProIfCardGivenToMem);
                 dtp_mem_date.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableMemDateIfCardGivenToMem);
                 txt_mem_no.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableMemNoIfCardGivenToMem);
                 grp_reg_progress.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableRegProgIfCardGivenToMem);
             }
+            else
+            {
+                grp_crd_processing.Enabled = grp_reg_progress.Enabled = true;
+                txt_mem_no.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_MembershipNo);
+                dtp_mem_date.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_MemberDetails_MembershipDate);
+            }
 
-            if (Member.Deceased)
+            if (!IsNewRecord && Member.Deceased)
             {
                 btn_delete.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableDeleteIfDeceased);
                 chk_deceased.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableDeceasedIfDeceased);
                 dtp_deceased.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableDeceasedDateIfDeceased);
                 btn_save.Enabled = btn_print.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableSaveIfDeceased);
             }
+            else
+            {
+                btn_delete.Enabled = hasAccessDelete;
+                chk_deceased.Enabled = dtp_deceased.Enabled = true;
+                btn_save.Enabled = btn_print.Enabled = (hasAccessInsert || hasAccessUpdate);
+            }
 
-            if (Member.Deleted)
+            if (!IsNewRecord && Member.Deleted)
             {
                 btn_save.Enabled = btn_print.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableSaveIfDel);
             }
+            else
+            {
+                btn_save.Enabled = btn_print.Enabled = (hasAccessInsert || hasAccessUpdate);
+            }
 
-            if (Member.Rejected)
+            if (!IsNewRecord && Member.Rejected)
             {
                 btn_delete.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableDeleteIfRej);
                 btn_save.Enabled = btn_print.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableSaveIfRej);
             }
+            else
+            {
+                btn_save.Enabled = btn_print.Enabled = (hasAccessInsert || hasAccessUpdate);
+                btn_delete.Enabled = hasAccessDelete;
+            }
 
-            if (Member.ReceiptNo.IsEmpty())
+            if (!IsNewRecord && Member.ReceiptNo.IsEmpty())
             {
                 cbo_mem_not_type.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableMemNotTypeTillRecGen);
             }
+            else
+            {
+                cbo_mem_not_type.Enabled = true;
+            }
 
-            if (Member.ApprovalStage == UniversalVariables.AppStage_Approved || Member.ApprovalStage == UniversalVariables.AppStage_Rejected)
+            if (!IsNewRecord && (Member.ApprovalStage == UniversalVariables.AppStage_Approved || Member.ApprovalStage == UniversalVariables.AppStage_Rejected))
             {
                 btn_delete.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableDelMemAfterAppRej);
                 txt_amount.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableRecAmtAfterAppRej);
             }
+            else
+            {
+                btn_delete.Enabled = hasAccessDelete;
+                txt_amount.Enabled = true;
+            }
 
-            if (Member.ApprovalStage == UniversalVariables.AppStage_Approved)
+            if (!IsNewRecord && Member.ApprovalStage == UniversalVariables.AppStage_Approved)
             {
                 grp_reg_progress.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableRegProgAfterApp);
                 tp_school.Enabled = !Privileges.CheckAccess(Privileges.MembershipDetails_DisableSchoolDetAfterApp);
 
             }
+            else
+            {
+                grp_reg_progress.Enabled = tp_school.Enabled = true;
+            }
+
             #endregion
         }
 

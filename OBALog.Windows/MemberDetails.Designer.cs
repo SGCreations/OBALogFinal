@@ -288,6 +288,7 @@
             this.vp_TelephoneValidation = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider(this.components);
             this.vp_MobileValidation = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider(this.components);
             this.vp_EmailValidation = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider(this.components);
+            this.errorProvider = new DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dtp_sent_to_printer.Properties.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtp_sent_to_printer.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtp_received_from_printer.Properties.CalendarTimeProperties)).BeginInit();
@@ -466,6 +467,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.vp_TelephoneValidation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.vp_MobileValidation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.vp_EmailValidation)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // dtp_sent_to_printer
@@ -1044,7 +1046,6 @@
             // 
             this.txt_mem_no.Location = new System.Drawing.Point(118, 12);
             this.txt_mem_no.Name = "txt_mem_no";
-            this.txt_mem_no.Properties.ReadOnly = true;
             this.txt_mem_no.Size = new System.Drawing.Size(93, 20);
             this.txt_mem_no.TabIndex = 1;
             // 
@@ -1874,9 +1875,10 @@
             // 
             // lbl_year_error
             // 
+            this.lbl_year_error.Appearance.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.lbl_year_error.Location = new System.Drawing.Point(7, 238);
             this.lbl_year_error.Name = "lbl_year_error";
-            this.lbl_year_error.Size = new System.Drawing.Size(52, 13);
+            this.lbl_year_error.Size = new System.Drawing.Size(62, 13);
             this.lbl_year_error.TabIndex = 63;
             this.lbl_year_error.Text = "year_error";
             this.lbl_year_error.Visible = false;
@@ -3142,6 +3144,10 @@
             this.split_search.TabIndex = 67;
             this.split_search.Text = "splitContainerControl2";
             // 
+            // errorProvider
+            // 
+            this.errorProvider.ContainerControl = this;
+            // 
             // MemberDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3353,6 +3359,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.vp_TelephoneValidation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.vp_MobileValidation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.vp_EmailValidation)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3603,5 +3610,6 @@
         private DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider vp_TelephoneValidation;
         private DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider vp_MobileValidation;
         private DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider vp_EmailValidation;
+        private DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider errorProvider;
     }
 }

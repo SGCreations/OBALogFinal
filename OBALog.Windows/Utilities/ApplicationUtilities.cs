@@ -57,6 +57,12 @@ namespace OBALog.Windows
         {
             return Convert.ToInt32(value);
         }
+        
+        public static int ToIntWithNull(this string value)
+        {
+            return Convert.ToInt32(value.IsEmpty() ? "0" : value);
+        }
+
         public static bool ToBool(this string value)
         {
             return Convert.ToBoolean(value);
@@ -72,7 +78,7 @@ namespace OBALog.Windows
 
         public static string DateFromString(this string value)
         {
-            return value.IsEmpty() ? null : Convert.ToDateTime(value).ToShortDateString();
+            return (value.IsEmpty() || value == "0000-00-00 00:00:00") ? null : Convert.ToDateTime(value).ToShortDateString();
         }
 
         public static int? ToIntNullable(this string value)
@@ -90,7 +96,10 @@ namespace OBALog.Windows
         {
             edit.Text = string.Empty;
         }
-
+        public static void Clear(this LabelControl edit)
+        {
+            edit.Text = string.Empty;
+        }
         public static void Clear(this LookUpEdit edit)
         {
             edit.Properties.DataSource = null;

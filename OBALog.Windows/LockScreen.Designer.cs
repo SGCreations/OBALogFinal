@@ -31,10 +31,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LockScreen));
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
             this.grp_controls = new DevExpress.XtraEditors.GroupControl();
+            this.lbl_lock_text = new DevExpress.XtraEditors.LabelControl();
             this.pic_col_crest = new DevExpress.XtraEditors.PictureEdit();
             this.lbl_user_full_name = new DevExpress.XtraEditors.LabelControl();
             this.txt_password = new DevExpress.XtraEditors.ButtonEdit();
-            this.lbl_lock_text = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.grp_controls)).BeginInit();
             this.grp_controls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic_col_crest.Properties)).BeginInit();
@@ -56,6 +56,17 @@
             this.grp_controls.Size = new System.Drawing.Size(500, 400);
             this.grp_controls.TabIndex = 0;
             this.grp_controls.Text = "groupControl1";
+            // 
+            // lbl_lock_text
+            // 
+            this.lbl_lock_text.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_lock_text.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.lbl_lock_text.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
+            this.lbl_lock_text.Location = new System.Drawing.Point(50, 219);
+            this.lbl_lock_text.Name = "lbl_lock_text";
+            this.lbl_lock_text.Size = new System.Drawing.Size(400, 21);
+            this.lbl_lock_text.TabIndex = 17;
+            this.lbl_lock_text.Text = "OBALog is locked. Please enter your password to unlock...";
             // 
             // pic_col_crest
             // 
@@ -101,22 +112,14 @@
             this.txt_password.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", 40, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, ((System.Drawing.Image)(resources.GetObject("txt_password.Properties.Buttons"))), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, "", null, null, true)});
             this.txt_password.Properties.LookAndFeel.UseDefaultLookAndFeel = false;
+            this.txt_password.Properties.NullValuePrompt = "Password";
+            this.txt_password.Properties.NullValuePromptShowForEmptyValue = true;
+            this.txt_password.Properties.UseSystemPasswordChar = true;
             this.txt_password.Size = new System.Drawing.Size(272, 38);
             this.txt_password.TabIndex = 0;
             this.txt_password.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.txt_password_ButtonClick);
             this.txt_password.EditValueChanged += new System.EventHandler(this.txt_password_EditValueChanged);
             this.txt_password.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_password_KeyDown);
-            // 
-            // lbl_lock_text
-            // 
-            this.lbl_lock_text.Appearance.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_lock_text.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.lbl_lock_text.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Vertical;
-            this.lbl_lock_text.Location = new System.Drawing.Point(50, 219);
-            this.lbl_lock_text.Name = "lbl_lock_text";
-            this.lbl_lock_text.Size = new System.Drawing.Size(400, 21);
-            this.lbl_lock_text.TabIndex = 17;
-            this.lbl_lock_text.Text = "OBALog is locked. Please enter your password to unlock...";
             // 
             // LockScreen
             // 
@@ -129,6 +132,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "LockScreen";
+            this.ShowInTaskbar = false;
             this.Text = "OBALog ";
             this.TransparencyKey = System.Drawing.SystemColors.Control;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

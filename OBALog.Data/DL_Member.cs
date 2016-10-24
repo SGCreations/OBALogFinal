@@ -53,7 +53,7 @@ namespace OBALog.Data
         {
             MySqlParameter[] para = new MySqlParameter[1];
             para[0] = new MySqlParameter("@MemberKey", MemberKey);
-            return MySQLHelper.ExecuteDataSet(DBConnection.connectionString, CommandType.Text, "SELECT * FROM vw_allmemberdata WHERE `KEY` = @MemberKey; SELECT * FROM admission a WHERE a.MemberKey = @MemberKey AND a.School != 'STC Mt. Lavinia'; SELECT * FROM professionaldetails WHERE MemberKey = @MemberKey; SELECT rh.`KEY`, rh.MemberKey, rh.UserKey, u.`Name` As User, rh.Remarks, rh.UpdatedDate FROM remarkshistory rh LEFT JOIN USER u ON rh.UserKey = u.`KEY` WHERE MemberKey = @MemberKey; SELECT Picture FROM member WHERE `Key` = @MemberKey AND Picture IS NOT NULL;", para);
+            return MySQLHelper.ExecuteDataSet(DBConnection.connectionString, CommandType.Text, "SELECT * FROM vw_allmemberdata WHERE `KEY` = @MemberKey; SELECT * FROM admission a WHERE a.MemberKey = @MemberKey AND a.School != 'STC Mt. Lavinia'; SELECT `KEY`, OrganisationKey, MemberKey, Designation, Email, Active, UserKey, CAST(UpdatedDate AS CHAR(50)) AS UpdatedDate FROM professionaldetails WHERE MemberKey = @MemberKey; SELECT rh.`KEY`, rh.MemberKey, rh.UserKey, u.`NAME` AS User, rh.Remarks, CAST(rh.UpdatedDate AS char(25)) AS UpdatedDate FROM remarkshistory rh LEFT JOIN User u ON rh.UserKey = u.`KEY` WHERE MemberKey = @MemberKey; SELECT Picture FROM member WHERE `KEY` = @MemberKey AND Picture IS NOT NULL;", para);
         }
 
         public DataTable selectMemberLastUpdatedTop20()

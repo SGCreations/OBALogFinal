@@ -17,7 +17,7 @@ namespace OBALog.Windows
         }
         private void LockScreen_Paint(object sender, PaintEventArgs e)
         {
-            var hb = new HatchBrush(HatchStyle.Percent70, this.TransparencyKey);
+            var hb = new HatchBrush(HatchStyle.Percent10, this.TransparencyKey);
             e.Graphics.FillRectangle(hb, this.DisplayRectangle);
         }
         private void txt_password_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
@@ -42,6 +42,8 @@ namespace OBALog.Windows
                 if (user.Tables[0].Rows.Count == 1 && user.Tables[1].Rows.Count > 0)
                 {
                     this.Hide();
+                    Home.InactivityTimer.Enabled = true;
+                    Home.idleFlag = true;
                 }
                 else
                 {
@@ -59,5 +61,6 @@ namespace OBALog.Windows
         {
 
         }
+
     }
 }

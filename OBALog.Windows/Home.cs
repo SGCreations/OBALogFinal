@@ -13,7 +13,7 @@ namespace OBALog.Windows
     {
         private Login LoginForm;
         private IdleTimeTool idleTimeTool;
-        bool idleFlag = true;
+        public static bool idleFlag = true;
 
         public Home()
         {
