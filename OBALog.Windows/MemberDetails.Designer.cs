@@ -42,9 +42,22 @@
             DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule9 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
             DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule10 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
             DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule11 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
-            DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule compareAgainstControlValidationRule3 = new DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MemberDetails));
             DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule12 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule13 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule14 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule15 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule16 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule17 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule compareAgainstControlValidationRule3 = new DevExpress.XtraEditors.DXErrorProvider.CompareAgainstControlValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule18 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule19 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MemberDetails));
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule20 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule21 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule22 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule23 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule24 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
+            DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule conditionValidationRule25 = new DevExpress.XtraEditors.DXErrorProvider.ConditionValidationRule();
             this.dtp_sent_to_printer = new DevExpress.XtraEditors.DateEdit();
             this.dtp_received_from_printer = new DevExpress.XtraEditors.DateEdit();
             this.dtp_member_notified = new DevExpress.XtraEditors.DateEdit();
@@ -107,8 +120,8 @@
             this.grp_other_nos = new DevExpress.XtraEditors.GroupControl();
             this.btn_add = new DevExpress.XtraEditors.SimpleButton();
             this.lst_mem_nos = new DevExpress.XtraEditors.ListBoxControl();
-            this.txt_old_mem_nos = new DevExpress.XtraEditors.TextEdit();
             this.btn_remove = new DevExpress.XtraEditors.SimpleButton();
+            this.txt_old_mem_nos = new DevExpress.XtraEditors.MemoEdit();
             this.txt_mem_no = new DevExpress.XtraEditors.TextEdit();
             this.grp_address = new DevExpress.XtraEditors.GroupControl();
             this.chk_mail_returned = new DevExpress.XtraEditors.CheckEdit();
@@ -125,7 +138,6 @@
             this.btn_new = new DevExpress.XtraEditors.SimpleButton();
             this.btn_close = new DevExpress.XtraEditors.SimpleButton();
             this.btn_save = new DevExpress.XtraEditors.SimpleButton();
-            this.chk_outdated = new DevExpress.XtraEditors.CheckEdit();
             this.grp_personal = new DevExpress.XtraEditors.GroupControl();
             this.dtp_deceased = new DevExpress.XtraEditors.DateEdit();
             this.dtp_dob = new DevExpress.XtraEditors.DateEdit();
@@ -145,7 +157,6 @@
             this.cbo_salutation = new OBALog.Windows.CustomLookUpEdit();
             this.Label1 = new DevExpress.XtraEditors.LabelControl();
             this.lbl_mem_no = new DevExpress.XtraEditors.LabelControl();
-            this.pic_approval_stage = new DevExpress.XtraEditors.PictureEdit();
             this.grp_reg_progress = new DevExpress.XtraEditors.GroupControl();
             this.grp_processing_complete = new DevExpress.XtraEditors.GroupControl();
             this.ts_approved_rejected = new DevExpress.XtraEditors.ToggleSwitch();
@@ -268,6 +279,8 @@
             this.tab_member = new DevExpress.XtraTab.XtraTabControl();
             this.tp_processing = new DevExpress.XtraTab.XtraTabPage();
             this.tp_member = new DevExpress.XtraTab.XtraTabPage();
+            this.chk_outdated = new DevExpress.XtraEditors.CheckEdit();
+            this.pic_approval_stage = new DevExpress.XtraEditors.PictureEdit();
             this.dtp_mem_date = new DevExpress.XtraEditors.DateEdit();
             this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
             this.btn_add_remark = new DevExpress.XtraEditors.SimpleButton();
@@ -288,7 +301,12 @@
             this.vp_TelephoneValidation = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider(this.components);
             this.vp_MobileValidation = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider(this.components);
             this.vp_EmailValidation = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider(this.components);
-            this.errorProvider = new DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider(this.components);
+            this.ep_years = new DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider(this.components);
+            this.vp_receipt_member_details = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider(this.components);
+            this.vp_receipt_school_details = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider(this.components);
+            this.vp_receipt_processing = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider(this.components);
+            this.vp_ReceiptAmount = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider(this.components);
+            this.ep_processing = new DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dtp_sent_to_printer.Properties.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtp_sent_to_printer.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtp_received_from_printer.Properties.CalendarTimeProperties)).BeginInit();
@@ -328,7 +346,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.txt_address.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbo_country.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbo_city.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chk_outdated.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grp_personal)).BeginInit();
             this.grp_personal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtp_deceased.Properties.CalendarTimeProperties)).BeginInit();
@@ -342,7 +359,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.txt_initials.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_surname.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbo_salutation.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pic_approval_stage.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grp_reg_progress)).BeginInit();
             this.grp_reg_progress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grp_processing_complete)).BeginInit();
@@ -445,6 +461,8 @@
             this.tab_member.SuspendLayout();
             this.tp_processing.SuspendLayout();
             this.tp_member.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chk_outdated.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pic_approval_stage.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtp_mem_date.Properties.CalendarTimeProperties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtp_mem_date.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).BeginInit();
@@ -467,7 +485,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.vp_TelephoneValidation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.vp_MobileValidation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.vp_EmailValidation)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ep_years)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vp_receipt_member_details)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vp_receipt_school_details)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vp_receipt_processing)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vp_ReceiptAmount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ep_processing)).BeginInit();
             this.SuspendLayout();
             // 
             // dtp_sent_to_printer
@@ -916,11 +939,10 @@
             // 
             this.grp_picture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.grp_picture.Controls.Add(this.pic_member);
-            this.grp_picture.Controls.Add(this.btn_picture);
-            this.grp_picture.Location = new System.Drawing.Point(429, 14);
+            this.grp_picture.Location = new System.Drawing.Point(208, 14);
             this.grp_picture.Name = "grp_picture";
             this.grp_picture.ShowCaption = false;
-            this.grp_picture.Size = new System.Drawing.Size(223, 193);
+            this.grp_picture.Size = new System.Drawing.Size(232, 193);
             this.grp_picture.TabIndex = 9;
             // 
             // pic_member
@@ -930,20 +952,24 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pic_member.Location = new System.Drawing.Point(5, 5);
             this.pic_member.Name = "pic_member";
-            this.pic_member.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
+            this.pic_member.Properties.NullText = "Double click to add an image...";
+            this.pic_member.Properties.PictureStoreMode = DevExpress.XtraEditors.Controls.PictureStoreMode.Image;
+            this.pic_member.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Always;
             this.pic_member.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Stretch;
             this.pic_member.Properties.ZoomAccelerationFactor = 1D;
-            this.pic_member.Size = new System.Drawing.Size(213, 153);
+            this.pic_member.Size = new System.Drawing.Size(222, 183);
             this.pic_member.TabIndex = 2;
+            this.pic_member.DoubleClick += new System.EventHandler(this.pic_member_DoubleClick);
             // 
             // btn_picture
             // 
             this.btn_picture.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btn_picture.Location = new System.Drawing.Point(5, 165);
+            this.btn_picture.Location = new System.Drawing.Point(217, 502);
             this.btn_picture.Name = "btn_picture";
             this.btn_picture.Size = new System.Drawing.Size(213, 23);
             this.btn_picture.TabIndex = 1;
             this.btn_picture.Text = "Picture";
+            this.btn_picture.Visible = false;
             this.btn_picture.Click += new System.EventHandler(this.btn_picture_Click);
             // 
             // chk_email_returned
@@ -998,19 +1024,19 @@
             // 
             this.grp_other_nos.Controls.Add(this.btn_add);
             this.grp_other_nos.Controls.Add(this.lst_mem_nos);
-            this.grp_other_nos.Controls.Add(this.txt_old_mem_nos);
             this.grp_other_nos.Controls.Add(this.btn_remove);
+            this.grp_other_nos.Controls.Add(this.txt_old_mem_nos);
             this.grp_other_nos.Location = new System.Drawing.Point(9, 67);
             this.grp_other_nos.Name = "grp_other_nos";
-            this.grp_other_nos.Size = new System.Drawing.Size(202, 140);
+            this.grp_other_nos.Size = new System.Drawing.Size(193, 140);
             this.grp_other_nos.TabIndex = 7;
             this.grp_other_nos.Text = "Old / Duplicate membership nos.";
             // 
             // btn_add
             // 
-            this.btn_add.Location = new System.Drawing.Point(99, 25);
+            this.btn_add.Location = new System.Drawing.Point(138, 24);
             this.btn_add.Name = "btn_add";
-            this.btn_add.Size = new System.Drawing.Size(38, 20);
+            this.btn_add.Size = new System.Drawing.Size(50, 20);
             this.btn_add.TabIndex = 32;
             this.btn_add.Text = "Add";
             this.btn_add.Click += new System.EventHandler(this.btn_add_Click);
@@ -1020,33 +1046,33 @@
             this.lst_mem_nos.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lst_mem_nos.Location = new System.Drawing.Point(6, 55);
+            this.lst_mem_nos.Location = new System.Drawing.Point(6, 76);
             this.lst_mem_nos.Name = "lst_mem_nos";
-            this.lst_mem_nos.Size = new System.Drawing.Size(191, 80);
+            this.lst_mem_nos.Size = new System.Drawing.Size(182, 59);
             this.lst_mem_nos.TabIndex = 31;
-            // 
-            // txt_old_mem_nos
-            // 
-            this.txt_old_mem_nos.Location = new System.Drawing.Point(6, 26);
-            this.txt_old_mem_nos.Name = "txt_old_mem_nos";
-            this.txt_old_mem_nos.Size = new System.Drawing.Size(87, 20);
-            this.txt_old_mem_nos.TabIndex = 8;
-            this.txt_old_mem_nos.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_old_mem_nos_KeyDown);
             // 
             // btn_remove
             // 
-            this.btn_remove.Location = new System.Drawing.Point(143, 25);
+            this.btn_remove.Location = new System.Drawing.Point(138, 50);
             this.btn_remove.Name = "btn_remove";
             this.btn_remove.Size = new System.Drawing.Size(50, 20);
             this.btn_remove.TabIndex = 1;
             this.btn_remove.Text = "Remove";
             this.btn_remove.Click += new System.EventHandler(this.btn_remove_Click);
             // 
+            // txt_old_mem_nos
+            // 
+            this.txt_old_mem_nos.Location = new System.Drawing.Point(6, 26);
+            this.txt_old_mem_nos.Name = "txt_old_mem_nos";
+            this.txt_old_mem_nos.Size = new System.Drawing.Size(126, 44);
+            this.txt_old_mem_nos.TabIndex = 8;
+            this.txt_old_mem_nos.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_old_mem_nos_KeyDown);
+            // 
             // txt_mem_no
             // 
             this.txt_mem_no.Location = new System.Drawing.Point(118, 12);
             this.txt_mem_no.Name = "txt_mem_no";
-            this.txt_mem_no.Size = new System.Drawing.Size(93, 20);
+            this.txt_mem_no.Size = new System.Drawing.Size(84, 20);
             this.txt_mem_no.TabIndex = 1;
             // 
             // grp_address
@@ -1222,15 +1248,6 @@
             this.btn_save.Text = "&Save";
             this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
             // 
-            // chk_outdated
-            // 
-            this.chk_outdated.Location = new System.Drawing.Point(9, 220);
-            this.chk_outdated.Name = "chk_outdated";
-            this.chk_outdated.Properties.Caption = "Incomplete";
-            this.chk_outdated.Properties.GlyphAlignment = DevExpress.Utils.HorzAlignment.Far;
-            this.chk_outdated.Size = new System.Drawing.Size(75, 19);
-            this.chk_outdated.TabIndex = 59;
-            // 
             // grp_personal
             // 
             this.grp_personal.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1258,7 +1275,7 @@
             this.grp_personal.Controls.Add(this.Label4);
             this.grp_personal.Controls.Add(this.Label2);
             this.grp_personal.Controls.Add(this.cbo_salutation);
-            this.grp_personal.Location = new System.Drawing.Point(9, 245);
+            this.grp_personal.Location = new System.Drawing.Point(9, 213);
             this.grp_personal.Name = "grp_personal";
             this.grp_personal.Size = new System.Drawing.Size(643, 279);
             this.grp_personal.TabIndex = 10;
@@ -1287,6 +1304,9 @@
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.dtp_dob.Size = new System.Drawing.Size(96, 20);
             this.dtp_dob.TabIndex = 73;
+            conditionValidationRule7.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule7.ErrorText = "This field is required to generate the receipt.";
+            this.vp_receipt_member_details.SetValidationRule(this.dtp_dob, conditionValidationRule7);
             // 
             // cbo_id_type
             // 
@@ -1298,6 +1318,9 @@
             this.cbo_id_type.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             this.cbo_id_type.Size = new System.Drawing.Size(157, 20);
             this.cbo_id_type.TabIndex = 63;
+            conditionValidationRule8.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule8.ErrorText = "This field is required to generate the receipt.";
+            this.vp_receipt_member_details.SetValidationRule(this.cbo_id_type, conditionValidationRule8);
             // 
             // chk_deceased
             // 
@@ -1330,9 +1353,12 @@
             this.txt_id_val.Name = "txt_id_val";
             this.txt_id_val.Size = new System.Drawing.Size(251, 20);
             this.txt_id_val.TabIndex = 8;
-            conditionValidationRule7.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule7.ErrorText = "This value cannot be blank";
-            this.vp_main.SetValidationRule(this.txt_id_val, conditionValidationRule7);
+            conditionValidationRule9.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule9.ErrorText = "This field is required to generate the receipt.";
+            this.vp_receipt_member_details.SetValidationRule(this.txt_id_val, conditionValidationRule9);
+            conditionValidationRule10.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule10.ErrorText = "This value cannot be blank";
+            this.vp_main.SetValidationRule(this.txt_id_val, conditionValidationRule10);
             // 
             // Label7
             // 
@@ -1348,9 +1374,9 @@
             this.txt_forenames.Name = "txt_forenames";
             this.txt_forenames.Size = new System.Drawing.Size(531, 20);
             this.txt_forenames.TabIndex = 6;
-            conditionValidationRule8.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule8.ErrorText = "This value cannot be blank";
-            this.vp_main.SetValidationRule(this.txt_forenames, conditionValidationRule8);
+            conditionValidationRule11.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule11.ErrorText = "This value cannot be blank";
+            this.vp_main.SetValidationRule(this.txt_forenames, conditionValidationRule11);
             // 
             // Label6
             // 
@@ -1366,9 +1392,12 @@
             this.txt_initials.Name = "txt_initials";
             this.txt_initials.Size = new System.Drawing.Size(121, 20);
             this.txt_initials.TabIndex = 5;
-            conditionValidationRule9.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule9.ErrorText = "This value cannot be blank";
-            this.vp_main.SetValidationRule(this.txt_initials, conditionValidationRule9);
+            conditionValidationRule12.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule12.ErrorText = "This field is required to generate the receipt.";
+            this.vp_receipt_member_details.SetValidationRule(this.txt_initials, conditionValidationRule12);
+            conditionValidationRule13.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule13.ErrorText = "This value cannot be blank";
+            this.vp_main.SetValidationRule(this.txt_initials, conditionValidationRule13);
             // 
             // Label5
             // 
@@ -1384,9 +1413,12 @@
             this.txt_surname.Name = "txt_surname";
             this.txt_surname.Size = new System.Drawing.Size(169, 20);
             this.txt_surname.TabIndex = 4;
-            conditionValidationRule10.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule10.ErrorText = "This value cannot be blank";
-            this.vp_main.SetValidationRule(this.txt_surname, conditionValidationRule10);
+            conditionValidationRule14.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule14.ErrorText = "This field is required to generate the receipt.";
+            this.vp_receipt_member_details.SetValidationRule(this.txt_surname, conditionValidationRule14);
+            conditionValidationRule15.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule15.ErrorText = "This value cannot be blank";
+            this.vp_main.SetValidationRule(this.txt_surname, conditionValidationRule15);
             // 
             // Label4
             // 
@@ -1419,9 +1451,9 @@
             this.cbo_salutation.Properties.ShowHeader = false;
             this.cbo_salutation.Size = new System.Drawing.Size(96, 20);
             this.cbo_salutation.TabIndex = 63;
-            conditionValidationRule11.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule11.ErrorText = "This value cannot be blank";
-            this.vp_main.SetValidationRule(this.cbo_salutation, conditionValidationRule11);
+            conditionValidationRule16.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule16.ErrorText = "This value cannot be blank";
+            this.vp_main.SetValidationRule(this.cbo_salutation, conditionValidationRule16);
             // 
             // Label1
             // 
@@ -1438,20 +1470,6 @@
             this.lbl_mem_no.Size = new System.Drawing.Size(96, 13);
             this.lbl_mem_no.TabIndex = 0;
             this.lbl_mem_no.Text = "Membership number";
-            // 
-            // pic_approval_stage
-            // 
-            this.pic_approval_stage.Location = new System.Drawing.Point(94, 215);
-            this.pic_approval_stage.Name = "pic_approval_stage";
-            this.pic_approval_stage.Properties.Appearance.BackColor = System.Drawing.Color.Green;
-            this.pic_approval_stage.Properties.Appearance.Options.UseBackColor = true;
-            this.pic_approval_stage.Properties.Caption.Alignment = System.Drawing.ContentAlignment.MiddleCenter;
-            this.pic_approval_stage.Properties.Caption.ContentPadding = new System.Windows.Forms.Padding(0);
-            this.pic_approval_stage.Properties.Caption.Offset = new System.Drawing.Point(0, 0);
-            this.pic_approval_stage.Properties.NullText = " ";
-            this.pic_approval_stage.Properties.ZoomAccelerationFactor = 1D;
-            this.pic_approval_stage.Size = new System.Drawing.Size(117, 24);
-            this.pic_approval_stage.TabIndex = 62;
             // 
             // grp_reg_progress
             // 
@@ -1646,6 +1664,9 @@
             this.cbo_mem_not_type.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             this.cbo_mem_not_type.Size = new System.Drawing.Size(101, 20);
             this.cbo_mem_not_type.TabIndex = 74;
+            conditionValidationRule17.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule17.ErrorText = "This field is required to generate the receipt.";
+            this.vp_receipt_processing.SetValidationRule(this.cbo_mem_not_type, conditionValidationRule17);
             // 
             // dtp_given_to_member
             // 
@@ -1767,6 +1788,12 @@
             this.cbo_payment_type.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             this.cbo_payment_type.Size = new System.Drawing.Size(100, 20);
             this.cbo_payment_type.TabIndex = 73;
+            conditionValidationRule18.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule18.ErrorText = "This field is required to generate the receipt.";
+            this.vp_receipt_processing.SetValidationRule(this.cbo_payment_type, conditionValidationRule18);
+            conditionValidationRule19.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule19.ErrorText = "This field is required to generate the receipt.";
+            this.vp_receipt_member_details.SetValidationRule(this.cbo_payment_type, conditionValidationRule19);
             // 
             // dtp_rec_date
             // 
@@ -1824,6 +1851,9 @@
             this.txt_amount.Name = "txt_amount";
             this.txt_amount.Size = new System.Drawing.Size(100, 20);
             this.txt_amount.TabIndex = 9;
+            conditionValidationRule20.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule20.ErrorText = "This field is required to generate the receipt.";
+            this.vp_receipt_processing.SetValidationRule(this.txt_amount, conditionValidationRule20);
             // 
             // lbl_card_cheque
             // 
@@ -1853,7 +1883,6 @@
             // 
             this.txt_rec_no.Location = new System.Drawing.Point(110, 29);
             this.txt_rec_no.Name = "txt_rec_no";
-            this.txt_rec_no.Properties.ReadOnly = true;
             this.txt_rec_no.Size = new System.Drawing.Size(100, 20);
             this.txt_rec_no.TabIndex = 5;
             // 
@@ -2026,6 +2055,9 @@
             0});
             this.txt_year_joined.Size = new System.Drawing.Size(100, 20);
             this.txt_year_joined.TabIndex = 15;
+            conditionValidationRule21.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule21.ErrorText = "This field is required to generate the receipt.";
+            this.vp_receipt_school_details.SetValidationRule(this.txt_year_joined, conditionValidationRule21);
             // 
             // txt_year_left
             // 
@@ -2050,6 +2082,9 @@
             0});
             this.txt_year_left.Size = new System.Drawing.Size(100, 20);
             this.txt_year_left.TabIndex = 9;
+            conditionValidationRule22.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule22.ErrorText = "This field is required to generate the receipt.";
+            this.vp_receipt_school_details.SetValidationRule(this.txt_year_left, conditionValidationRule22);
             // 
             // txt_class_group
             // 
@@ -2074,6 +2109,9 @@
             0});
             this.txt_class_group.Size = new System.Drawing.Size(100, 20);
             this.txt_class_group.TabIndex = 17;
+            conditionValidationRule23.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule23.ErrorText = "This field is required to generate the receipt.";
+            this.vp_receipt_school_details.SetValidationRule(this.txt_class_group, conditionValidationRule23);
             // 
             // grp_admission
             // 
@@ -2132,9 +2170,12 @@
             this.txt_admission_1.Name = "txt_admission_1";
             this.txt_admission_1.Size = new System.Drawing.Size(100, 20);
             this.txt_admission_1.TabIndex = 9;
-            conditionValidationRule12.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
-            conditionValidationRule12.ErrorText = "This value cannot be blank";
-            this.vp_school_details.SetValidationRule(this.txt_admission_1, conditionValidationRule12);
+            conditionValidationRule24.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule24.ErrorText = "This field is required to generate the receipt.";
+            this.vp_receipt_school_details.SetValidationRule(this.txt_admission_1, conditionValidationRule24);
+            conditionValidationRule25.ConditionOperator = DevExpress.XtraEditors.DXErrorProvider.ConditionOperator.IsNotBlank;
+            conditionValidationRule25.ErrorText = "This value cannot be blank";
+            this.vp_school_details.SetValidationRule(this.txt_admission_1, conditionValidationRule25);
             // 
             // Label27
             // 
@@ -2935,6 +2976,7 @@
             this.gvSearch.OptionsView.ShowIndicator = false;
             this.gvSearch.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gvSearch_FocusedRowChanged);
             this.gvSearch.FocusedRowObjectChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowObjectChangedEventHandler(this.gvSearch_FocusedRowObjectChanged);
+            this.gvSearch.Click += new System.EventHandler(this.gvSearch_Click);
             // 
             // colKey
             // 
@@ -3007,19 +3049,43 @@
             // 
             this.tp_member.Appearance.PageClient.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(236)))), ((int)(((byte)(239)))));
             this.tp_member.Appearance.PageClient.Options.UseBackColor = true;
+            this.tp_member.Controls.Add(this.chk_outdated);
+            this.tp_member.Controls.Add(this.btn_picture);
+            this.tp_member.Controls.Add(this.pic_approval_stage);
             this.tp_member.Controls.Add(this.dtp_mem_date);
             this.tp_member.Controls.Add(this.groupControl2);
-            this.tp_member.Controls.Add(this.chk_outdated);
             this.tp_member.Controls.Add(this.lbl_mem_no);
             this.tp_member.Controls.Add(this.Label1);
             this.tp_member.Controls.Add(this.grp_personal);
             this.tp_member.Controls.Add(this.txt_mem_no);
             this.tp_member.Controls.Add(this.grp_picture);
             this.tp_member.Controls.Add(this.grp_other_nos);
-            this.tp_member.Controls.Add(this.pic_approval_stage);
             this.tp_member.Name = "tp_member";
             this.tp_member.Size = new System.Drawing.Size(666, 534);
             this.tp_member.Text = "Member Details";
+            // 
+            // chk_outdated
+            // 
+            this.chk_outdated.Location = new System.Drawing.Point(9, 507);
+            this.chk_outdated.Name = "chk_outdated";
+            this.chk_outdated.Properties.Caption = "Incomplete";
+            this.chk_outdated.Properties.GlyphAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.chk_outdated.Size = new System.Drawing.Size(75, 19);
+            this.chk_outdated.TabIndex = 74;
+            // 
+            // pic_approval_stage
+            // 
+            this.pic_approval_stage.Location = new System.Drawing.Point(94, 502);
+            this.pic_approval_stage.Name = "pic_approval_stage";
+            this.pic_approval_stage.Properties.Appearance.BackColor = System.Drawing.Color.Green;
+            this.pic_approval_stage.Properties.Appearance.Options.UseBackColor = true;
+            this.pic_approval_stage.Properties.Caption.Alignment = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pic_approval_stage.Properties.Caption.ContentPadding = new System.Windows.Forms.Padding(0);
+            this.pic_approval_stage.Properties.Caption.Offset = new System.Drawing.Point(0, 0);
+            this.pic_approval_stage.Properties.NullText = " ";
+            this.pic_approval_stage.Properties.ZoomAccelerationFactor = 1D;
+            this.pic_approval_stage.Size = new System.Drawing.Size(117, 24);
+            this.pic_approval_stage.TabIndex = 75;
             // 
             // dtp_mem_date
             // 
@@ -3030,7 +3096,7 @@
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.dtp_mem_date.Properties.CalendarTimeProperties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.dtp_mem_date.Size = new System.Drawing.Size(94, 20);
+            this.dtp_mem_date.Size = new System.Drawing.Size(85, 20);
             this.dtp_mem_date.TabIndex = 73;
             // 
             // groupControl2
@@ -3041,7 +3107,7 @@
             this.groupControl2.Controls.Add(this.lst_remarks);
             this.groupControl2.Controls.Add(this.btn_view_remarks);
             this.groupControl2.Controls.Add(this.txt_new_remark);
-            this.groupControl2.Location = new System.Drawing.Point(217, 14);
+            this.groupControl2.Location = new System.Drawing.Point(446, 14);
             this.groupControl2.Name = "groupControl2";
             this.groupControl2.Size = new System.Drawing.Size(206, 193);
             this.groupControl2.TabIndex = 33;
@@ -3144,9 +3210,13 @@
             this.split_search.TabIndex = 67;
             this.split_search.Text = "splitContainerControl2";
             // 
-            // errorProvider
+            // ep_years
             // 
-            this.errorProvider.ContainerControl = this;
+            this.ep_years.ContainerControl = this;
+            // 
+            // ep_processing
+            // 
+            this.ep_processing.ContainerControl = this;
             // 
             // MemberDetails
             // 
@@ -3203,7 +3273,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.txt_address.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbo_country.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbo_city.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chk_outdated.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grp_personal)).EndInit();
             this.grp_personal.ResumeLayout(false);
             this.grp_personal.PerformLayout();
@@ -3218,7 +3287,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.txt_initials.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txt_surname.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbo_salutation.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pic_approval_stage.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grp_reg_progress)).EndInit();
             this.grp_reg_progress.ResumeLayout(false);
             this.grp_reg_progress.PerformLayout();
@@ -3336,6 +3404,8 @@
             this.tp_processing.ResumeLayout(false);
             this.tp_member.ResumeLayout(false);
             this.tp_member.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chk_outdated.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pic_approval_stage.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtp_mem_date.Properties.CalendarTimeProperties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtp_mem_date.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).EndInit();
@@ -3359,7 +3429,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.vp_TelephoneValidation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.vp_MobileValidation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.vp_EmailValidation)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ep_years)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vp_receipt_member_details)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vp_receipt_school_details)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vp_receipt_processing)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vp_ReceiptAmount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ep_processing)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3424,7 +3499,6 @@
         private DevExpress.XtraEditors.GroupControl grp_other_nos;
         private DevExpress.XtraEditors.SimpleButton btn_add;
         private DevExpress.XtraEditors.ListBoxControl lst_mem_nos;
-        private DevExpress.XtraEditors.TextEdit txt_old_mem_nos;
         private DevExpress.XtraEditors.SimpleButton btn_remove;
         private DevExpress.XtraEditors.TextEdit txt_mem_no;
         private DevExpress.XtraEditors.GroupControl grp_address;
@@ -3440,7 +3514,6 @@
         private DevExpress.XtraEditors.SimpleButton btn_new;
         private DevExpress.XtraEditors.SimpleButton btn_close;
         private DevExpress.XtraEditors.SimpleButton btn_save;
-        private DevExpress.XtraEditors.CheckEdit chk_outdated;
         private DevExpress.XtraEditors.GroupControl grp_personal;
         private DevExpress.XtraEditors.CheckEdit chk_deceased;
         private DevExpress.XtraEditors.LabelControl lbl_deceased_date;
@@ -3456,7 +3529,6 @@
         private DevExpress.XtraEditors.LabelControl Label2;
         private DevExpress.XtraEditors.LabelControl Label1;
         private DevExpress.XtraEditors.LabelControl lbl_mem_no;
-        private DevExpress.XtraEditors.PictureEdit pic_approval_stage;
         private DevExpress.XtraEditors.GroupControl grp_reg_progress;
         private DevExpress.XtraEditors.CheckEdit chk_col_office;
         private DevExpress.XtraEditors.LabelControl Label23;
@@ -3610,6 +3682,14 @@
         private DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider vp_TelephoneValidation;
         private DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider vp_MobileValidation;
         private DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider vp_EmailValidation;
-        private DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider errorProvider;
+        private DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider ep_years;
+        private DevExpress.XtraEditors.CheckEdit chk_outdated;
+        private DevExpress.XtraEditors.PictureEdit pic_approval_stage;
+        private DevExpress.XtraEditors.MemoEdit txt_old_mem_nos;
+        private DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider vp_receipt_member_details;
+        private DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider vp_receipt_school_details;
+        private DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider vp_receipt_processing;
+        private DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider vp_ReceiptAmount;
+        private DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider ep_processing;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DevExpress.XtraEditors;
+using System;
 using System.Windows.Forms;
 
 namespace OBALog.Windows
@@ -8,8 +9,7 @@ namespace OBALog.Windows
         protected override void OnHandleCreated(System.EventArgs e)
         {
             this.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
-            this.EditValue = null;
-
+            this.EditValue = (this.Value.ToString() == null || this.Value == 0) ? null : this.EditValue;
             base.OnHandleCreated(e);
         }
         protected override void OnKeyPress(System.Windows.Forms.KeyPressEventArgs e)
@@ -20,6 +20,16 @@ namespace OBALog.Windows
             }
 
             base.OnKeyPress(e);
+        }
+
+        protected override void OnTextChanged(System.EventArgs e)
+        {
+            if (this.Value.ToString() == null || this.Value == Convert.ToDecimal("0"))
+            {
+                this.EditValue = null;
+            }
+
+            base.OnTextChanged(e);
         }
     }
 }

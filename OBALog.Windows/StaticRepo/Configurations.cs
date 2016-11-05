@@ -24,7 +24,9 @@ namespace OBALog.Windows
         public const string EmailValidationStr = "EmailValidation";
 
         public static bool InternetConnection { get { return GetConfigurationValue(InternetConnectionStr).ToBool(); } }
-        public static int[] ReceiptAmount { get { return GetConfigurationValue(ReceiptAmountStr).Split(new char[] { ';' }).Select(int.Parse).ToArray(); } }
+        public static int[] ReceiptAmount { get {
+            return GetConfigurationValue(ReceiptAmountStr).Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray(); 
+        } }
         public static string LastReceiptNo { get { return GetConfigurationValue(ReceiptNoStr); } }
         public static TimeSpan TimeoutPeriod { get { return GetConfigurationValue(TimeoutPeriodStr).ToTimeSpan(); } }
         public static TimeSpan LogoffPeriod { get { return GetConfigurationValue(LogoffPeriodStr).ToTimeSpan(); } }

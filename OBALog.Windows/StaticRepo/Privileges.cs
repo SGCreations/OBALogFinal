@@ -95,14 +95,14 @@ namespace OBALog.Windows
         #endregion
 
         #region Level 3
-        public const string MembershipDetails_MemberDetails_PersonalDetails_Surname = "MembershipDetails_MemberDetails_PersonalDetails_Surname";
-        public const string MembershipDetails_MemberDetails_PersonalDetails_Initials = "MembershipDetails_MemberDetails_PersonalDetails_Initials";
-        public const string MembershipDetails_MemberDetails_MembershipDate = "MembershipDetails_MemberDetails_MembershipDate";
-        public const string MembershipDetails_MemberDetails_MembershipNo = "MembershipDetails_MemberDetails_MembershipNo";
-        public const string MembershipDetails_MemberDetails_PersonalDetails_IDVal = "MembershipDetails_MemberDetails_PersonalDetails_IDVal";
-        public const string MembershipDetails_MemberDetails_PersonalDetails_Forenames = "MembershipDetails_MemberDetails_PersonalDetails_Forenames";
-        public const string MembershipDetails_ProcessingDetails_ReceiptDetails_ReceiptNo = "MembershipDetails_ProcessingDetails_ReceiptDetails_ReceiptNo";
-        public const string MembershipDetails_ProcessingDetails_ReceiptDetails_ReceiptDate = "MembershipDetails_ProcessingDetails_ReceiptDetails_ReceiptDate"; 
+        public const string MembershipDetails_MemberDetails_PersonalDetails_Surname = "MembershipDetails_MemberDetails_PersonalDetails_DisableSurname";
+        public const string MembershipDetails_MemberDetails_PersonalDetails_Initials = "MembershipDetails_MemberDetails_PersonalDetails_DisableInitials";
+        public const string MembershipDetails_MemberDetails_MembershipDate = "MembershipDetails_MemberDetails_DisableMembershipDate";
+        public const string MembershipDetails_MemberDetails_MembershipNo = "MembershipDetails_MemberDetails_DisableMembershipNo";
+        public const string MembershipDetails_MemberDetails_PersonalDetails_IDVal = "MembershipDetails_MemberDetails_PersonalDetails_DisableIDVal";
+        public const string MembershipDetails_MemberDetails_PersonalDetails_Forenames = "MembershipDetails_MemberDetails_PersonalDetails_DisableForenames";
+        public const string MembershipDetails_ProcessingDetails_ReceiptDetails_ReceiptNo = "MembershipDetails_ProcessingDetails_ReceiptDetails_DisableReceiptNo";
+        public const string MembershipDetails_ProcessingDetails_ReceiptDetails_ReceiptDate = "MembershipDetails_ProcessingDetails_ReceiptDetails_DisableReceiptDate"; 
         #endregion
         
         public static bool CheckAccess(string PrivilegeName)

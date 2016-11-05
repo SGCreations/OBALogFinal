@@ -30,7 +30,7 @@ namespace OBALog.Windows
         {
             CaseSensitive = false;
             ErrorText = "Invalid email address.";
-            ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Warning;
+            ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
         }
 
         public override bool Validate(Control control, object value)
@@ -53,12 +53,12 @@ namespace OBALog.Windows
         {
             CaseSensitive = false;
             ErrorText = "Invalid phone number.";
-            ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Warning;
+            ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
         }
 
         public override bool Validate(Control control, object value)
         {
-            if (value != null)
+            if (value != null && value.ToString().IsNotEmpty())
             {
                 var tel = value.ToString();
                 Match m = Regex.Match(tel, "^[0-9|+]{10,12}$", RegexOptions.IgnoreCase);
@@ -70,7 +70,6 @@ namespace OBALog.Windows
             }
         }
     }
-
     internal class DateValidation : ValidationRule
     {
         public DateValidation()
@@ -86,10 +85,31 @@ namespace OBALog.Windows
             return (year.ToString().Length == 4 && year < 2200 && year > 1900);
         }
     }
-
-    internal class TelephoneValidation : ValidationRule
+    internal class ReceiptAmountValidation : ValidationRule
     {
-        public TelephoneValidation()
+        public ReceiptAmountValidation()
+        {
+            CaseSensitive = false;
+            ErrorText = "This field is required. Enter a valid receipt amount.";
+            ErrorType = DevExpress.XtraEditors.DXErrorProvider.ErrorType.Critical;
+        }
+
+        public override bool Validate(Control control, object value)
+        {
+            if (value != null && Array.Exists(Configurations.ReceiptAmount, element => element == Decimal.ToInt32(Convert.ToDecimal(value))))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    internal class TelephoneControlValidation : ValidationRule
+    {
+        public TelephoneControlValidation()
         {
             CaseSensitive = false;
             ErrorText = "This field is required. Enter a valid phone number.";
@@ -98,11 +118,18 @@ namespace OBALog.Windows
 
         public override bool Validate(Control control, object value)
         {
-            if (value != null && Configurations.TelephoneValidation)
+            if (Configurations.TelephoneValidation)
             {
-                var tel = value.ToString();
-                Match m = Regex.Match(tel, "^[0-9|+]{10,12}$", RegexOptions.IgnoreCase);
-                return (tel.Trim().IsNotEmpty() && m.Success);
+                if (value != null)
+                {
+                    var tel = value.ToString();
+                    Match m = Regex.Match(tel, "^[0-9|+]{10,12}$", RegexOptions.IgnoreCase);
+                    return (tel.Trim().IsNotEmpty() && m.Success);
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
@@ -111,9 +138,9 @@ namespace OBALog.Windows
         }
     }
 
-    internal class MobileValidation : ValidationRule
+    internal class MobileControlValidation : ValidationRule
     {
-        public MobileValidation()
+        public MobileControlValidation()
         {
             CaseSensitive = false;
             ErrorText = "This field is required. Enter a valid phone number.";
@@ -123,11 +150,18 @@ namespace OBALog.Windows
 
         public override bool Validate(Control control, object value)
         {
-            if (value != null && Configurations.MobileValidation)
+            if (Configurations.MobileValidation)
             {
-                var tel = value.ToString();
-                Match m = Regex.Match(tel, "^[0-9|+]{10,12}$", RegexOptions.IgnoreCase);
-                return (tel.Trim().IsNotEmpty() && m.Success);
+                if (value != null)
+                {
+                    var tel = value.ToString();
+                    Match m = Regex.Match(tel, "^[0-9|+]{10,12}$", RegexOptions.IgnoreCase);
+                    return (tel.Trim().IsNotEmpty() && m.Success);
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
@@ -147,12 +181,19 @@ namespace OBALog.Windows
 
         public override bool Validate(Control control, object value)
         {
-            if (value != null && Configurations.EmailValidation)
+            if (Configurations.EmailValidation)
             {
-                var email = value.ToString();
-                Match m = Regex.Match(email, @"^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", RegexOptions.IgnoreCase);
+                if (value != null)
+                {
+                    var email = value.ToString();
+                    Match m = Regex.Match(email, @"^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$", RegexOptions.IgnoreCase);
 
-                return (email.Trim().IsNotEmpty() && m.Success);
+                    return (email.Trim().IsNotEmpty() && m.Success);
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {

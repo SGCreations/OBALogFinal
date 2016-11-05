@@ -3,6 +3,8 @@ using DevExpress.XtraEditors.DXErrorProvider;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -10,7 +12,7 @@ using System.Windows.Forms;
 
 namespace OBALog.Windows
 {
-    [System.Diagnostics.DebuggerStepThrough()]
+    //[System.Diagnostics.DebuggerStepThrough()]
     public static class ApplicationUtilities
     {
         public static bool IsNotEmpty(this TextBox control)
@@ -52,12 +54,17 @@ namespace OBALog.Windows
         {
             return (control.Text.Trim().IsEmpty()) ? (int?)null : (control.Text.Trim().All(Char.IsDigit) ? Convert.ToInt32(control.Text.Trim()) : (int?)null);
         }
-
+        public static double? ToDoubleNullable(this TextEdit control)
+        {
+            double doubleValue;
+            bool isDouble = Double.TryParse(control.Text.Trim(), out doubleValue);
+            return isDouble ? Convert.ToDouble(control.Text.Trim()) : (double?)null;
+        }
         public static int ToInt(this string value)
         {
             return Convert.ToInt32(value);
         }
-        
+
         public static int ToIntWithNull(this string value)
         {
             return Convert.ToInt32(value.IsEmpty() ? "0" : value);
@@ -326,6 +333,61 @@ namespace OBALog.Windows
             imageIn.Save(ms, imageIn.RawFormat);
             return ms.ToArray();
         }
+        public static byte[] imageToByteArray(PictureEdit imageIn)
+        {
+            MemoryStream ms = new MemoryStream();
+            ((Image)imageIn.EditValue).Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            return ms.ToArray();
+        }
+
+
+        public static Stream ConvertImage(this Stream originalStream, ImageFormat format)
+        {
+            var image = Image.FromStream(originalStream);
+
+            var stream = new MemoryStream();
+            image.Save(stream, format);
+            stream.Position = 0;
+            return stream;
+        }
+
+        /// <summary>
+        /// Convert a bitmap to a byte array
+        /// </summary>
+        /// <param name="bitmap">image to convert</param>
+        /// <returns>image as bytes</returns>
+        private static byte[] ConvertBitmap(Bitmap bitmap)
+        {
+            //Code excerpted from Microsoft Robotics Studio v1.5
+            BitmapData raw = null;  //used to get attributes of the image
+            byte[] rawImage = null; //the image as a byte[]
+
+            try
+            {
+                //Freeze the image in memory
+                raw = bitmap.LockBits(
+                    new Rectangle(0, 0, (int)bitmap.Width, (int)bitmap.Height),
+                    ImageLockMode.ReadOnly,
+                    PixelFormat.Format24bppRgb
+                );
+
+                int size = raw.Height * raw.Stride;
+                rawImage = new byte[size];
+
+                //Copy the image into the byte[]
+                System.Runtime.InteropServices.Marshal.Copy(raw.Scan0, rawImage, 0, size);
+            }
+            finally
+            {
+                if (raw != null)
+                {
+                    //Unfreeze the memory for the image
+                    bitmap.UnlockBits(raw);
+                }
+            }
+            return rawImage;
+        }
+
 
         public static System.Drawing.Image byteArrayToImage(byte[] byteArray)
         {

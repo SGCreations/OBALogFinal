@@ -12,6 +12,8 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
+using DevExpress.XtraGrid;
+using DevExpress.XtraEditors.DXErrorProvider;
 
 namespace OBALog.Windows
 {
@@ -31,11 +33,17 @@ namespace OBALog.Windows
         public List<ML_ProfessionalDetails> ProfessionalDetails { get; set; }
         public List<ML_RemarksHistory> RemarksHistory { get; set; }
         public bool IsNewRecord { get; set; }
+
+        public bool InitialRun { get; set; }
+        public bool DataLoadedOrNew { get; set; }
+
         #endregion
 
         public MemberDetails()
         {
             InitializeComponent();
+
+            InitialRun = true;
         }
 
         private void MemberDetails_Load(object sender, EventArgs e)
@@ -48,9 +56,11 @@ namespace OBALog.Windows
                 vp_email.SetValidationRule(txt_email, new EmailValidation());
                 vp_email_professional.SetValidationRule(txt_email_professional, new EmailValidation());
 
-                vp_TelephoneValidation.SetValidationRule(txt_tel, new TelephoneValidation());
-                vp_MobileValidation.SetValidationRule(txt_mobile, new MobileValidation());
+                vp_TelephoneValidation.SetValidationRule(txt_tel, new TelephoneControlValidation());
+                vp_MobileValidation.SetValidationRule(txt_mobile, new MobileControlValidation());
                 vp_EmailValidation.SetValidationRule(txt_email, new EmailControlValidation());
+
+                vp_ReceiptAmount.SetValidationRule(txt_amount, new ReceiptAmountValidation());
 
                 split_search.PanelVisibility = SplitPanelVisibility.Panel2;
                 split_search.Collapsed = true;
@@ -65,11 +75,17 @@ namespace OBALog.Windows
                 btn_new.Enabled = hasAccessInsert;
                 btn_delete.Enabled = hasAccessDelete;
                 btn_save.Enabled = btn_print.Enabled = (hasAccessInsert || hasAccessUpdate);
+
+                gvSearch.OptionsSelection.EnableAppearanceFocusedRow = false;
             }
             catch (Exception ex)
             {
                 AuditFactory.AuditLog(ex);
                 ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
+            finally
+            {
+                InitialRun = false;
             }
         }
 
@@ -408,7 +424,11 @@ namespace OBALog.Windows
                     ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, "You have no save rights.", "Access Denied");
                     return;
                 }
-
+                if (!DataLoadedOrNew)
+                {
+                    ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, "Please select a valid record to save!", "Error Saving");
+                    return;
+                }
                 bool Tab_Member = false, Tab_School = false, Tab_Processing = false, Tab_Professional = false;
 
                 ValidateTabs(ref Tab_Member, ref Tab_School, ref Tab_Processing, ref Tab_Professional);
@@ -453,7 +473,7 @@ namespace OBALog.Windows
 
                     if (curResult == DialogResult.OK)
                     {
-                        ResetFormAfterSave(IsNewRecord);
+                        ResetFormAfterSave(IsNewRecord, SelectedMemberKey);
                     }
                 }
                 else
@@ -481,7 +501,7 @@ namespace OBALog.Windows
         private DialogResult saveMember(bool showConfirmActionDialog, bool genRecBtnClicked)
         {
             DialogResult curResult = DialogResult.Cancel;
-            
+
             if (IsNewRecord)
             {
                 #region Insert New Record
@@ -503,11 +523,11 @@ namespace OBALog.Windows
 
                     var receipt = new ML_Receipt
                       {
-                          ReceiptNo = (genRecBtnClicked && txt_rec_no.IsNotEmpty()) ? txt_rec_no.Text.Trim() : new BL_Member().getReceiptNo(Configurations.ReceiptNoStr),
-                          ReceiptDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat),
+                          ReceiptNo = txt_rec_no.IsNotEmpty() ? txt_rec_no.Text.Trim() : (genRecBtnClicked ? new BL_Member().getReceiptNo(Configurations.ReceiptNoStr) : string.Empty),
+                          ReceiptDate = dtp_rec_date.IsNotEmpty() ? dtp_rec_date.GetFormattedDateString(UniversalVariables.MySQLDateFormat) : (genRecBtnClicked ? DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) : string.Empty),
                           CardChequeNo = txt_cheque_no.Text.Trim(),
                           Bank = txt_bank.Text.Trim(),
-                          ReceiptAmount = Convert.ToDouble(txt_amount.ToIntNullable()),
+                          ReceiptAmount = Convert.ToDouble(txt_amount.ToDoubleNullable()),
                           PaymentType = cbo_payment_type.Text,
                           PrintCount = 0,
                           UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
@@ -552,10 +572,9 @@ namespace OBALog.Windows
                         UserKey = UniversalVariables.UserKey,
                         YearJoined = txt_year_joined.Text,
                         YearLeft = txt_year_left.Text,
-                        Picture = pic_member.Image != null ? ApplicationUtilities.imageToByteArray(pic_member.Image) : null,
+                        Picture = pic_member.Image != null ? ApplicationUtilities.imageToByteArray(pic_member) : null,
                         UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                     };
-
 
                     List<ML_Admission> admission = new List<ML_Admission>();
 
@@ -586,6 +605,17 @@ namespace OBALog.Windows
                          };
                     }
 
+                    RemarksHistory = new List<ML_RemarksHistory>();
+
+                    foreach (var item in lst_remarks.Items)
+                    {
+                        RemarksHistory.Add(new ML_RemarksHistory
+                        {
+                            Remarks = item.ToString(),
+                            UserKey = UniversalVariables.UserKey,
+                            UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
+                        });
+                    }
 
                     #region Auto Remarks
 
@@ -663,21 +693,18 @@ namespace OBALog.Windows
                         UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                     };
 
-
                     var receipt = new ML_Receipt
                       {
-                          //check this - should a receipt no be always generated when saving?
-                          ReceiptNo = (genRecBtnClicked && txt_rec_no.IsNotEmpty()) ? txt_rec_no.Text.Trim() : new BL_Member().getReceiptNo(Configurations.ReceiptNoStr),
-                          ReceiptDate = dtp_rec_date.GetFormattedDateString(UniversalVariables.MySQLDateFormat),
+                          ReceiptNo = txt_rec_no.IsNotEmpty() ? txt_rec_no.Text.Trim() : (genRecBtnClicked ? new BL_Member().getReceiptNo(Configurations.ReceiptNoStr) : string.Empty),
+                          ReceiptDate = dtp_rec_date.IsNotEmpty() ? dtp_rec_date.GetFormattedDateString(UniversalVariables.MySQLDateFormat) : (genRecBtnClicked ? DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat) : string.Empty),
                           CardChequeNo = txt_cheque_no.Text.Trim(),
                           Bank = txt_bank.Text.Trim(),
-                          ReceiptAmount = Convert.ToDouble(txt_amount.ToIntNullable()),
+                          ReceiptAmount = Convert.ToDouble(txt_amount.ToDoubleNullable()),
                           PaymentType = cbo_payment_type.Text,
                           PrintCount = Member.PrintCount == string.Empty ? 0 : (genRecBtnClicked ? Member.PrintCount.ToInt() + 1 : Member.PrintCount.ToInt()),
                           Key = (Member.ReceiptKey == null || Member.ReceiptKey == string.Empty) ? (int?)null : Member.ReceiptKey.ToInt(),
                           UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                       };
-
 
                     var member = new ML_Member()
                     {
@@ -719,12 +746,12 @@ namespace OBALog.Windows
                         UserKey = UniversalVariables.UserKey,
                         YearJoined = txt_year_joined.Text,
                         YearLeft = txt_year_left.Text,
-                        Picture = pic_member.Image != null ? ApplicationUtilities.imageToByteArray(pic_member.Image) : null,
+                        Picture = pic_member.Image != null ? ApplicationUtilities.imageToByteArray(pic_member) : null,
                         Key = SelectedMemberKey,
                         UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                     };
 
-                  
+
                     List<ML_Admission> admission = new List<ML_Admission>();
 
                     admission.Add(new ML_Admission
@@ -754,6 +781,21 @@ namespace OBALog.Windows
                              OrganisationKey = Convert.ToInt32(cbo_org.EditValue),
                              UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
                          };
+                    }
+
+                    if (RemarksHistory != null)
+                    {
+                        RemarksHistory.Clear();
+                    }
+
+                    foreach (var item in lst_remarks.Items)
+                    {
+                        RemarksHistory.Add(new ML_RemarksHistory
+                        {
+                            Remarks = item.ToString(),
+                            UserKey = UniversalVariables.UserKey,
+                            UpdatedDate = DateTime.Now.GetFormattedDateString(UniversalVariables.MySQLDateFormat)
+                        });
                     }
 
                     #region Auto Remarks
@@ -848,8 +890,15 @@ namespace OBALog.Windows
             }
             return approvalStage;
         }
-
-        private void ResetFormAfterSave(bool insert)
+        private int GetRowHandleByColumnValue(DevExpress.XtraGrid.Views.Grid.GridView view, string ColumnFieldName, object value)
+        {
+            int result = GridControl.InvalidRowHandle;
+            for (int i = 0; i < view.RowCount; i++)
+                if (view.GetDataRow(i)[ColumnFieldName].Equals(value))
+                    return i;
+            return result;
+        }
+        private void ResetFormAfterSave(bool insert, int selectedMemberKey)
         {
             if (insert)
             {
@@ -863,6 +912,13 @@ namespace OBALog.Windows
                 bindSearchData();
                 //this.Invoke((MethodInvoker)delegate { bindInitialData(); });
                 rad_search_options.SelectedIndex = 1;
+
+                int rowHandle = GetRowHandleByColumnValue(gvSearch, "KEY", selectedMemberKey);
+                if (rowHandle != GridControl.InvalidRowHandle)
+                {
+                    gvSearch.FocusedRowHandle = rowHandle;
+                }
+
                 mainSplit.Panel1.Enabled = true;
                 DevExpress.XtraSplashScreen.SplashScreenManager.CloseForm(false);
             }
@@ -876,7 +932,15 @@ namespace OBALog.Windows
                 chk_col_office_CheckedChanged(this, new EventArgs());
                 rad_search_options_SelectedIndexChanged(this, new EventArgs());
                 //this.Invoke((MethodInvoker)delegate { bindInitialData(); });
+
                 rad_search_options.SelectedIndex = 0;
+
+                int rowHandle = GetRowHandleByColumnValue(gvSearch, "KEY", selectedMemberKey);
+                if (rowHandle != GridControl.InvalidRowHandle)
+                {
+                    gvSearch.FocusedRowHandle = rowHandle;
+                }
+
                 mainSplit.Panel1.Enabled = true;
                 DevExpress.XtraSplashScreen.SplashScreenManager.CloseForm(false);
             }
@@ -945,8 +1009,8 @@ namespace OBALog.Windows
                 tp_school.Image = null;
             }
 
-
-            if (!vp_date_validator.Validate())
+            //!vp_date_validator.Validate()
+            if (!ValidateProcessingDates())
             {
                 Tab_Processing = false;
                 tp_processing.Image = OBALog.Windows.Properties.Resources.High_Importance;
@@ -969,13 +1033,69 @@ namespace OBALog.Windows
             }
         }
 
+        private bool ValidateProcessingDates()
+        {
+            //Sent to printer
+            //Received from printer
+            //Date member notified
+            //Given to member 
+
+            ClearYearErrors(ep_processing);
+
+            List<KeyValuePair<DateTime, Control>> processingDates = new List<KeyValuePair<DateTime, Control>>();
+
+            if (dtp_sent_to_printer.IsNotEmpty())
+            {
+                processingDates.Add(new KeyValuePair<DateTime, Control>(dtp_sent_to_printer.DateTime, dtp_sent_to_printer));
+            }
+
+            if (dtp_received_from_printer.IsNotEmpty())
+            {
+                processingDates.Add(new KeyValuePair<DateTime, Control>(dtp_received_from_printer.DateTime, dtp_received_from_printer));
+            }
+
+            if (dtp_member_notified.IsNotEmpty())
+            {
+                processingDates.Add(new KeyValuePair<DateTime, Control>(dtp_member_notified.DateTime, dtp_member_notified));
+            }
+
+            if (dtp_given_to_member.IsNotEmpty())
+            {
+                processingDates.Add(new KeyValuePair<DateTime, Control>(dtp_given_to_member.DateTime, dtp_given_to_member));
+            }
+
+            List<DateTime> unsortedList = new System.Collections.Generic.List<DateTime> { };
+            processingDates.ForEach(y => unsortedList.Add(y.Key));
+            List<DateTime> sortedList = unsortedList.ToList();
+            sortedList.Sort();
+
+            for (int i = 0; i < unsortedList.Count; i++)
+            {
+                if (unsortedList[i].ToString().ToDateTime() > DateTime.Now)
+                {
+                    AddYearErrors(processingDates, "One or more of the dates you have entered in the processing details section are greater than the current date. Please re-check!", ep_processing);
+                    return false;
+                }
+
+                if (unsortedList[i] == sortedList[i])
+                {
+                    continue;
+                }
+                else
+                {
+                    AddYearErrors(processingDates, "One or more of the years you have entered in the processing details section is/are not consistent with the chronological order of events. Please re-check!", ep_processing);
+                    return false;
+                }
+            }
+            return true;
+        }
 
         private bool ValidateSchoolYears()
         {
             // Year joined <= Class group <= Year left
             // OL year < AL year (The two sections are independant)
 
-            ClearYearErrors();
+            ClearYearErrors(ep_years);
 
             List<KeyValuePair<int, Control>> dYears = new List<KeyValuePair<int, Control>>();
             List<KeyValuePair<int, Control>> dYearsGeneral = new List<KeyValuePair<int, Control>>();
@@ -1018,7 +1138,7 @@ namespace OBALog.Windows
             {
                 if (unsortedList[i].ToString().ToInt() > DateTime.Now.Year)
                 {
-                    AddYearErrors(dYears, "One or more of the years you have entered in the 'STC Mount Lavinia' and / or 'General' section/s are greater than the current year. Please re-check!");
+                    AddYearErrors(dYears, "One or more of the years you have entered in the 'STC Mount Lavinia' and / or 'General' section/s are greater than the current year. Please re-check!", ep_years);
                     return false;
                 }
 
@@ -1028,7 +1148,7 @@ namespace OBALog.Windows
                 }
                 else
                 {
-                    AddYearErrors(dYears, "One or more of the years you have entered in the 'STC Mount Lavinia' and / or 'General' section/s are not consistent with the chronological order of events. Please re-check!");
+                    AddYearErrors(dYears, "One or more of the years you have entered in the 'STC Mount Lavinia' and / or 'General' section/s are not consistent with the chronological order of events. Please re-check!", ep_years);
                     return false;
                 }
             }
@@ -1037,7 +1157,7 @@ namespace OBALog.Windows
             {
                 if (unsortedListGeneral[i].ToString().ToInt() > DateTime.Now.Year)
                 {
-                    AddYearErrors(dYearsGeneral, "One or more of the years you have entered in the 'General' section are greater than the current year. Please re-check!");
+                    AddYearErrors(dYearsGeneral, "One or more of the years you have entered in the 'General' section are greater than the current year. Please re-check!", ep_years);
                     return false;
                 }
                 if (unsortedListGeneral[i] == sortedListGeneral[i])
@@ -1046,7 +1166,7 @@ namespace OBALog.Windows
                 }
                 else
                 {
-                    AddYearErrors(dYearsGeneral, "One or more of the years you have entered in the 'General' section are not consistent with the chronological order of events. Please re-check!");
+                    AddYearErrors(dYearsGeneral, "One or more of the years you have entered in the 'General' section are not consistent with the chronological order of events. Please re-check!", ep_years);
                     return false;
                 }
             }
@@ -1054,7 +1174,7 @@ namespace OBALog.Windows
             return true;
         }
 
-        private void AddYearErrors(List<KeyValuePair<int, Control>> dYears, string errorMessage)
+        private void AddYearErrors(List<KeyValuePair<int, Control>> dYears, string errorMessage, DXErrorProvider errorProvider)
         {
             foreach (KeyValuePair<int, Control> item in dYears)
             {
@@ -1062,8 +1182,15 @@ namespace OBALog.Windows
                 lbl_year_error.Text = errorMessage;
             }
         }
-
-        private void ClearYearErrors()
+        private void AddYearErrors(List<KeyValuePair<DateTime, Control>> dYears, string errorMessage, DXErrorProvider errorProvider)
+        {
+            foreach (KeyValuePair<DateTime, Control> item in dYears)
+            {
+                errorProvider.SetError(item.Value, errorMessage, DevExpress.XtraEditors.DXErrorProvider.ErrorType.Warning);
+                lbl_year_error.Text = errorMessage;
+            }
+        }
+        private void ClearYearErrors(DXErrorProvider errorProvider)
         {
             errorProvider.ClearErrors();
             lbl_year_error.Clear();
@@ -1073,7 +1200,7 @@ namespace OBALog.Windows
         {
             try
             {
-                IsNewRecord = true;
+                IsNewRecord = DataLoadedOrNew = true;
                 ResetForm();
                 mainSplit.Panel1.Enabled = false;
                 //FormDirty = false;
@@ -1099,7 +1226,8 @@ namespace OBALog.Windows
 
             ClearAllForm(tab_member);
             SetDefaults();
-            ClearYearErrors();
+            ClearYearErrors(ep_years);
+            ClearYearErrors(ep_processing);
         }
 
         private void SetDefaults()
@@ -1113,7 +1241,10 @@ namespace OBALog.Windows
                 cbo_city.EditValue = Configurations.DefaultCity;
                 btn_new.Enabled = btn_delete.Enabled = false;
                 FormatDeceased();
-                RemarksHistory.Clear();
+                if (RemarksHistory != null)
+                {
+                    RemarksHistory.Clear();
+                }
                 BindRemarksHistory();
                 pic_approval_stage.Visible = false;
                 grp_processing_complete.Enabled = false;
@@ -1173,6 +1304,12 @@ namespace OBALog.Windows
         {
             try
             {
+                if (SelectedMemberKey <= 0)
+                {
+                    ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, "Please select a valid record to save!", "Error Saving Record");
+                    return;
+                }
+
                 if (ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Warning, string.Format("Are you sure you want to delete the record with name: {0} {1} ? This can only be undone by the database administrator!", txt_initials.Text, txt_surname.Text), "Warning") == System.Windows.Forms.DialogResult.OK)
                 {
                     new BL_Member().delete(new ML_Member { Key = SelectedMemberKey });
@@ -1239,13 +1376,14 @@ namespace OBALog.Windows
 
 
                     #region TAB 2 - School Details
-                    ClearYearErrors();
+                    ClearYearErrors(ep_years);
 
                     txt_admission_1.Text = Member.AdmissionNo;
                     txt_admission_2.Text = Admission == null ? string.Empty : Admission.AdmissionNo;
                     cbo_school_2.EditValue = Admission == null ? string.Empty : Admission.School;
+
                     txt_year_joined.EditValue = Member.YearJoined;
-                    txt_year_joined.Update();
+
                     txt_year_left.EditValue = Member.YearLeft;
                     txt_class_group.EditValue = Member.ClassGroup;
                     txt_ol_year.EditValue = Member.OLYear;
@@ -1254,9 +1392,11 @@ namespace OBALog.Windows
                     #endregion
 
                     #region TAB 3 - Processing Details
+                    ClearYearErrors(ep_processing);
+
                     txt_rec_no.Text = Member.ReceiptNo;
                     dtp_rec_date.EditValue = Member.ReceiptDate.DateFromString();
-                    txt_amount.Text = Member.ReceiptAmount;
+                    txt_amount.EditValue = Convert.ToDecimal(Member.ReceiptAmount);
                     cbo_payment_type.SelectedText = Member.PaymentType;
                     txt_cheque_no.Text = Member.CardChequeNo;
                     txt_bank.Text = Member.Bank;
@@ -1428,6 +1568,8 @@ namespace OBALog.Windows
 
         private void FormatApprovalStage(string ApprovalStage, string DateApproved, string DateRejected)
         {
+            dtp_approved_rejected.EditValue = null;
+            rtb_rej_reason.Text = string.Empty;
             switch (ApprovalStage)
             {
                 case UniversalVariables.AppStage_ColOffice:
@@ -1507,7 +1649,23 @@ namespace OBALog.Windows
 
         private void gvSearch_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
         {
-
+            try
+            {
+                //if (gvSearch.SelectedRowsCount == 1 && !InitialRun)
+                //{
+                //    DataRow currentRow = (gvSearch.GetFocusedDataRow() as DataRow);
+                //    if (currentRow != null)
+                //    {
+                //        SelectedMemberKey = (int)currentRow["KEY"];
+                //        loadMemberDetails(SelectedMemberKey);
+                //    }
+                //}
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
         }
 
         private void btn_view_remarks_Click(object sender, EventArgs e)
@@ -1545,15 +1703,9 @@ namespace OBALog.Windows
         {
             try
             {
-                //gvSearch.OptionsSelection.EnableAppearanceFocusedRow = true;
-                if (gvSearch.SelectedRowsCount == 1)
+                if (gvSearch.SelectedRowsCount == 1 && !InitialRun)
                 {
-                    DataRow currentRow = (gvSearch.GetFocusedDataRow() as DataRow);
-                    if (currentRow != null)
-                    {
-                        SelectedMemberKey = (int)currentRow["KEY"];
-                        loadMemberDetails(SelectedMemberKey);
-                    }
+                    ManageSearchFocus();
                 }
             }
             catch (Exception ex)
@@ -1565,23 +1717,7 @@ namespace OBALog.Windows
 
         private void btn_picture_Click(object sender, EventArgs e)
         {
-            try
-            {
-                using (OpenFileDialog ofd_picture = new OpenFileDialog() { Filter = "All Supported Formats|*.jpg;*.jpeg;*.bmp;*.tiff;*.tif;*.png;*.gif|JPEG files (*.jpg)|*.jpg|GIF files (*.gif)|*.gif|PNG files (*.png)|*.png" })
-                {
-                    ofd_picture.ShowDialog();
-
-                    if (ofd_picture.FileName != null)
-                    {
-                        pic_member.Image = Image.FromFile(ofd_picture.FileName);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                AuditFactory.AuditLog(ex);
-                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
-            }
+            openImageSaveDialog();
         }
 
         private void btn_add_Click(object sender, EventArgs e)
@@ -1663,21 +1799,38 @@ namespace OBALog.Windows
         {
             try
             {
-                if (ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.YesNo, string.Format("The record needs to be saved before the receipt can be generated.{0}Are you sure you want to save the record now?", Environment.NewLine), "Generate Receipt") == DialogResult.Yes)
+                if (!DataLoadedOrNew)
                 {
-                    SaveCore(false, true);
+                    ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, "Please select a valid record to save!", "Error Saving");
+                    return;
+                }
 
-                    DevExpress.XtraSplashScreen.SplashScreenManager.ShowForm(this, typeof(AppProgress), true, true, false);
+                bool Tab_Member_Receipt = false, Tab_School_Receipt = false, Tab_Processing_Receipt = false;
 
-                    rptReceipt report = new rptReceipt();
+                ValidateTabsReceipt(ref Tab_Member_Receipt, ref Tab_School_Receipt, ref Tab_Processing_Receipt);
 
-                    report.Parameters["MemberKey"].Value = SelectedMemberKey;
-                    report.Parameters["MemberKey"].Visible = false;
-                    DevExpress.XtraReports.UI.ReportPrintTool tool = new DevExpress.XtraReports.UI.ReportPrintTool(report);
+                if (Tab_Member_Receipt & Tab_School_Receipt & Tab_Processing_Receipt)
+                {
+                    if (ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.YesNo, string.Format("The record needs to be saved before the receipt can be generated.{0}Are you sure you want to save the record now?", Environment.NewLine), "Generate Receipt") == DialogResult.Yes)
+                    {
+                        SaveCore(false, true);
 
-                    DevExpress.XtraSplashScreen.SplashScreenManager.CloseForm(false);
+                        DevExpress.XtraSplashScreen.SplashScreenManager.ShowForm(this, typeof(AppProgress), true, true, false);
 
-                    tool.ShowPreview(this, this.LookAndFeel);
+                        rptReceipt report = new rptReceipt();
+
+                        report.Parameters["MemberKey"].Value = SelectedMemberKey;
+                        report.Parameters["MemberKey"].Visible = false;
+                        DevExpress.XtraReports.UI.ReportPrintTool tool = new DevExpress.XtraReports.UI.ReportPrintTool(report);
+
+                        DevExpress.XtraSplashScreen.SplashScreenManager.CloseForm(false);
+
+                        tool.ShowPreview(this, this.LookAndFeel);
+                    }
+                }
+                else
+                {
+                    ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Exclamation, "One or more of the fields required to generate the receipt are blank or contain invalid data. Please re-check! The errorneous fields are marked with a \"X\"", "Validation Error");
                 }
             }
             catch (Exception ex)
@@ -1685,6 +1838,44 @@ namespace OBALog.Windows
                 AuditFactory.AuditLog(ex);
                 ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
             }
+        }
+
+        private void ValidateTabsReceipt(ref bool Tab_Member_Receipt, ref bool Tab_School_Receipt, ref bool Tab_Processing_Receipt)
+        {
+            if (!vp_receipt_member_details.Validate())
+            {
+                Tab_Member_Receipt = false;
+                tp_member.Image = OBALog.Windows.Properties.Resources.High_Importance;
+            }
+            else
+            {
+                Tab_Member_Receipt = true;
+                tp_member.Image = null;
+            }
+
+            if (!vp_receipt_school_details.Validate() | !ValidateSchoolYears())
+            {
+                Tab_School_Receipt = false;
+                tp_school.Image = OBALog.Windows.Properties.Resources.High_Importance;
+            }
+            else
+            {
+                Tab_School_Receipt = true;
+                tp_school.Image = null;
+            }
+
+
+            if (!vp_receipt_processing.Validate() | !vp_ReceiptAmount.Validate())
+            {
+                Tab_Processing_Receipt = false;
+                tp_processing.Image = OBALog.Windows.Properties.Resources.High_Importance;
+            }
+            else
+            {
+                Tab_Processing_Receipt = true;
+                tp_processing.Image = null;
+            }
+
         }
 
         private void dtp_sent_to_printer_EditValueChanged(object sender, EventArgs e)
@@ -1841,6 +2032,61 @@ namespace OBALog.Windows
             {
                 AuditFactory.AuditLog(ex);
                 ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
+        }
+
+        private void openImageSaveDialog()
+        {
+            try
+            {
+                using (OpenFileDialog ofd_picture = new OpenFileDialog() { Filter = "All Supported Formats|*.jpg;*.jpeg;*.bmp;*.tiff;*.tif;*.png;*.gif|JPEG files (*.jpg)|*.jpg|GIF files (*.gif)|*.gif|PNG files (*.png)|*.png" })
+                {
+                    DialogResult picDialog = ofd_picture.ShowDialog();
+
+                    if (picDialog != System.Windows.Forms.DialogResult.Cancel && ofd_picture.FileName != null)
+                    {
+                        pic_member.Image = Image.FromFile(ofd_picture.FileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
+        }
+        private void pic_member_DoubleClick(object sender, EventArgs e)
+        {
+            openImageSaveDialog();
+        }
+
+        private void gvSearch_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                gvSearch.OptionsSelection.EnableAppearanceFocusedRow = true;
+
+                if (gvSearch.SelectedRowsCount == 1 && gvSearch.FocusedRowHandle == 0 && !InitialRun)
+                {
+                    ManageSearchFocus();
+                }
+            }
+            catch (Exception ex)
+            {
+                AuditFactory.AuditLog(ex);
+                ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
+            }
+        }
+
+        private void ManageSearchFocus()
+        {
+            DataRow currentRow = (gvSearch.GetFocusedDataRow() as DataRow);
+
+            if (currentRow != null)
+            {
+                DataLoadedOrNew = true;
+                SelectedMemberKey = (int)currentRow["KEY"];
+                loadMemberDetails(SelectedMemberKey);
             }
         }
     }

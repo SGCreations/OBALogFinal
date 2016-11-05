@@ -84,8 +84,6 @@
             this.gv_remarks.OptionsView.RowAutoHeight = true;
             this.gv_remarks.OptionsView.ShowGroupPanel = false;
             this.gv_remarks.OptionsView.ShowIndicator = false;
-            this.gv_remarks.SortInfo.AddRange(new DevExpress.XtraGrid.Columns.GridColumnSortInfo[] {
-            new DevExpress.XtraGrid.Columns.GridColumnSortInfo(this.gridColumn3, DevExpress.Data.ColumnSortOrder.Descending)});
             // 
             // gridColumn1
             // 

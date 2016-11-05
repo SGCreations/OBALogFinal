@@ -48,6 +48,7 @@
             this.lst_uat = new DevExpress.XtraEditors.ListBoxControl();
             this.btn_close = new DevExpress.XtraEditors.SimpleButton();
             this.button1 = new System.Windows.Forms.Button();
+            this.txt_year_joined = new OBALog.Windows.CustomSpinEdit();
             ((System.ComponentModel.ISupportInitialize)(this.grp_privileges)).BeginInit();
             this.grp_privileges.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lst_privileges)).BeginInit();
@@ -56,6 +57,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_user_levels)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gv_assigned_privileges)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lst_uat)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_year_joined.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // grp_privileges
@@ -236,7 +238,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(187, 433);
+            this.button1.Location = new System.Drawing.Point(154, 411);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 30;
@@ -244,11 +246,36 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // txt_year_joined
+            // 
+            this.txt_year_joined.Location = new System.Drawing.Point(17, 414);
+            this.txt_year_joined.Name = "txt_year_joined";
+            this.txt_year_joined.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
+            this.txt_year_joined.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.txt_year_joined.Properties.EditValueChangedFiringMode = DevExpress.XtraEditors.Controls.EditValueChangedFiringMode.Default;
+            this.txt_year_joined.Properties.IsFloatValue = false;
+            this.txt_year_joined.Properties.Mask.EditMask = "d";
+            this.txt_year_joined.Properties.MaxLength = 4;
+            this.txt_year_joined.Properties.MaxValue = new decimal(new int[] {
+            2200,
+            0,
+            0,
+            0});
+            this.txt_year_joined.Properties.MinValue = new decimal(new int[] {
+            1900,
+            0,
+            0,
+            0});
+            this.txt_year_joined.Size = new System.Drawing.Size(100, 20);
+            this.txt_year_joined.TabIndex = 31;
+            // 
             // TestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1177, 490);
+            this.Controls.Add(this.txt_year_joined);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.grp_access_types);
             this.Controls.Add(this.grp_privileges);
@@ -270,6 +297,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgv_user_levels)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gv_assigned_privileges)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lst_uat)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txt_year_joined.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -295,5 +323,6 @@
         private DevExpress.XtraGrid.Columns.GridColumn colPrivilege;
         private DevExpress.XtraGrid.Columns.GridColumn colAllowed;
         private System.Windows.Forms.Button button1;
+        private CustomSpinEdit txt_year_joined;
     }
 }

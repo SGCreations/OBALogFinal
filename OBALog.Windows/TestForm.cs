@@ -27,6 +27,8 @@ namespace OBALog.Windows
                 AuditFactory.AuditLog(ex);
                 ApplicationUtilities.ShowMessage(UniversalEnum.MessageTypes.Error, ex.Message);
             }
+
+
         }
 
         private int BindPrivileges()
@@ -54,6 +56,7 @@ namespace OBALog.Windows
 
         private void ManagePrivileges_Load(object sender, EventArgs e)
         {
+            txt_year_joined.EditValue = ("2010").ToIntNullable();
 
         }
 
@@ -115,14 +118,14 @@ namespace OBALog.Windows
             //DevExpress.XtraReports.UI.ReportPrintTool tool = new DevExpress.XtraReports.UI.ReportPrintTool(report);
             //tool.ShowPreview();
 
+            txt_year_joined.EditValue = ("2010").ToIntNullable();
 
-
-            using (WebClient client = new WebClient())
-            {
-                string text = client.DownloadString("http://nist.time.gov/actualtime.cgi?lzbc=siqm9b");
-                double milliseconds = Convert.ToInt64(System.Text.RegularExpressions.Regex.Match(text, "(?<=\\btime=\")[^\"]*").Value) / 1000.0;
-                var dateTime = new DateTime(1970, 1, 1).AddMilliseconds(milliseconds).ToLocalTime();
-            }
+            //using (WebClient client = new WebClient())
+            //{
+            //    string text = client.DownloadString("http://nist.time.gov/actualtime.cgi?lzbc=siqm9b");
+            //    double milliseconds = Convert.ToInt64(System.Text.RegularExpressions.Regex.Match(text, "(?<=\\btime=\")[^\"]*").Value) / 1000.0;
+            //    var dateTime = new DateTime(1970, 1, 1).AddMilliseconds(milliseconds).ToLocalTime();
+            //}
         }
 
         private void TestForm_FormClosed(object sender, FormClosedEventArgs e)
